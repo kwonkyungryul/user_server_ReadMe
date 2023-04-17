@@ -1,13 +1,15 @@
 package shop.readmecorp.userserverreadme.modules.payment.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.card.entity.Card;
 import shop.readmecorp.userserverreadme.modules.membership.entity.Membership;
+import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
+import shop.readmecorp.userserverreadme.modules.payment.response.MembershipPaymentResponse;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
 import javax.persistence.*;
@@ -16,7 +18,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "MEMBERSHIP_PAYMENT_TB")
 public class MembershipPayment extends BaseTime {
     @Id
@@ -51,5 +52,26 @@ public class MembershipPayment extends BaseTime {
     @Comment("멤버십 구매내역 활성화 상태")
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+
+    @Builder
+    public MembershipPayment(Integer id, User user, Membership membership, String membershipStartTime,String membershipEndTime,Integer price ,Card card, LocalDateTime paymentTime, PaymentStatus status) {
+        this.id = id;
+        this.user = user;
+        this.membership = membership;
+        this.membershipStartTime = membershipStartTime;
+        this.membershipEndTime = membershipEndTime;
+        this.price = price;
+        this.card = card;
+        this.paymentTime = paymentTime;
+        this.status = status;
+    }
+
+    public MembershipPaymentDTO toDTO() {
+        return new MembershipPaymentDTO(id, user.toDTO(), membership.toDTO(), membershipStartTime, membershipEndTime, price, card.toDTO(),paymentTime.toString(), status.name());
+    }
+
+    public MembershipPaymentResponse toResponse() {
+        return new MembershipPaymentResponse(id, user.toDTO(), membership.toDTO(), membershipStartTime, membershipEndTime, price, card.toDTO(),paymentTime.toString(), status.name());
+    }
 }
 

@@ -1,11 +1,13 @@
 package shop.readmecorp.userserverreadme.modules.claim.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.claim.dto.AnswerDTO;
 import shop.readmecorp.userserverreadme.modules.claim.enums.ClaimStatus;
+import shop.readmecorp.userserverreadme.modules.claim.response.AnswerResponse;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "ANSWER_TB")
 public class Answer extends BaseTime {
     @Id
@@ -34,4 +35,21 @@ public class Answer extends BaseTime {
     @Comment("답변 활성화 상태")
     @Enumerated(EnumType.STRING)
     private ClaimStatus status;
+
+    @Builder
+    public Answer(Integer id, Question question, String content, LocalDateTime writeTime, ClaimStatus status) {
+        this.id = id;
+        this.question = question;
+        this.content = content;
+        this.writeTime = writeTime;
+        this.status = status;
+    }
+
+    public AnswerDTO toDTO() {
+        return new AnswerDTO(id, question.toDTO(), content, writeTime.toString(), status.name());
+    }
+
+    public AnswerResponse toResponse() {
+        return new AnswerResponse(id, question.toDTO(), content, writeTime.toString(), status.name());
+    }
 }
