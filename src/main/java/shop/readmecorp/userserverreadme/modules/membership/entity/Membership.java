@@ -1,18 +1,19 @@
 package shop.readmecorp.userserverreadme.modules.membership.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.membership.dto.MembershipDTO;
 import shop.readmecorp.userserverreadme.modules.membership.enums.MembershipStatus;
+import shop.readmecorp.userserverreadme.modules.membership.response.MembershipResponse;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "MEMBERSHIP_TB")
 public class Membership extends BaseTime {
     @Id
@@ -30,4 +31,19 @@ public class Membership extends BaseTime {
     @Enumerated(EnumType.STRING)
     private MembershipStatus status;
 
+    @Builder
+    public Membership(Integer id, Integer price, String membershipTerm, MembershipStatus status) {
+        this.id = id;
+        this.price = price;
+        this.membershipTerm = membershipTerm;
+        this.status = status;
+    }
+
+    public MembershipDTO toDTO() {
+        return new MembershipDTO(id,price,membershipTerm, status.name());
+    }
+
+    public MembershipResponse toResponse() {
+        return new MembershipResponse(id,price,membershipTerm, status.name());
+    }
 }

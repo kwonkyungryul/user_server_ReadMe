@@ -1,11 +1,13 @@
 package shop.readmecorp.userserverreadme.modules.notification.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.notification.dto.NotificationDTO;
 import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationStatus;
+import shop.readmecorp.userserverreadme.modules.notification.response.NotificationResponse;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "NOTIFICATION_TB")
 public class Notification extends BaseTime {
     @Id
@@ -34,4 +35,20 @@ public class Notification extends BaseTime {
     @Enumerated(EnumType.STRING)
     private NotificationStatus status;
 
+    @Builder
+    public Notification(Integer id, String title, String content, LocalDateTime writeTime, NotificationStatus status) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.writeTime = writeTime;
+        this.status = status;
+    }
+
+    public NotificationDTO toDTO() {
+        return new NotificationDTO(id, title, content,writeTime.toString(), status.name());
+    }
+
+    public NotificationResponse toResponse() {
+        return new NotificationResponse(id, title, content,writeTime.toString(), status.name());
+    }
 }

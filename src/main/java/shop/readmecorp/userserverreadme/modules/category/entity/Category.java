@@ -1,20 +1,21 @@
 package shop.readmecorp.userserverreadme.modules.category.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.category.dto.CategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
 import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
 import shop.readmecorp.userserverreadme.modules.category.enums.SmallCategoryType;
+import shop.readmecorp.userserverreadme.modules.category.response.CategoryResponse;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "CATEGORY_TB")
 public class Category extends BaseTime {
     @Id
@@ -34,4 +35,20 @@ public class Category extends BaseTime {
     @Enumerated(EnumType.STRING)
     private CategoryStatus status;
 
+
+    @Builder
+    public Category(Integer id, BigCategoryType bigCategory, SmallCategoryType smallCategory, CategoryStatus status) {
+        this.id = id;
+        this.bigCategory = bigCategory;
+        this.smallCategory = smallCategory;
+        this.status = status;
+    }
+
+    public CategoryDTO toDTO() {
+        return new CategoryDTO(id, bigCategory.name(), smallCategory.name(), status.name() );
+    }
+
+    public CategoryResponse toResponse() {
+        return new CategoryResponse(id, bigCategory.name(), smallCategory.name(), status.name());
+    }
 }

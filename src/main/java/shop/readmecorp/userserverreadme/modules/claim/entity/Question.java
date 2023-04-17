@@ -1,12 +1,14 @@
 package shop.readmecorp.userserverreadme.modules.claim.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.common.jpa.RoleType;
+import shop.readmecorp.userserverreadme.modules.claim.dto.QuestionDTO;
 import shop.readmecorp.userserverreadme.modules.claim.enums.ClaimStatus;
+import shop.readmecorp.userserverreadme.modules.claim.response.QuestionResponse;
 import shop.readmecorp.userserverreadme.modules.publisher.entity.Publisher;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
@@ -16,7 +18,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "QUESTION_TB")
 public class Question extends BaseTime {
     @Id
@@ -48,4 +49,24 @@ public class Question extends BaseTime {
     @Comment("문의 활성화 상태")
     @Enumerated(EnumType.STRING)
     private ClaimStatus status;
+
+    @Builder
+    public Question(Integer id, RoleType role, User user, Publisher publisher, String title, String content, LocalDateTime writeTime, ClaimStatus status) {
+        this.id = id;
+        this.role = role;
+        this.user = user;
+        this.publisher = publisher;
+        this.title = title;
+        this.content = content;
+        this.writeTime = writeTime;
+        this.status = status;
+    }
+
+    public QuestionDTO toDTO() {
+        return new QuestionDTO(id, role.name(), user.toDTO(), publisher.toDTO(), title, content, writeTime.toString(), status.name() );
+    }
+
+    public QuestionResponse toResponse() {
+        return new QuestionResponse(id, role.name(), user.toDTO(), publisher.toDTO(), title, content, writeTime.toString(), status.name());
+    }
 }

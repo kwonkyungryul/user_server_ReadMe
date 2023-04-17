@@ -1,12 +1,14 @@
 package shop.readmecorp.userserverreadme.modules.publisher.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.common.jpa.RoleType;
+import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.enums.PublisherStatus;
+import shop.readmecorp.userserverreadme.modules.publisher.response.PublisherResponse;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +16,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "PUBLISHER_TB")
 public class Publisher extends BaseTime {
     @Id
@@ -45,4 +46,24 @@ public class Publisher extends BaseTime {
     @Comment("출판사 활성화 상태")
     @Enumerated(EnumType.STRING)
     private PublisherStatus status;
+
+    @Builder
+    public Publisher(Integer id, String username, String password, RoleType role, String businessNumber, String businessName, LocalDateTime joinTime, PublisherStatus status) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.businessNumber = businessNumber;
+        this.businessName = businessName;
+        this.joinTime = joinTime;
+        this.status = status;
+    }
+
+    public PublisherDTO toDTO() {
+        return new PublisherDTO(id, username, password, role.name(),businessNumber, businessName, joinTime.toString(), status.name() );
+    }
+
+    public PublisherResponse toResponse() {
+        return new PublisherResponse(id, username, password, role.name(),businessNumber, businessName, joinTime.toString(), status.name());
+    }
 }
