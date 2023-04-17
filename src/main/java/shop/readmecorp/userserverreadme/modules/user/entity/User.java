@@ -1,9 +1,6 @@
 package shop.readmecorp.userserverreadme.modules.user.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.common.jpa.RoleType;
@@ -17,8 +14,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "USER_TB")
 public class User extends BaseTime {
     @Id
@@ -55,9 +52,11 @@ public class User extends BaseTime {
     private UserStatus status;
 
     @Builder
-    public User(Integer id, String username, RoleType role, Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo, UserStatus status) {
+    public User(Integer id, String username,String password, RoleType role, Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo, UserStatus status) {
         this.id = id;
         this.username = username;
+        this.password = password;
+        this.role = role;
         this.isMembership = isMembership;
         this.isAutoPayment = isAutoPayment;
         this.joinTime = joinTime;

@@ -3,6 +3,7 @@ package shop.readmecorp.userserverreadme.modules.history.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.history.dto.SearchHistoryDTO;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "SEARCH_HISTORY_TB")
 public class SearchHistory extends BaseTime {

@@ -3,6 +3,7 @@ package shop.readmecorp.userserverreadme.modules.card.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.card.dto.CardDTO;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "CARD_TB")
 public class Card extends BaseTime {

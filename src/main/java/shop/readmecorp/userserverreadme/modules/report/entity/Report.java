@@ -3,6 +3,7 @@ package shop.readmecorp.userserverreadme.modules.report.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.report.dto.ReportDTO;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "REPORT_TB")
 public class Report extends BaseTime {

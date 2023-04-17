@@ -11,8 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AdminUpdateRequest {
 
-    private String username;
-
     private String password;
 
     private String role;
