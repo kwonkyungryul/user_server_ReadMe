@@ -3,6 +3,7 @@ package shop.readmecorp.userserverreadme.modules.payment.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.card.entity.Card;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "MEMBERSHIP_PAYMENT_TB")
 public class MembershipPayment extends BaseTime {

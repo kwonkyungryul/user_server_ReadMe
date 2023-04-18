@@ -1,0 +1,25 @@
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/readme?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: 1234
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:static/data/data.sql
+      encoding: utf-8
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+
+server:
+  servlet:
+    encoding:
+      force-response: true
+
+
