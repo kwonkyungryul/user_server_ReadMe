@@ -21,11 +21,11 @@ public class BookService {
     }
 
     public Page<Book> getPage(Pageable pageable) {
-        return null;
+        return bookRepository.findAll(pageable);
     }
 
     public Optional<Book> getBook(Integer id) {
-        return null;
+        return bookRepository.findById(id);
     }
 
     public Book save(BookSaveRequest request) {

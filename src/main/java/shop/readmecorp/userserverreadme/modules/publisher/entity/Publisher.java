@@ -41,7 +41,6 @@ public class Publisher extends BaseTime {
     @Comment("사업자 이름")
     private String businessName;
 
-    //TODO 이거 써도되나?
     @Comment("출판사 가입 시간")
     private LocalDateTime joinTime;
 
