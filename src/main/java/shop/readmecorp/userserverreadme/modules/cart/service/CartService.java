@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.repository.BookRepository;
 import shop.readmecorp.userserverreadme.modules.cart.entity.Cart;
@@ -15,7 +16,6 @@ import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.modules.user.repository.UserRepository;
 
 import javax.validation.Valid;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -38,7 +38,7 @@ public class CartService {
 
 
     public Optional<Cart> getCart(Integer id) {
-        return null;
+        return cartRepository.findById(id);
     }
 
     @Transactional
@@ -46,11 +46,20 @@ public class CartService {
         Optional<User> optionalUser = userRepository.findById(request.getUser().getId());
         Optional<Book> optionalBook = bookRepository.findById(request.getBook().getId());
 
+        if (optionalUser.isPresent() == false){
+            throw new Exception400("유저의 정보가 없습니다.");
+        }
+
+        if (optionalBook.isPresent() == false){
+            throw new Exception400("책의 정보가 없습니다.");
+        }
+
         Cart cart = Cart.builder()
                 .user(optionalUser.get())
                 .book(optionalBook.get())
                 .status(CartStatus.ACTIVE)
                 .build();
+
 
         return cartRepository.save(cart);
     }
@@ -65,5 +74,7 @@ public class CartService {
 
     @Transactional
     public void delete(Cart cart) {
+
+        cartRepository.delete(cart);
     }
 }

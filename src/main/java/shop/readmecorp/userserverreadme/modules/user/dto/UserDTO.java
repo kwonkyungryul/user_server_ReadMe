@@ -10,12 +10,14 @@ import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.modules.user.enums.UserStatus;
 import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-
+    @NotNull(message = "유저 ID가 없습니다.")
     private Integer id;
 
     private String username;
