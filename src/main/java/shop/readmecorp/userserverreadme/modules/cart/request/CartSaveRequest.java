@@ -26,12 +26,11 @@ public class CartSaveRequest {
     @NotNull(message = "책 정보를 입력해주세요.")
     private BookDTO book;
 
-    public Cart toEntity(User user, Book book) {
+    public Cart toEntity() {
         return Cart.builder()
                 .id(null)
-                .user(user)
-                .book(book)
-                .status(CartStatus.ACTIVE)
+                .user(user.toEntity())
+                .book(book.toEntity())
                 .build();
     }
 }

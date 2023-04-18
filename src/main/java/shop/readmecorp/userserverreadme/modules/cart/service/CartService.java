@@ -46,7 +46,11 @@ public class CartService {
         Optional<User> optionalUser = userRepository.findById(request.getUser().getId());
         Optional<Book> optionalBook = bookRepository.findById(request.getBook().getId());
 
-        Cart cart = request.toEntity(optionalUser.get(), optionalBook.get());
+        Cart cart = Cart.builder()
+                .user(optionalUser.get())
+                .book(optionalBook.get())
+                .status(CartStatus.ACTIVE)
+                .build();
 
         return cartRepository.save(cart);
     }
