@@ -185,7 +185,7 @@ public class CartMockTest {
         // given
         CartSaveRequest request = new CartSaveRequest(makeUser().toDTO(), makeBook(makePublisher() , makeCategory()).toDTO());
 
-        Cart cart = request.toEntity();
+        Cart cart = request.toEntity(makeUser(),makeBook(makePublisher(),makeCategory()));
 
         given(this.cartService.save(request)).willReturn(cart);
 
