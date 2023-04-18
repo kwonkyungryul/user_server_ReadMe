@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import shop.readmecorp.userserverreadme.modules.book.entity.Book;
+import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.category.dto.CategoryDTO;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
@@ -35,5 +37,21 @@ public class BookDTO {
     private FileInfoDTO fileInfo;
 
     private String status;
+
+    public Book toEntity() {
+        return Book.builder()
+                .id(id)
+                .publisher(publisher.toEntity())
+                .title(title)
+                .author(author)
+                .price(price)
+                .introduction(introduction)
+                .content(content)
+                .category(category.toEntity())
+                .authorInfo(authorInfo)
+                .fileInfo(fileInfo.toEntity())
+                .status(BookStatus.valueOf(status))
+                .build();
+    }
 
 }

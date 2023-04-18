@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "FILES")
+@Table(name = "FILE_TB")
 public class File extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,8 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "FILE_INFO_LIST")
+@Table(name = "FILE_INFO_TB")
 public class FileInfo extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,8 @@ public class FileInfo extends BaseTime {
     private FileType type;
 
     @Builder
-    public FileInfo(FileType type) {
+    public FileInfo(Integer id, FileType type) {
+        this.id = id;
         this.type = type;
     }
 
