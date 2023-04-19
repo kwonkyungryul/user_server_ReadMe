@@ -10,12 +10,14 @@ import shop.readmecorp.userserverreadme.modules.category.dto.CategoryDTO;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookDTO {
-
+    @NotNull(message = "책 ID가 없습니다.")
     private Integer id;
 
     private PublisherDTO publisher;

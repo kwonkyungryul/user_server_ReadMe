@@ -11,6 +11,7 @@ import shop.readmecorp.userserverreadme.modules.cart.enums.CartStatus;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -20,10 +21,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class CartSaveRequest {
 
-    @NotNull(message = "유저 정보를 입력해주세요.")
+    @NotNull(message = "유저 정보가 없습니다.")
+    @Valid
     private UserDTO user;
 
-    @NotNull(message = "책 정보를 입력해주세요.")
+    @NotNull(message = "책 정보가 없습니다.")
+    @Valid
     private BookDTO book;
 
     public Cart toEntity() {
