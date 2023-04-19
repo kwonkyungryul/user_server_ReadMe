@@ -23,5 +23,4 @@ public class ExceptionAdvice {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(errorMap, headers, HttpStatus.BAD_REQUEST);
     }
-
 }
