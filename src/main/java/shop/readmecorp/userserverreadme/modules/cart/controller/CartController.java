@@ -3,7 +3,6 @@ package shop.readmecorp.userserverreadme.modules.cart.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +16,7 @@ import shop.readmecorp.userserverreadme.modules.cart.response.CartResponse;
 import shop.readmecorp.userserverreadme.modules.cart.service.CartService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -53,6 +53,15 @@ public class CartController {
         return ResponseEntity.ok(
                 optionalCart.get().toResponse()
         );
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CartDTO>> getCartByUserId (@PathVariable Integer userId){
+        List<Cart> cartByUserId = cartService.getCartByUserId(userId);
+        List<CartDTO> cartDTOS = cartByUserId.stream().map(Cart::toDTO).collect(Collectors.toList());
+
+        return ResponseEntity.ok(cartDTOS);
+
     }
 
     @PostMapping

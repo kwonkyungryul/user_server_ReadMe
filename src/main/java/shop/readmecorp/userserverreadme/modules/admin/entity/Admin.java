@@ -48,10 +48,10 @@ public class Admin extends BaseTime {
     }
 
     public AdminDTO toDTO() {
-        return new AdminDTO(id, username, password, role.name(), status.name()  );
+        return new AdminDTO(id, username,role.name(), status.name()  );
     }
 
     public AdminResponse toResponse() {
-        return new AdminResponse(id, username, password, role.name(), status.name());
+        return new AdminResponse(id, username,role.name(), status.name());
     }
 }
