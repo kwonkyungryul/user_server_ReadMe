@@ -30,7 +30,7 @@ public class BookDTO {
 
     private String introduction;
 
-    private String content;
+    private String filePath;
 
     private CategoryDTO category;
 
@@ -48,7 +48,7 @@ public class BookDTO {
                 .author(author)
                 .price(price)
                 .introduction(introduction)
-                .content(content)
+                .filePath(filePath)
                 .category(category.toEntity())
                 .authorInfo(authorInfo)
                 .fileInfo(fileInfo.toEntity())

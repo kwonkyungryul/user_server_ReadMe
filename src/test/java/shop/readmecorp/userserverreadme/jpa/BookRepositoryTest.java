@@ -45,17 +45,17 @@ public class BookRepositoryTest {
         List<Book> books = bookRepository.findAll();
         Assertions.assertNotEquals(books.size(), 0);
 
-        Assertions.assertEquals(books.get(0).getTitle(), "책 제목1");
+        Assertions.assertEquals(books.get(0).getTitle(), "책제목1");
     }
 
     @Test
     @Transactional
     public void selectAndUpdate() {
         int id = 1;
-        Optional<Book> optionalBooks = bookRepository.findById(1);
+        Optional<Book> optionalBooks = bookRepository.findById(id);
         if (optionalBooks.isPresent()) {
             Book result = optionalBooks.get();
-            Assertions.assertEquals(result.getTitle(), "책 제목1");
+            Assertions.assertEquals(result.getTitle(), "책제목1");
 
             String title = "수정 책 제목1";
             result.setTitle(title);
@@ -113,7 +113,7 @@ public class BookRepositoryTest {
                 .author("권비영")
                 .price(12420)
                 .introduction("책 소개글")
-                .content("책 내용")
+                .filePath("책 내용")
                 .category(category)
                 .authorInfo("저자 소개")
                 .fileInfo(fileInfo)

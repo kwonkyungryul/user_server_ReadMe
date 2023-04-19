@@ -42,8 +42,8 @@ public class Book extends BaseTime {
     @Comment("책 소개")
     private String introduction;
 
-    @Comment("책 내용")
-    private String content;
+    @Comment("파일 경로")
+    private String filePath;
 
     @Comment("책 카테고리")
     @OneToOne
@@ -61,14 +61,14 @@ public class Book extends BaseTime {
     private BookStatus status;
 
     @Builder
-    public Book(Integer id, Publisher publisher, String title, String author, Integer price, String introduction, String content, Category category,String authorInfo,FileInfo fileInfo, BookStatus status) {
+    public Book(Integer id, Publisher publisher, String title, String author, Integer price, String introduction, String filePath, Category category,String authorInfo,FileInfo fileInfo, BookStatus status) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;
         this.author = author;
         this.price = price;
         this.introduction = introduction;
-        this.content = content;
+        this.filePath = filePath;
         this.category = category;
         this.authorInfo = authorInfo;
         this.fileInfo = fileInfo;
@@ -76,11 +76,11 @@ public class Book extends BaseTime {
     }
 
     public BookDTO toDTO() {
-        return new BookDTO(id, publisher.toDTO(), title, author,price, introduction, content, category.toDTO(), authorInfo, fileInfo.toDTO(), status.name() );
+        return new BookDTO(id, publisher.toDTO(), title, author,price, introduction, filePath, category.toDTO(), authorInfo, fileInfo.toDTO(), status.name() );
     }
 
     public BookResponse toResponse() {
-        return new BookResponse(id, publisher.toDTO(), title, author,price, introduction, content, category.toDTO(), authorInfo, fileInfo.toDTO(), status.name());
+        return new BookResponse(id, publisher.toDTO(), title, author,price, introduction, filePath, category.toDTO(), authorInfo, fileInfo.toDTO(), status.name());
     }
 
 }

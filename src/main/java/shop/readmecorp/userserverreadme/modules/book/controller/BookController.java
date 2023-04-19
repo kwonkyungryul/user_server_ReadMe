@@ -1,8 +1,14 @@
 package shop.readmecorp.userserverreadme.modules.book.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +22,15 @@ import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @RestController
 @RequestMapping("/books")
@@ -49,6 +61,24 @@ public class BookController {
         }
 
         return ResponseEntity.ok(optionalBook.get().toResponse());
+    }
+
+    @GetMapping("/{id}/epub")
+    public ResponseEntity<String> getEpubFile(@PathVariable Integer id) throws IOException {
+        Optional<Book> optionalBook = bookService.getBook(id);
+        Path path = Path.of(optionalBook.get().getFilePath());
+
+        try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(path))) {
+            ZipEntry entry;
+            int i = 0;
+            while ((entry = zis.getNextEntry()) != null) {
+                if (entry.getName().endsWith(".html") || entry.getName().endsWith(".xhtml")) {
+                    byte[] contentBytes = zis.readAllBytes();
+                    return ResponseEntity.ok(new String(contentBytes, StandardCharsets.UTF_8));
+                }
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
