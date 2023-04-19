@@ -46,11 +46,11 @@ public class CartService {
         Optional<User> optionalUser = userRepository.findById(request.getUser().getId());
         Optional<Book> optionalBook = bookRepository.findById(request.getBook().getId());
 
-        if (optionalUser.isPresent() == false){
+        if (optionalUser.isEmpty()){
             throw new Exception400("유저의 정보가 없습니다.");
         }
 
-        if (optionalBook.isPresent() == false){
+        if (optionalBook.isEmpty()){
             throw new Exception400("책의 정보가 없습니다.");
         }
 
