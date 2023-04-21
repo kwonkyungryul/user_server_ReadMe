@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
-import shop.readmecorp.userserverreadme.modules.category.dto.CategoryDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.SmallCategoryDTO;
+import shop.readmecorp.userserverreadme.modules.category.entity.BigCategory;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
 
@@ -32,7 +34,9 @@ public class BookDTO {
 
     private String filePath;
 
-    private CategoryDTO category;
+    private BigCategoryDTO bigCategory;
+
+    private SmallCategoryDTO smallCategory;
 
     private String authorInfo;
 
@@ -49,7 +53,8 @@ public class BookDTO {
                 .price(price)
                 .introduction(introduction)
                 .filePath(filePath)
-                .category(category.toEntity())
+                .bigCategory(bigCategory.toEntity())
+                .smallCategory(smallCategory.toEntity())
                 .authorInfo(authorInfo)
                 .fileInfo(fileInfo.toEntity())
                 .status(BookStatus.valueOf(status))

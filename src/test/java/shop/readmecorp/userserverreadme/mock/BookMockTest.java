@@ -21,7 +21,7 @@ import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.book.request.BookSaveRequest;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
-import shop.readmecorp.userserverreadme.modules.category.entity.Category;
+import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
 import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
 import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
 import shop.readmecorp.userserverreadme.modules.category.enums.SmallCategoryType;
@@ -300,8 +300,8 @@ public class BookMockTest {
         return FileInfo.builder().id(1).type(FileType.BOOK).build();
     }
 
-    private Category getCategory() {
-        return Category.builder()
+    private SmallCategory getCategory() {
+        return SmallCategory.builder()
                 .id(1)
                 .bigCategory(BigCategoryType.역사)
                 .smallCategory(SmallCategoryType.독서_에세이)

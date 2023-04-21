@@ -15,7 +15,7 @@ import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.cart.entity.Cart;
 import shop.readmecorp.userserverreadme.modules.cart.enums.CartStatus;
 import shop.readmecorp.userserverreadme.modules.cart.repository.CartRepository;
-import shop.readmecorp.userserverreadme.modules.category.entity.Category;
+import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
 import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
 import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
 import shop.readmecorp.userserverreadme.modules.category.enums.SmallCategoryType;
@@ -92,7 +92,7 @@ public class CartRepositoryTest {
         FileInfo fileInfo = FileInfo.builder().type(FileType.BOOK).build();
         User user = User.builder().username("유저이름").password("1234").role(RoleType.USER).isMembership(true).isAutoPayment(true).joinTime(LocalDateTime.now()).fileInfo(fileInfo).status(UserStatus.ACTIVE).build();
         Publisher publisher =Publisher.builder().username("출판사이름").password("1234").role(RoleType.PUBLISHER).businessNumber("1234").businessName("사업자이름").joinTime(LocalDateTime.now()).status(PublisherStatus.ACTIVE).build();
-        Category category = Category.builder().bigCategory(BigCategoryType.경영).smallCategory(SmallCategoryType.경영일반).status(CategoryStatus.ACTIVE).build();
+        SmallCategory category = SmallCategory.builder().bigCategory(BigCategoryType.경영).smallCategory(SmallCategoryType.경영일반).status(CategoryStatus.ACTIVE).build();
         Book book = Book.builder().publisher(publisher).title("책제목").author("저자이름").price(1000).introduction("책소개").content("책내용").category(category).fileInfo(fileInfo).status(BookStatus.ACTIVE).build();
 
         var cart = new Cart();
