@@ -18,17 +18,30 @@ insert into USER_TB(username, password, role, is_membership, is_auto_payment, jo
 insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, file_info_id, status) values ('유저이름2','1234', 'USER', true, false, '2021-01-01 00:02', 2, 'ACTIVE');
 insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, file_info_id, status) values ('유저이름3','1234', 'USER', false, false, '2021-01-01 00:03', 3, 'ACTIVE');
 
-insert into CATEGORY_TB(big_category, small_category, status) values ('경영', '경영일반','ACTIVE');
-insert into CATEGORY_TB(big_category, small_category, status) values ('자기계발', '리더십','ACTIVE');
-insert into CATEGORY_TB(big_category, small_category, status) values ('에세이', '여행_에세이','ACTIVE');
+insert into BIG_CATEGORY_TB(big_category, status) values ('경영', 'ACTIVE');
+insert into BIG_CATEGORY_TB(big_category, status) values ('자기계발', 'ACTIVE');
+insert into BIG_CATEGORY_TB(big_category, status) values ('에세이', 'ACTIVE');
 
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
-values (1, '책제목1', '저자1', 1000,'책소개1', 'C:\\workspace\\final_lab\\user_server_ReadMe\\src\\main\\resources\\static\\epubTest.epub', 1, '저자정보1', 1, 'ACTIVE');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
-values (2, '책제목2', '저자2', 1000,'책소개2', '책내용2', 2, '저자정보2', 1, 'ACTIVE');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
-values (3, '책제목3', '저자3', 1000,'책소개3', '책내용3', 3, '저자정보3', 2, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('경영일반', 1, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('리더십', 2, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('여행_에세이', 3, 'ACTIVE');
+
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (1, '책제목1', '저자1', 1000,'책소개1', 'C:\workspace\final_lab\user_server_ReadMe\src\main\resources\static\epubTest.epub', 1, 1, '저자정보1', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (2, '책제목2', '저자2', 1000,'책소개2', '책내용2', 2, 2, '저자정보2', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (3, '책제목3', '저자3', 1000,'책소개3', '책내용3', 3, 3, '저자정보3', 1, 'ACTIVE');
 
 insert into CART_TB(user_id, book_id, status) values (1, 1, 'ACTIVE');
 insert into CART_TB(user_id, book_id, status) values (2, 2, 'ACTIVE');
 insert into CART_TB(user_id, book_id, status) values (3, 3, 'ACTIVE');
+
+insert into REVIEW_TB(user_id, book_id, stars, content, status)
+values (1, 1, 1.0, '너무 재미 업서요 ㅡㅡ', 'ACTIVE');
+insert into REVIEW_TB(user_id, book_id, stars, content, status)
+values (2, 1, 3.5, '무난하게 재미있네요', 'ACTIVE');
+insert into REVIEW_TB(user_id, book_id, stars, content, status)
+values (3, 1, 1.0, '너무 재미 업서요 ㅡㅡ', 'ACTIVE');
+
+commit;

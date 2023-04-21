@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.readmecorp.userserverreadme.common.ValueOfEnum;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
-import shop.readmecorp.userserverreadme.modules.category.dto.CategoryDTO;
-import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
 
 import javax.validation.constraints.NotBlank;
@@ -38,7 +37,7 @@ public class BookUpdateRequest {
     private String content;
 
     @NotNull(message = "카테고리를 입력해주세요")
-    private CategoryDTO category;
+    private BigCategoryDTO category;
 
     @NotBlank(message = "작가소개를 입력해주세요")
     private String authorInfo;

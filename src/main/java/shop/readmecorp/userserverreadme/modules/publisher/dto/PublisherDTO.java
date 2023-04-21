@@ -28,9 +28,6 @@ public class PublisherDTO {
     private String username;
 
     @NotBlank
-    private String password;
-
-    @NotBlank
     private String role;
 
     @NotBlank
@@ -50,7 +47,6 @@ public class PublisherDTO {
         return Publisher.builder()
                 .id(id)
                 .username(username)
-                .password(password)
                 .role(RoleType.valueOf(role))
                 .businessNumber(businessNumber)
                 .businessName(businessName)

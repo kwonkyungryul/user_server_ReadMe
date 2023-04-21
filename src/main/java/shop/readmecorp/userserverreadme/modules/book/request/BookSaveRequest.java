@@ -4,8 +4,8 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
-import shop.readmecorp.userserverreadme.modules.category.dto.CategoryDTO;
-import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.SmallCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
 
 import javax.validation.Valid;
@@ -38,7 +38,10 @@ public class BookSaveRequest {
     private MultipartFile epubFile;
 
     @Valid
-    private CategoryDTO category;
+    private BigCategoryDTO bigCategory;
+
+    @Valid
+    private SmallCategoryDTO smallCategory;
 
     @NotBlank(message = "작가 소개를 입력해주세요.")
     private String authorInfo;
@@ -46,14 +49,15 @@ public class BookSaveRequest {
     private List<MultipartFile> files;
 
     @Builder
-    public BookSaveRequest(PublisherDTO publisher, String title, String author, Integer price, String introduction, MultipartFile epubFile, CategoryDTO category, String authorInfo, List<MultipartFile> files) {
+    public BookSaveRequest(PublisherDTO publisher, String title, String author, Integer price, String introduction, MultipartFile epubFile, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, List<MultipartFile> files) {
         this.publisher = publisher;
         this.title = title;
         this.author = author;
         this.price = price;
         this.introduction = introduction;
         this.epubFile = epubFile;
-        this.category = category;
+        this.bigCategory = bigCategory;
+        this.smallCategory = smallCategory;
         this.authorInfo = authorInfo;
         this.files = files;
     }
@@ -67,7 +71,8 @@ public class BookSaveRequest {
                 .price(price)
                 .introduction(introduction)
                 .filePath(null)
-                .category(category.toEntity())
+                .bigCategory(bigCategory.toEntity())
+                .smallCategory(smallCategory.toEntity())
                 .authorInfo(authorInfo)
                 .fileInfo(null)
                 .status(BookStatus.WAIT)

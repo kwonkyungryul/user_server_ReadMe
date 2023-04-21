@@ -5,16 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryUpdateRequest {
+public class SmallCategorySaveRequest {
 
-    private String bigCategory;
-
+    @NotNull(message = "소분류 카테고리를 입력해주세요.")
     private String smallCategory;
-
-    private String status;
 
 }
