@@ -66,10 +66,10 @@ public class User extends BaseTime {
     }
 
     public UserDTO toDTO() {
-        return new UserDTO(id, username, password, role.name(), isMembership,isAutoPayment,joinTime.toString(),fileInfo.toDTO(), status.name()  );
+        return new UserDTO(id, username,role.name(), isMembership,isAutoPayment,joinTime.toString(),fileInfo.toDTO(), status.name()  );
     }
 
     public UserResponse toResponse() {
-        return new UserResponse(id, username, password, role.name(), isMembership,isAutoPayment,joinTime.toString(),fileInfo.toDTO(), status.name());
+        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment,joinTime.toString(),fileInfo.toDTO(), status.name());
     }
 }

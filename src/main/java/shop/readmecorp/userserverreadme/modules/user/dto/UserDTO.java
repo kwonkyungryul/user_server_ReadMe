@@ -22,8 +22,6 @@ public class UserDTO {
 
     private String username;
 
-    private String password;
-
     private String role;
 
     private Boolean isMembership;
@@ -40,7 +38,6 @@ public class UserDTO {
     public User toEntity() {
         return User.builder()
                 .username(username)
-                .password(password)
                 .role(RoleType.valueOf(role))
                 .isMembership(isMembership)
                 .isAutoPayment(isAutoPayment)

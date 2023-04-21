@@ -26,16 +26,35 @@ insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('리더십', 2, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('여행_에세이', 3, 'ACTIVE');
 
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
-values (1, '책제목1', '저자1', 1000,'책소개1', 'C:\workspace\final_lab\user_server_ReadMe\src\main\resources\static\epubTest.epub', 1, 1, '저자정보1', 1, 'ACTIVE');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
-values (2, '책제목2', '저자2', 1000,'책소개2', '책내용2', 2, 2, '저자정보2', 1, 'ACTIVE');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
-values (3, '책제목3', '저자3', 1000,'책소개3', '책내용3', 3, 3, '저자정보3', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
+values (1, '책제목1', '저자1', 1000,'책소개1', 'C:\\workspace\\final_lab\\user_server_ReadMe\\src\\main\\resources\\static\\epubTest.epub', 1, '저자정보1', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
+values (2, '책제목2', '저자2', 1000,'책소개2', '책내용2', 2, '저자정보2', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
+values (3, '책제목3', '저자3', 1000,'책소개3', '책내용3', 3, '저자정보3', 2, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
+values (3, '책제목4', '저자4', 1000,'책소개4', '책내용4', 3, '저자정보4', 2, 'WAIT');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, category_id, author_info, file_info_id, status)
+values (3, '책제목5', '저자5', 1000,'책소개5', '책내용5', 3, '저자정보5', 2, 'WAIT');
 
 insert into CART_TB(user_id, book_id, status) values (1, 1, 'ACTIVE');
+insert into CART_TB(user_id, book_id, status) values (1, 2, 'ACTIVE');
+insert into CART_TB(user_id, book_id, status) values (1, 3, 'ACTIVE');
 insert into CART_TB(user_id, book_id, status) values (2, 2, 'ACTIVE');
 insert into CART_TB(user_id, book_id, status) values (3, 3, 'ACTIVE');
+
+insert into BOOKMARK_TB(user_id, book_id, page_num, status) values (1, 2, 15, 'ACTIVE');
+insert into BOOKMARK_TB(user_id, book_id, page_num, status) values (1, 3, 29, 'ACTIVE');
+insert into BOOKMARK_TB(user_id, book_id, page_num, status) values (1, 4, 54, 'ACTIVE');
+insert into BOOKMARK_TB(user_id, book_id, page_num, status) values (2, 2, 35, 'ACTIVE');
+insert into BOOKMARK_TB(user_id, book_id, page_num, status) values (2, 2, 75, 'ACTIVE');
+insert into BOOKMARK_TB(user_id, book_id, page_num, status) values (3, 2, 25, 'ACTIVE');
+
+insert into HEART_TB(user_id, book_id, status) values (1, 1, 'ACTIVE');
+insert into HEART_TB(user_id, book_id, status) values (1, 2, 'ACTIVE');
+insert into HEART_TB(user_id, book_id, status) values (2, 1, 'ACTIVE');
+insert into HEART_TB(user_id, book_id, status) values (3, 2, 'ACTIVE');
+insert into HEART_TB(user_id, book_id, status) values (3, 4, 'ACTIVE');
 
 insert into REVIEW_TB(user_id, book_id, stars, content, status)
 values (1, 1, 1.0, '너무 재미 업서요 ㅡㅡ', 'ACTIVE');
