@@ -22,8 +22,6 @@ public class ReviewResponse {
 
     private String content;
 
-    private String writeTime;
-
     private String status;
 
 }

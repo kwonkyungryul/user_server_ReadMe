@@ -16,13 +16,9 @@ public class ReviewDTO {
 
     private UserDTO user;
 
-    private BookDTO book;
-
     private Double stars;
 
     private String content;
-
-    private String writeTime;
 
     private String status;
 

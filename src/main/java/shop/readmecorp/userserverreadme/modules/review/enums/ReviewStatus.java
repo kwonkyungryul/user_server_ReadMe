@@ -7,5 +7,5 @@ package shop.readmecorp.userserverreadme.modules.review.enums;
  */
 
 public enum ReviewStatus {
-    ACTIVE, DELETE, WAIT
+    ACTIVE, DELETE
 }

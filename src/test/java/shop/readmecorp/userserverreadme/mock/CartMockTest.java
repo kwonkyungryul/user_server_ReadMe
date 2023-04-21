@@ -26,7 +26,7 @@ import shop.readmecorp.userserverreadme.modules.cart.enums.CartStatus;
 import shop.readmecorp.userserverreadme.modules.cart.request.CartSaveRequest;
 import shop.readmecorp.userserverreadme.modules.cart.request.CartUpdateRequest;
 import shop.readmecorp.userserverreadme.modules.cart.service.CartService;
-import shop.readmecorp.userserverreadme.modules.category.entity.Category;
+import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
 import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
 import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
 import shop.readmecorp.userserverreadme.modules.category.enums.SmallCategoryType;
@@ -37,7 +37,6 @@ import shop.readmecorp.userserverreadme.modules.publisher.enums.PublisherStatus;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.modules.user.enums.UserStatus;
 
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -395,8 +394,8 @@ public class CartMockTest {
                 .build();
     }
 
-    private Category makeCategory(){
-        return Category.builder()
+    private SmallCategory makeCategory(){
+        return SmallCategory.builder()
                 .id(1)
                 .bigCategory(BigCategoryType.경영)
                 .smallCategory(SmallCategoryType.경영일반)
@@ -404,7 +403,7 @@ public class CartMockTest {
                 .build();
     }
 
-    private Book makeBook(Publisher publisher, Category category) {
+    private Book makeBook(Publisher publisher, SmallCategory category) {
         return Book.builder()
                 .id(1)
                 .publisher(publisher)

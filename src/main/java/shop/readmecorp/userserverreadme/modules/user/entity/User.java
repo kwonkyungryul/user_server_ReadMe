@@ -12,6 +12,7 @@ import shop.readmecorp.userserverreadme.modules.user.response.UserResponse;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+// checkpoint : user model
 @Entity
 @Getter
 @Setter

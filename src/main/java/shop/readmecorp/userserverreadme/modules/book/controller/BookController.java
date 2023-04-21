@@ -18,6 +18,7 @@ import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.request.BookSaveRequest;
 import shop.readmecorp.userserverreadme.modules.book.request.BookUpdateRequest;
+import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse;
 import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 
@@ -43,24 +44,19 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<BookDTO>> getPage(Pageable pageable) {
-        Page<Book> page = bookService.getPage(pageable);
-        List<BookDTO> content = page.getContent()
-                .stream()
-                .map(Book::toDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new PageImpl<>(content, pageable, page.getTotalElements()));
+    public ResponseEntity<PageImpl<?>> getPage(Pageable pageable) {
+        return ResponseEntity.ok(bookService.getPage(pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookResponse> getBook(@PathVariable Integer id) {
         var optionalBook = bookService.getBook(id);
-        if (optionalBook.isEmpty()) {
-            throw new Exception400(BookConst.notFound);
-        }
-
         return ResponseEntity.ok(optionalBook.get().toResponse());
+    }
+
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<BookDetailResponse> getBookDetail(@PathVariable Integer id) {
+        return ResponseEntity.ok(bookService.getBookDetail(id));
     }
 
     @GetMapping("/{id}/epub")

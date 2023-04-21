@@ -12,7 +12,7 @@ import shop.readmecorp.userserverreadme.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.book.repository.BookRepository;
-import shop.readmecorp.userserverreadme.modules.category.entity.Category;
+import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
 import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
 import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
 import shop.readmecorp.userserverreadme.modules.category.enums.SmallCategoryType;
@@ -100,7 +100,7 @@ public class BookRepositoryTest {
 
         FileInfo fileInfo = entityManager.persist(FileInfo.builder().type(FileType.BOOK).build());
 
-        Category category = entityManager.persist(Category.builder()
+        SmallCategory category = entityManager.persist(SmallCategory.builder()
                 .bigCategory(BigCategoryType.역사)
                 .smallCategory(SmallCategoryType.독서_에세이)
                 .status(CategoryStatus.ACTIVE)
