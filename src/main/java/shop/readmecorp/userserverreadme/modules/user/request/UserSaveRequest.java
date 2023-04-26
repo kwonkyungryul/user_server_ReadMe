@@ -16,11 +16,4 @@ public class UserSaveRequest {
 
     private String username;
 
-    private String password;
-
-    private Boolean isMembership;
-
-    private Boolean isAutoPayment;
-
-    private List<MultipartFile> files;
 }

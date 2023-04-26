@@ -55,10 +55,13 @@ public class CartController {
         );
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<List<CartDTO>> getCartByUserId (@PathVariable Integer userId){
         List<Cart> cartByUserId = cartService.getCartByUserId(userId);
-        List<CartDTO> cartDTOS = cartByUserId.stream().map(Cart::toDTO).collect(Collectors.toList());
+        List<CartDTO> cartDTOS = cartByUserId
+                .stream()
+                .map(Cart::toDTO)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(cartDTOS);
 

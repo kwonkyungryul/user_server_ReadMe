@@ -38,12 +38,10 @@ public class UserDTO {
     public User toEntity() {
         return User.builder()
                 .username(username)
-                .role(RoleType.valueOf(role))
                 .isMembership(isMembership)
                 .isAutoPayment(isAutoPayment)
                 .joinTime(DateTimeConverter.stringToLocalDateTime(joinTime))
                 .fileInfo(fileInfo.toEntity())
-                .status(UserStatus.valueOf(status))
                 .build();
     }
 

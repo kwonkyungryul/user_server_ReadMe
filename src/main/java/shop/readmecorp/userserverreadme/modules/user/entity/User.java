@@ -10,6 +10,7 @@ import shop.readmecorp.userserverreadme.modules.user.enums.UserStatus;
 import shop.readmecorp.userserverreadme.modules.user.response.UserResponse;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 
 // checkpoint : user model
@@ -53,16 +54,16 @@ public class User extends BaseTime {
     private UserStatus status;
 
     @Builder
-    public User(Integer id, String username,String password, RoleType role, Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo, UserStatus status) {
+    public User(Integer id, String username,String password,Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.role = RoleType.USER;
         this.isMembership = isMembership;
         this.isAutoPayment = isAutoPayment;
         this.joinTime = joinTime;
         this.fileInfo = fileInfo;
-        this.status = status;
+        this.status = UserStatus.ACTIVE;
     }
 
     public UserDTO toDTO() {
