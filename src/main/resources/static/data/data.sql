@@ -13,7 +13,6 @@ insert into FILE_INFO_TB(type) values ('USER');
 
 insert into FILE_TB(file_info_id, file_name, file_url, status) values (1, '8.jpg', 'https://news.samsungdisplay.com/wp-content/uploads/2018/08/8.jpg', 'ACTIVE');
 insert into FILE_TB(file_info_id, file_name, file_url, status) values (2, 'aa.jpg', 'https://news.dbhasjuhwuha.com/wp-content/uploads/2021/08/aa.jpg', 'ACTIVE');
-insert into FILE_TB(file_info_id, file_name, file_url, status) values (3, 'aa.jpg', 'https://news.dbhasjuhwuha.com/wp-content/uploads/2021/08/aa.jpg', 'ACTIVE');
 
 insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, file_info_id, status) values ('유저이름1','1234', 'USER', true, true, '2021-01-01 00:01', 1, 'ACTIVE');
 insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, file_info_id, status) values ('유저이름2','1234', 'USER', true, false, '2021-01-01 00:02', 2, 'ACTIVE');
@@ -22,21 +21,37 @@ insert into USER_TB(username, password, role, is_membership, is_auto_payment, jo
 insert into BIG_CATEGORY_TB(big_category, status) values ('경영', 'ACTIVE');
 insert into BIG_CATEGORY_TB(big_category, status) values ('자기계발', 'ACTIVE');
 insert into BIG_CATEGORY_TB(big_category, status) values ('에세이', 'ACTIVE');
+insert into BIG_CATEGORY_TB(big_category, status) values ('인문', 'ACTIVE');
+insert into BIG_CATEGORY_TB(big_category, status) values ('언어', 'ACTIVE');
+insert into BIG_CATEGORY_TB(big_category, status) values ('소설', 'ACTIVE');
+insert into BIG_CATEGORY_TB(big_category, status) values ('역사', 'ACTIVE');
 
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('경영일반', 1, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('경영이론', 1, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('마케팅_광고', 1, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('재테크_금융', 1, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('세계_경제', 1, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('성공_처세', 2, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('인간_관계', 2, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('화술_협상', 2, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('시간_관리', 2, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('리더십', 2, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('여행_에세이', 3, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('예술_에세이', 3, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('독서_에세이', 3, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('심리_에세이', 3, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('사랑_연애_에세이', 3, 'ACTIVE');
 
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id,small_category_id, author_info, file_info_id, status)
-values (1, '책제목1', '저자1', 1000,'책소개1', '책내용1', 1,1, '저자정보1', 1, 'ACTIVE');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id,small_category_id, author_info, file_info_id, status)
-values (2, '책제목2', '저자2', 1000,'책소개2', '책내용2', 2,2, '저자정보2', 1, 'ACTIVE');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id,small_category_id, author_info, file_info_id, status)
-values (3, '책제목3', '저자3', 1000,'책소개3', '책내용3', 3,3, '저자정보3', 2, 'ACTIVE');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id,small_category_id, author_info, file_info_id, status)
-values (3, '책제목4', '저자4', 1000,'책소개4', '책내용4', 3,3, '저자정보4', 2, 'WAIT');
-insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id,small_category_id, author_info, file_info_id, status)
-values (3, '책제목5', '저자5', 1000,'책소개5', '책내용5', 3,3, '저자정보5', 2, 'WAIT');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (1, '책제목1', '저자1', 1000,'책소개1', 'C:\\workspace\\final_lab\\user_server_ReadMe\\src\\main\\resources\\static\\epubTest.epub', 1, 1, '저자정보1', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (2, '책제목2', '저자2', 1000,'책소개2', '책내용2', 2, 2, '저자정보2', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (3, '책제목3', '저자3', 1000,'책소개3', '책내용3', 3, 3, '저자정보3', 1, 'ACTIVE');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (1, '책제목4', '저자4', 1000,'책소개4', '책내용4', 4, 4, '저자정보4', 1, 'WAIT');
+insert into BOOK_TB(publisher_id, title, author, price, introduction, file_path, big_category_id, small_category_id, author_info, file_info_id, status)
+values (2, '책제목5', '저자5', 1000,'책소개5', '책내용5', 5, 5, '저자정보5', 1, 'WAIT');
 
 insert into CART_TB(user_id, book_id, status) values (1, 1, 'ACTIVE');
 insert into CART_TB(user_id, book_id, status) values (1, 2, 'ACTIVE');

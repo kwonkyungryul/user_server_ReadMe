@@ -48,10 +48,12 @@ public class Book extends BaseTime {
 
     @Comment("대분류 카테고리")
     @OneToOne
+    @JoinColumn(name = "big_category_id")
     private BigCategory bigCategory;
 
     @Comment("소분류 카테고리")
     @OneToOne
+    @JoinColumn(name = "small_category_id")
     private SmallCategory smallCategory;
 
     @Comment("저자 정보")
