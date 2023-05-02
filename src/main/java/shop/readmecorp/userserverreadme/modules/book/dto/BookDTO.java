@@ -38,14 +38,16 @@ public class BookDTO {
 
     private Boolean isHeart;
 
-    private List<FileDTO> fileDTO;
+    private FileDTO epubFile;
+
+    private FileDTO coverFile;
 
     private Double stars;
 
     private String status;
 
     @Builder
-    public BookDTO(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, List<FileDTO> fileDTO, String status) {
+    public BookDTO(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, Boolean isHeart, FileDTO epubFile, FileDTO coverFile, Double stars, String status) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;
@@ -55,23 +57,10 @@ public class BookDTO {
         this.bigCategory = bigCategory;
         this.smallCategory = smallCategory;
         this.authorInfo = authorInfo;
-        this.fileDTO = fileDTO;
+        this.isHeart = isHeart;
+        this.epubFile = epubFile;
+        this.coverFile = coverFile;
+        this.stars = stars;
         this.status = status;
     }
-
-    //    public Book toEntity() {
-//        return Book.builder()
-//                .id(id)
-//                .publisher(publisher.toEntity())
-//                .title(title)
-//                .author(author)
-//                .price(price)
-//                .introduction(introduction)
-//                .bigCategory(bigCategory.toEntity())
-//                .smallCategory(smallCategory.toEntity())
-//                .authorInfo(authorInfo)
-//                .status(BookStatus.valueOf(status))
-//                .build();
-//    }
-
 }

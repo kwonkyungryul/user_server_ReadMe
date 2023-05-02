@@ -59,16 +59,20 @@ public class Book extends BaseTime {
     @Comment("저자 정보")
     private String authorInfo;
 
-    @Comment("파일 출처")
+    @Comment("epub 파일 출처")
     @ManyToOne
-    private FileInfo fileInfo;
+    private FileInfo epub;
+
+    @Comment("cover 파일 출처")
+    @ManyToOne
+    private FileInfo cover;
 
     @Comment("책 활성화 상태")
     @Enumerated(EnumType.STRING)
     private BookStatus status;
 
     @Builder
-    public Book(Integer id, Publisher publisher, String title, String author, Integer price, String introduction, String filePath, BigCategory bigCategory, SmallCategory smallCategory, String authorInfo, FileInfo fileInfo, BookStatus status) {
+    public Book(Integer id, Publisher publisher, String title, String author, Integer price, String introduction, String filePath, BigCategory bigCategory, SmallCategory smallCategory, String authorInfo, FileInfo epub, FileInfo cover, BookStatus status) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;
@@ -79,7 +83,8 @@ public class Book extends BaseTime {
         this.bigCategory = bigCategory;
         this.smallCategory = smallCategory;
         this.authorInfo = authorInfo;
-        this.fileInfo = fileInfo;
+        this.epub = epub;
+        this.cover = cover;
         this.status = status;
     }
 
@@ -99,7 +104,7 @@ public class Book extends BaseTime {
     }
 
     public BookResponse toResponse() {
-        return new BookResponse(id, publisher.toDTO(), title, author,price, introduction, filePath, bigCategory.toDTO(), smallCategory.toDTO(), authorInfo, fileInfo.toDTO(), status.name());
+        return new BookResponse(id, publisher.toDTO(), title, author,price, introduction, filePath, bigCategory.toDTO(), smallCategory.toDTO(), authorInfo, epub.toDTO(), cover.toDTO(), status.name());
     }
 
 }

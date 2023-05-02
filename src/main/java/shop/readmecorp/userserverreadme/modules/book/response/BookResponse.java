@@ -35,7 +35,9 @@ public class BookResponse {
 
     private String authorInfo;
 
-    private FileInfoDTO fileInfo;
+    private FileInfoDTO epubFile;
+
+    private FileInfoDTO coverFile;
 
     private String status;
 

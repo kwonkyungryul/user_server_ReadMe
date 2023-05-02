@@ -57,11 +57,19 @@ public class BookService {
                 .map(Book::toDTO)
                 .collect(Collectors.toList());
 
+
+
         for (int i = 0; i < content.size(); i++) {
-            List<File> files = fileRepository.findByFileInfo_Id(page.getContent().get(i).getFileInfo().getId());
+            File epubFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getEpub().getId());
+            File coverFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getCover().getId());
             Double stars = reviewRepository.findAvgStars(content.get(i).getId());
-            content.get(i).setFileDTO(File.toDTO(files));
-            content.get(i).setStars(Math.ceil(stars));
+            content.get(i).setEpubFile(epubFiles.toDTO());
+            content.get(i).setCoverFile(coverFiles.toDTO());
+            if (stars != null) {
+                content.get(i).setStars(Math.ceil((stars * 10) / 10));
+            } else {
+                content.get(i).setStars(0.0);
+            }
         }
 
         // TODO 로그인 시 좋아요 체크(isHeart) 해야함. 아래 것들도 마찬가지
@@ -79,14 +87,16 @@ public class BookService {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < content.size(); i++) {
-            List<File> files = fileRepository.findByFileInfo_Id(page.getContent().get(i).getFileInfo().getId());
+            File epubFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getEpub().getId());
+            File coverFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getCover().getId());
             Double stars = reviewRepository.findAvgStars(content.get(i).getId());
+            content.get(i).setEpubFile(epubFiles.toDTO());
+            content.get(i).setCoverFile(coverFiles.toDTO());
             if (stars != null) {
                 content.get(i).setStars(Math.ceil((stars * 10) / 10));
             } else {
                 content.get(i).setStars(0.0);
             }
-            content.get(i).setFileDTO(File.toDTO(files));
         }
 
         return new PageImpl<>(content, pageable, page.getTotalElements());
@@ -102,9 +112,11 @@ public class BookService {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < content.size(); i++) {
-            List<File> files = fileRepository.findByFileInfo_Id(page.getContent().get(i).getFileInfo().getId());
+            File epubFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getEpub().getId());
+            File coverFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getCover().getId());
             Double stars = reviewRepository.findAvgStars(content.get(i).getId());
-            content.get(i).setFileDTO(File.toDTO(files));
+            content.get(i).setEpubFile(epubFiles.toDTO());
+            content.get(i).setCoverFile(coverFiles.toDTO());
             if (stars != null) {
                 content.get(i).setStars(Math.ceil((stars * 10) / 10));
             } else {
@@ -123,41 +135,41 @@ public class BookService {
         return optionalBook;
     }
 
-    public BookDetailResponse getBookDetail(Integer id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        if (optionalBook.isEmpty()) {
-            throw new Exception400(BookConst.notFound);
-        }
-        Book book = optionalBook.get();
-        List<Review> reviews = reviewRepository.findByBookId(book.getId());
-        if (reviews == null) {
-            throw new Exception400(BookConst.notFound);
-        }
-
-        Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(book.getFileInfo().getId());
-        List<File> files = fileRepository.findByFileInfo_Id(optionalFileInfo.get().getId());
-
-        var reviewDTOList = reviews.stream()
-                .filter(review -> review.getStatus().equals(ReviewStatus.ACTIVE))
-                .map(Review::toDTO)
-                .collect(Collectors.toList());
-
-        return BookDetailResponse.builder()
-                .id(id)
-                .publisher(book.getPublisher().toDTO())
-                .title(book.getTitle())
-                .author(book.getAuthor())
-                .price(book.getPrice())
-                .introduction(book.getIntroduction())
-                .bigCategory(book.getBigCategory().toDTO())
-                .smallCategory(book.getSmallCategory().toDTO())
-                .authorInfo(book.getAuthorInfo())
-                .epubUrl(files.get(0).getFileUrl())
-                .coverUrl(files.get(1).getFileUrl())
-                .status(book.getStatus().name())
-                .reviews(reviewDTOList)
-                .build();
-    }
+//    public BookDetailResponse getBookDetail(Integer id) {
+//        Optional<Book> optionalBook = bookRepository.findById(id);
+//        if (optionalBook.isEmpty()) {
+//            throw new Exception400(BookConst.notFound);
+//        }
+//        Book book = optionalBook.get();
+//        List<Review> reviews = reviewRepository.findByBookId(book.getId());
+//        if (reviews == null) {
+//            throw new Exception400(BookConst.notFound);
+//        }
+//
+//        Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(book.getFileInfo().getId());
+//        List<File> files = fileRepository.findByFileInfo_Id(optionalFileInfo.get().getId());
+//
+//        var reviewDTOList = reviews.stream()
+//                .filter(review -> review.getStatus().equals(ReviewStatus.ACTIVE))
+//                .map(Review::toDTO)
+//                .collect(Collectors.toList());
+//
+//        return BookDetailResponse.builder()
+//                .id(id)
+//                .publisher(book.getPublisher().toDTO())
+//                .title(book.getTitle())
+//                .author(book.getAuthor())
+//                .price(book.getPrice())
+//                .introduction(book.getIntroduction())
+//                .bigCategory(book.getBigCategory().toDTO())
+//                .smallCategory(book.getSmallCategory().toDTO())
+//                .authorInfo(book.getAuthorInfo())
+//                .epubUrl(files.get(0).getFileUrl())
+//                .coverUrl(files.get(1).getFileUrl())
+//                .status(book.getStatus().name())
+//                .reviews(reviewDTOList)
+//                .build();
+//    }
 
     public Book save(BookSaveRequest request) {
 

@@ -74,7 +74,8 @@ public class BookSaveRequest {
                 .bigCategory(bigCategory.toEntity())
                 .smallCategory(smallCategory.toEntity())
                 .authorInfo(authorInfo)
-                .fileInfo(null)
+                .epub(null)
+                .cover(null)
                 .status(BookStatus.WAIT)
                 .build();
     }
