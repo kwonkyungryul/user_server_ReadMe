@@ -55,7 +55,7 @@ public class CartController {
         );
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}/users")
     public ResponseEntity<List<CartDTO>> getCartByUserId (@PathVariable Integer userId){
         List<Cart> cartByUserId = cartService.getCartByUserId(userId);
         List<CartDTO> cartDTOS = cartByUserId
@@ -64,7 +64,6 @@ public class CartController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(cartDTOS);
-
     }
 
     @PostMapping
@@ -77,25 +76,6 @@ public class CartController {
         }
 
         var cart = cartService.save(request);
-        return ResponseEntity.ok(cart.toResponse());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<CartResponse> updateCart (
-            @Valid @RequestBody CartUpdateRequest request,
-            Errors error,
-            @PathVariable Integer id
-    ) {
-        if (error.hasErrors()) {
-            throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
-        }
-
-        var optionalCart = cartService.getCart(id);
-        if (optionalCart.isEmpty()) {
-            throw new Exception400(CartConst.notFound);
-        }
-
-        var cart = cartService.update(request, optionalCart.get());
         return ResponseEntity.ok(cart.toResponse());
     }
 

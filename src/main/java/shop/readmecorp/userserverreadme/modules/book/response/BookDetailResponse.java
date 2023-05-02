@@ -24,33 +24,33 @@ public class BookDetailResponse {
 
     private String introduction;
 
-    private String filePath;
-
     private BigCategoryDTO bigCategory;
 
     private SmallCategoryDTO smallCategory;
 
     private String authorInfo;
 
-    private FileInfoDTO fileInfo;
+    private String epubUrl;
+
+    private String coverUrl;
 
     private String status;
 
     private List<ReviewDTO> reviews;
 
     @Builder
-    public BookDetailResponse(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, String filePath, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, FileInfoDTO fileInfo, String status, List<ReviewDTO> reviews) {
+    public BookDetailResponse(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, String epubUrl, String coverUrl, String status, List<ReviewDTO> reviews) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;
         this.author = author;
         this.price = price;
         this.introduction = introduction;
-        this.filePath = filePath;
         this.bigCategory = bigCategory;
         this.smallCategory = smallCategory;
         this.authorInfo = authorInfo;
-        this.fileInfo = fileInfo;
+        this.epubUrl = epubUrl;
+        this.coverUrl = coverUrl;
         this.status = status;
         this.reviews = reviews;
     }

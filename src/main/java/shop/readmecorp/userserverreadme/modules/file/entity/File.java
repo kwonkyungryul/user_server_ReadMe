@@ -8,6 +8,8 @@ import shop.readmecorp.userserverreadme.modules.file.enums.FileStatus;
 import shop.readmecorp.userserverreadme.modules.file.response.FileResponse;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -30,6 +32,12 @@ public class File extends BaseTime {
     @Comment("파일 경로")
     private String fileUrl;
 
+    @Comment("파일 사이즈")
+    private Long fileSize;
+
+    @Comment("파일 확장자")
+    private String extension;
+
     // Multi
     // File Insert
     // S3
@@ -46,16 +54,23 @@ public class File extends BaseTime {
     private FileStatus status;
 
     @Builder
-    public File(Integer id, FileInfo fileInfo, String fileName, String fileUrl, FileStatus status) {
+    public File(Integer id, FileInfo fileInfo, String fileName, String fileUrl, Long fileSize, String extension, FileStatus status) {
         this.id = id;
         this.fileInfo = fileInfo;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
+        this.fileSize = fileSize;
+        this.extension = extension;
         this.status = status;
     }
 
     public FileDTO toDTO() {
-        return new FileDTO(id, fileInfo.toDTO(), fileName, fileUrl, status.name() );
+        return new FileDTO(id, fileName, fileUrl, status.name() );
+    }
+
+    public static List<FileDTO> toDTO(List<File> files) {
+        return files.stream().map(File::toDTO)
+                .collect(Collectors.toList());
     }
 
     public FileResponse toResponse() {

@@ -13,8 +13,6 @@ public class FileDTO {
 
     private Integer id;
 
-    private FileInfoDTO fileInfo;
-
     private String fileName;
 
     private String fileUrl;

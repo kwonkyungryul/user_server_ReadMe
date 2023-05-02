@@ -22,18 +22,8 @@ import javax.validation.constraints.NotNull;
 public class CartSaveRequest {
 
     @NotNull(message = "유저 정보가 없습니다.")
-    @Valid
-    private UserDTO user;
+    private Integer userId;
 
     @NotNull(message = "책 정보가 없습니다.")
-    @Valid
-    private BookDTO book;
-
-    public Cart toEntity() {
-        return Cart.builder()
-                .id(null)
-                .user(user.toEntity())
-                .book(book.toEntity())
-                .build();
-    }
+    private Integer bookId;
 }

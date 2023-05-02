@@ -46,13 +46,18 @@ public class CartService {
     }
 
     public List<Cart> getCartByUserId(Integer userId){
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()){
+            throw new Exception400(UserConst.notFound);
+        }
+
         return cartRepository.findCartByUserId(userId);
     }
 
     @Transactional
     public Cart save(CartSaveRequest request) {
-        Optional<User> optionalUser = userRepository.findById(request.getUser().getId());
-        Optional<Book> optionalBook = bookRepository.findById(request.getBook().getId());
+        Optional<User> optionalUser = userRepository.findById(request.getUserId());
+        Optional<Book> optionalBook = bookRepository.findById(request.getBookId());
 
         if (optionalUser.isEmpty()){
             throw new Exception400(UserConst.notFound);
@@ -72,13 +77,13 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    @Transactional
-    public Cart update(@Valid CartUpdateRequest request, Cart cart) {
-            cart.setUser(request.getUser().toEntity());
-            cart.setBook(request.getBook().toEntity());
-            cart.setStatus(CartStatus.valueOf(request.getStatus()));
-        return cartRepository.save(cart);
-    }
+//    @Transactional
+//    public Cart update(@Valid CartUpdateRequest request, Cart cart) {
+//            cart.setUser(request.getUser().toEntity());
+//            cart.setBook(request.getBook().toEntity());
+//            cart.setStatus(CartStatus.valueOf(request.getStatus()));
+//        return cartRepository.save(cart);
+//    }
 
     @Transactional
     public void delete(Cart cart) {

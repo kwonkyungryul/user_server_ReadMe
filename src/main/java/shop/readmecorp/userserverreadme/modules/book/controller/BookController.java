@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
+import shop.readmecorp.userserverreadme.modules.book.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.request.BookSaveRequest;
 import shop.readmecorp.userserverreadme.modules.book.request.BookUpdateRequest;
@@ -43,9 +44,24 @@ public class BookController {
         this.bookService = bookService;
     }
 
+//    @GetMapping
+//    public ResponseEntity<PageImpl<?>> getPage(Pageable pageable) {
+//        return ResponseEntity.ok(bookService.getPage(pageable));
+//    }
+
     @GetMapping
-    public ResponseEntity<PageImpl<?>> getPage(Pageable pageable) {
-        return ResponseEntity.ok(bookService.getPage(pageable));
+    public ResponseEntity<?> getPage(Pageable pageable) {
+        return ResponseEntity.ok(new ResponseDTO<>(1, "전체/신간 리스트 조회 성공", bookService.getPage(pageable)));
+    }
+
+    @GetMapping("/recommends")
+    public ResponseEntity<?> getRecommend(Pageable pageable) {
+        return ResponseEntity.ok(new ResponseDTO<>(1, "추천 리스트 조회 성공", bookService.getRecommend(pageable)));
+    }
+
+    @GetMapping("/best-sellers")
+    public ResponseEntity<?> getBestSeller(Pageable pageable) {
+        return ResponseEntity.ok(new ResponseDTO<>(1, "베스트 셀러 리스트 조회 성공", bookService.getBestSellers(pageable)));
     }
 
     @GetMapping("/{id}")
@@ -53,6 +69,8 @@ public class BookController {
         var optionalBook = bookService.getBook(id);
         return ResponseEntity.ok(optionalBook.get().toResponse());
     }
+
+
 
     @GetMapping("/{id}/detail")
     public ResponseEntity<BookDetailResponse> getBookDetail(@PathVariable Integer id) {

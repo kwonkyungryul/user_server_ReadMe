@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
-import shop.readmecorp.userserverreadme.modules.card.entity.Card;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 
 @Getter
@@ -21,8 +20,6 @@ public class BookPaymentResponse {
     private BookDTO book;
 
     private Integer price;
-
-    private Card card;
 
     private String paymentTime;
 

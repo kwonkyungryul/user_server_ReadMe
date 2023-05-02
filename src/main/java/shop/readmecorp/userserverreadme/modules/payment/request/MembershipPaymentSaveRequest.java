@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shop.readmecorp.userserverreadme.modules.card.entity.Card;
 import shop.readmecorp.userserverreadme.modules.membership.dto.MembershipDTO;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 
@@ -23,8 +22,6 @@ public class MembershipPaymentSaveRequest {
     private String membershipEndTime;
 
     private Integer price;
-
-    private Card card;
 
     private String paymentTime;
 

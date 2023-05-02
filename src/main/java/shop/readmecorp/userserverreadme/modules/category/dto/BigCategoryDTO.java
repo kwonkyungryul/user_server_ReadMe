@@ -17,13 +17,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class BigCategoryDTO {
 
-    @NotNull
     private Integer id;
 
-    @NotBlank
     private String bigCategory;
 
-    @ValueOfEnum(enumClass = CategoryStatus.class, message = "카테고리 상태 값에 이상이 있습니다. 확인해주세요")
     private String status;
 
     @Builder

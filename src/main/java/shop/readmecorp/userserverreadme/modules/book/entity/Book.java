@@ -84,7 +84,18 @@ public class Book extends BaseTime {
     }
 
     public BookDTO toDTO() {
-        return new BookDTO(id, publisher.toDTO(), title, author,price, introduction, filePath, bigCategory.toDTO(), smallCategory.toDTO() , authorInfo, fileInfo.toDTO(), status.name() );
+        return BookDTO.builder()
+                .id(id)
+                .publisher(publisher.toDTO())
+                .title(title)
+                .author(author)
+                .price(price)
+                .introduction(introduction)
+                .bigCategory(bigCategory.toDTO())
+                .smallCategory(smallCategory.toDTO())
+                .authorInfo(authorInfo)
+                .status(status.name())
+                .build();
     }
 
     public BookResponse toResponse() {

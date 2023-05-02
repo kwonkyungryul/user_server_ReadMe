@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
-import shop.readmecorp.userserverreadme.modules.card.entity.Card;
 import shop.readmecorp.userserverreadme.modules.payment.dto.BookPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
 import shop.readmecorp.userserverreadme.modules.payment.response.BookPaymentResponse;
@@ -38,10 +37,6 @@ public class BookPayment extends BaseTime {
     @Comment("총 금액")
     private Integer price;
 
-    @Comment("결제한 카드")
-    @ManyToOne
-    private Card card;
-
     @Comment("구매한 시간")
     private LocalDateTime paymentTime;
 
@@ -50,22 +45,21 @@ public class BookPayment extends BaseTime {
     private PaymentStatus status;
 
     @Builder
-    public BookPayment(Integer id, User user, Book book, Integer price,Card card,LocalDateTime paymentTime, PaymentStatus status) {
+    public BookPayment(Integer id, User user, Book book, Integer price, LocalDateTime paymentTime, PaymentStatus status) {
         this.id = id;
         this.user = user;
         this.book = book;
         this.price = price;
-        this.card = card;
         this.paymentTime = paymentTime;
         this.status = status;
     }
 
     public BookPaymentDTO toDTO() {
-        return new BookPaymentDTO(id, user.toDTO(), book.toDTO(), price, card, paymentTime.toString(), status.name());
+        return new BookPaymentDTO(id, user.toDTO(), book.toDTO(), price, paymentTime.toString(), status.name());
     }
 
     public BookPaymentResponse toResponse() {
-        return new BookPaymentResponse(id, user.toDTO(), book.toDTO(), price, card, paymentTime.toString(), status.name());
+        return new BookPaymentResponse(id, user.toDTO(), book.toDTO(), price, paymentTime.toString(), status.name());
     }
 }
 
