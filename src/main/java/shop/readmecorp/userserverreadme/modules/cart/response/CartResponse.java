@@ -7,6 +7,8 @@ import lombok.Setter;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,7 +20,4 @@ public class CartResponse {
     private UserDTO user;
 
     private BookDTO book;
-
-    private String status;
-
 }

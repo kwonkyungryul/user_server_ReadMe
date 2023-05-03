@@ -23,4 +23,15 @@ public class ExceptionAdvice {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(errorMap, headers, HttpStatus.BAD_REQUEST);
     }
+
+    // TODO 리팩토링 어케하는지 물어보기
+    @ExceptionHandler(Exception500.class)
+    public ResponseEntity<Map<String, Object>> handleException500(Exception500 ex) {
+        Map<String, Object> errorMap = new HashMap<>();
+        errorMap.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorMap.put("message", ex.getMessage());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(errorMap, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

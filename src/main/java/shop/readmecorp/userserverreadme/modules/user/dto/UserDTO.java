@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    @NotNull(message = "유저 ID가 없습니다.")
     private Integer id;
 
     private String username;
@@ -28,10 +27,7 @@ public class UserDTO {
 
     private Boolean isAutoPayment;
 
-    //TODO 이거 써도되나?
     private String joinTime;
-
-    private FileInfoDTO fileInfo;
 
     private String status;
 
@@ -41,7 +37,6 @@ public class UserDTO {
                 .isMembership(isMembership)
                 .isAutoPayment(isAutoPayment)
                 .joinTime(DateTimeConverter.stringToLocalDateTime(joinTime))
-                .fileInfo(fileInfo.toEntity())
                 .build();
     }
 

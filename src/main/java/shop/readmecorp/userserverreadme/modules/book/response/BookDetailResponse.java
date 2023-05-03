@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.dto.SmallCategoryDTO;
+import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
 import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
@@ -30,16 +31,14 @@ public class BookDetailResponse {
 
     private String authorInfo;
 
-    private String epubUrl;
+    private FileDTO epubFile;
 
-    private String coverUrl;
-
-    private String status;
+    private FileDTO coverFile;
 
     private List<ReviewDTO> reviews;
 
     @Builder
-    public BookDetailResponse(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, String epubUrl, String coverUrl, String status, List<ReviewDTO> reviews) {
+    public BookDetailResponse(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, FileDTO epubFile, FileDTO coverFile, List<ReviewDTO> reviews) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;
@@ -49,9 +48,8 @@ public class BookDetailResponse {
         this.bigCategory = bigCategory;
         this.smallCategory = smallCategory;
         this.authorInfo = authorInfo;
-        this.epubUrl = epubUrl;
-        this.coverUrl = coverUrl;
-        this.status = status;
+        this.epubFile = epubFile;
+        this.coverFile = coverFile;
         this.reviews = reviews;
     }
 }

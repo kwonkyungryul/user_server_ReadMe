@@ -99,7 +99,6 @@ public class Book extends BaseTime {
                 .bigCategory(bigCategory.toDTO())
                 .smallCategory(smallCategory.toDTO())
                 .authorInfo(authorInfo)
-                .status(status.name())
                 .build();
     }
 

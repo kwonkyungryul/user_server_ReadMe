@@ -25,8 +25,6 @@ public class UserResponse {
     //TODO 이거 써도되나?
     private String joinTime;
 
-    private FileInfoDTO fileInfo;
-
     private String status;
 
 }

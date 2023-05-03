@@ -72,10 +72,10 @@ public class BookController {
 
 
 
-//    @GetMapping("/{id}/detail")
-//    public ResponseEntity<BookDetailResponse> getBookDetail(@PathVariable Integer id) {
-//        return ResponseEntity.ok(bookService.getBookDetail(id));
-//    }
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<?> getBookDetail(@PathVariable Integer id) {
+        return ResponseEntity.ok(new ResponseDTO<>(1, "도서 상세 조회 성공", bookService.getBookDetail(id)));
+    }
 
     @GetMapping("/{id}/epub")
     public ResponseEntity<String> getEpubFile(@PathVariable Integer id) throws IOException {

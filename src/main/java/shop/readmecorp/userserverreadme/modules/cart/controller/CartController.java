@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.modules.book.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.cart.CartConst;
 import shop.readmecorp.userserverreadme.modules.cart.dto.CartDTO;
 import shop.readmecorp.userserverreadme.modules.cart.entity.Cart;
@@ -56,18 +57,13 @@ public class CartController {
     }
 
     @GetMapping("/{userId}/users")
-    public ResponseEntity<List<CartDTO>> getCartByUserId (@PathVariable Integer userId){
-        List<Cart> cartByUserId = cartService.getCartByUserId(userId);
-        List<CartDTO> cartDTOS = cartByUserId
-                .stream()
-                .map(Cart::toDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getCartByUserId (@PathVariable Integer userId){
 
-        return ResponseEntity.ok(cartDTOS);
+        return ResponseEntity.ok(new ResponseDTO<>(1, "유저 장바구니 조회 성공", cartService.getCartByUserId(userId)));
     }
 
     @PostMapping
-    public ResponseEntity<CartResponse> saveCart (
+    public ResponseEntity<?> saveCart (
             @Valid @RequestBody CartSaveRequest request,
             Errors error
     ) {
@@ -76,20 +72,15 @@ public class CartController {
         }
 
         var cart = cartService.save(request);
-        return ResponseEntity.ok(cart.toResponse());
+        return ResponseEntity.ok(new ResponseDTO<>(1, "장바구니 등록 성공", cart.toResponse()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCart (
+    public ResponseEntity<?> deleteCart (
             @PathVariable Integer id
     ) {
-        var optionalCart = cartService.getCart(id);
-        if (optionalCart.isEmpty()) {
-            throw new Exception400(CartConst.notFound);
-        }
+        cartService.delete(id);
 
-        cartService.delete(optionalCart.get());
-
-        return ResponseEntity.ok("삭제가 완료되었습니다.");
+        return ResponseEntity.ok(new ResponseDTO<>(1, "삭제가 완료되었습니다.", null));
     }
 }
