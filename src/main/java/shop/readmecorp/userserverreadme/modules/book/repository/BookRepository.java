@@ -15,4 +15,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Page<Book> findByBookPaymentDESC(Pageable pageable);
 
     Page<Book> findByBigCategoryId(Integer bigCategoryId, Pageable pageable);
+
+    Page<Book> findByBigCategoryIdAndSmallCategoryId(Integer bigCategoryId, Integer smallCategoryId, Pageable pageable);
 }

@@ -39,9 +39,6 @@ public class PublisherDTO {
     @NotBlank
     private String joinTime;
 
-    @NotBlank
-    private String status;
-
 
     public Publisher toEntity() {
         return Publisher.builder()
@@ -51,7 +48,6 @@ public class PublisherDTO {
                 .businessNumber(businessNumber)
                 .businessName(businessName)
                 .joinTime(DateTimeConverter.stringToLocalDateTime(joinTime))
-                .status(PublisherStatus.valueOf(status))
                 .build();
     }
 }

@@ -2,14 +2,20 @@ package shop.readmecorp.userserverreadme.modules.user.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
+import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
+import shop.readmecorp.userserverreadme.modules.payment.entity.MembershipPayment;
 import shop.readmecorp.userserverreadme.modules.payment.repository.MembershipPaymentRepository;
+import shop.readmecorp.userserverreadme.modules.user.UserConst;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.modules.user.repository.UserRepository;
 import shop.readmecorp.userserverreadme.modules.user.request.UserSaveRequest;
+import shop.readmecorp.userserverreadme.modules.user.response.UserDetailResponse;
 import shop.readmecorp.userserverreadme.modules.user.response.UserResponse;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,5 +46,27 @@ public class UserService {
 
     }
 
-    public UserResponse
+    public UserDetailResponse getUser(Integer userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new Exception400(UserConst.notFound);
+        }
+        User user = optionalUser.get();
+        Optional<MembershipPayment> optionalMembershipPayment = membershipPaymentRepository.findByUserId(userId);
+
+        MembershipPayment membershipPayment = optionalMembershipPayment.get();
+
+        MembershipPaymentDTO membershipPaymentDTO = membershipPayment.toDTO();
+
+        return UserDetailResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .role(user.getRole().name())
+                .membershipPaymentDTO(membershipPaymentDTO)
+                .isMembership(user.getIsMembership())
+                .isAutoPayment(user.getIsAutoPayment())
+                .joinTime(user.getJoinTime().toString())
+                .build();
+
+    }
 }

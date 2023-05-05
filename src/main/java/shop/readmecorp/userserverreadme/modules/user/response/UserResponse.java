@@ -19,14 +19,10 @@ public class UserResponse {
 
     private String role;
 
-    private MembershipPaymentDTO membershipPaymentInfo;
-
     private Boolean isMembership;
 
     private Boolean isAutoPayment;
 
     private String joinTime;
-
-    private String status;
 
 }

@@ -66,6 +66,6 @@ public class User extends BaseTime {
     }
 
     public UserResponse toResponse() {
-        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment, joinTime.toString(), status.name());
+        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment, joinTime.toString());
     }
 }

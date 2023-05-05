@@ -65,7 +65,7 @@ public class File extends BaseTime {
     }
 
     public FileDTO toDTO() {
-        return new FileDTO(id, fileName, fileUrl, status.name() );
+        return new FileDTO(id, fileName, fileUrl);
     }
 
     public static List<FileDTO> toDTO(List<File> files) {
@@ -74,6 +74,6 @@ public class File extends BaseTime {
     }
 
     public FileResponse toResponse() {
-        return new FileResponse(id, fileInfo.toDTO(), fileName, fileUrl, status.name());
+        return new FileResponse(id, fileInfo.toDTO(), fileName, fileUrl);
     }
 }

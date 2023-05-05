@@ -24,6 +24,4 @@ public class PublisherResponse {
     //TODO 이거 써도되나?
     private String joinTime;
 
-    private String status;
-
 }

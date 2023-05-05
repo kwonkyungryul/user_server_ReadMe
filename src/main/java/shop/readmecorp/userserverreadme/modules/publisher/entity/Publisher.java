@@ -61,10 +61,10 @@ public class Publisher extends BaseTime {
     }
 
     public PublisherDTO toDTO() {
-        return new PublisherDTO(id, username, role.name(),businessNumber, businessName, joinTime.toString(), status.name() );
+        return new PublisherDTO(id, username, role.name(),businessNumber, businessName, joinTime.toString() );
     }
 
     public PublisherResponse toResponse() {
-        return new PublisherResponse(id, username, role.name(),businessNumber, businessName, joinTime.toString(), status.name());
+        return new PublisherResponse(id, username, role.name(),businessNumber, businessName, joinTime.toString());
     }
 }

@@ -22,6 +22,7 @@ import shop.readmecorp.userserverreadme.modules.file.entity.File;
 import shop.readmecorp.userserverreadme.modules.file.repository.FileRepository;
 import shop.readmecorp.userserverreadme.modules.review.repository.ReviewRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class CategoryService {
     }
 
     // TODO 완전 바뀔 예정
-    public CategoryResponse getCategories(Integer bigCategoryId, Pageable pageable) {
+    public CategoryResponse getCategories(Integer bigCategoryId, Integer smallCategoryId, Pageable pageable) {
         Optional<BigCategory> optionalBigCategory = bigCategoryRepository.findById(bigCategoryId);
         if (optionalBigCategory.isEmpty()) {
             throw new Exception400(CategoryConst.notFound);
@@ -58,15 +59,24 @@ public class CategoryService {
         BigCategory bigCategory = optionalBigCategory.get();
         List<BigCategory> bigCategoryList = bigCategoryRepository.findAll();
         List<SmallCategory> smallCategoryList = smallCategoryRepository.findByBigCategoryId(bigCategory.getId());
-        Page<Book> page = bookRepository.findByBigCategoryId(bigCategoryId, pageable);
-        List<BookDTO> content = page.getContent()
-                .stream()
-                .filter(book -> book.getStatus().equals(BookStatus.ACTIVE) && book.getBigCategory().getId().equals(bigCategory.getId()))
-                .map(Book::toDTO)
-                .collect(Collectors.toList());
 
-        content.forEach(bookDTO -> System.out.println("디버그 : " + content.size()));
-
+        Page<Book> page = null;
+        List<BookDTO> content = new ArrayList<>();
+        if (smallCategoryId == null) {
+            page = bookRepository.findByBigCategoryId(bigCategoryId, pageable);
+            content = page.getContent()
+                    .stream()
+                    .filter(book -> book.getStatus().equals(BookStatus.ACTIVE) && book.getBigCategory().getId().equals(bigCategory.getId()))
+                    .map(Book::toDTO)
+                    .collect(Collectors.toList());
+        } else {
+            page = bookRepository.findByBigCategoryIdAndSmallCategoryId(bigCategoryId, smallCategoryId, pageable);
+            content = page.getContent()
+                    .stream()
+                    .filter(book -> book.getStatus().equals(BookStatus.ACTIVE) && book.getBigCategory().getId().equals(bigCategory.getId()))
+                    .map(Book::toDTO)
+                    .collect(Collectors.toList());
+        }
 
         List<BigCategoryDTO> bigCategoryDTOList = bigCategoryList.stream().map(BigCategory::toDTO).collect(Collectors.toList());
         List<SmallCategoryDTO> smallCategoryDTOList = smallCategoryList.stream().map(SmallCategory::toDTO).collect(Collectors.toList());

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.repository.BookRepository;
 import shop.readmecorp.userserverreadme.modules.cart.CartConst;
@@ -98,6 +99,23 @@ public class CartService {
             throw new Exception400(BookConst.notFound);
         }
 
+        Book book = optionalBook.get();
+
+        BookDTO bookDTO = book.toDTO();
+        File epubFiles = fileRepository.findByFileInfo_Id(book.getEpub().getId());
+        File coverFiles = fileRepository.findByFileInfo_Id(book.getCover().getId());
+        Double stars = reviewRepository.findAvgStars(bookDTO.getId());
+        bookDTO.setEpubFile(epubFiles.toDTO());
+        bookDTO.setCoverFile(coverFiles.toDTO());
+
+        // TODO 로그인 시 좋아요 체크(isHeart) 해야함. 아래 것들도 마찬가지
+        bookDTO.setIsHeart(true);
+        if (stars != null) {
+            bookDTO.setStars(Math.ceil((stars * 10) / 10));
+        } else {
+            bookDTO.setStars(0.0);
+        }
+
         Cart cart = Cart.builder()
                 .user(optionalUser.get())
                 .book(optionalBook.get())
@@ -105,6 +123,7 @@ public class CartService {
                 .build();
         CartResponse response = cartRepository.save(cart).toResponse();
 
+        response.setBook(bookDTO);
 
         return response;
     }

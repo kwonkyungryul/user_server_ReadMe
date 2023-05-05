@@ -16,7 +16,4 @@ public class FileDTO {
     private String fileName;
 
     private String fileUrl;
-
-    private String status;
-
 }
