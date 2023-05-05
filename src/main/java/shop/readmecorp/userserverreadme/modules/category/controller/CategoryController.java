@@ -21,8 +21,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getCategories(Integer bigCategoryId, Integer smallCategoryId, Pageable pageable) {
+    public ResponseEntity<?> getCategories() {
 
-        return ResponseEntity.ok(new ResponseDTO<>(1, "카테고리 조회 성공", categoryService.getCategories(bigCategoryId, smallCategoryId, pageable)));
+        return ResponseEntity.ok(new ResponseDTO<>(1, "카테고리 조회 성공", categoryService.getCategories()));
     }
 }

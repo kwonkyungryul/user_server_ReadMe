@@ -158,7 +158,7 @@ insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('일본어', 5, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('중국어', 5, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('프랑스어', 5, 'ACTIVE');
-insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('기타 외국어', 5, 'ACTIVE');
+insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('기타_외국어', 5, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('고전', 6, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('스릴러', 6, 'ACTIVE');
 insert into SMALL_CATEGORY_TB(small_category, big_category_id, status) values ('역사', 6, 'ACTIVE');

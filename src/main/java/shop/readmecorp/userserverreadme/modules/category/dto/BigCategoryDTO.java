@@ -11,6 +11,7 @@ import shop.readmecorp.userserverreadme.modules.category.response.BigCategoryRes
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,10 +22,13 @@ public class BigCategoryDTO {
 
     private String bigCategory;
 
+    private List<SmallCategoryDTO> smallCategory;
+
     @Builder
-    public BigCategoryDTO(Integer id, String bigCategory) {
+    public BigCategoryDTO(Integer id, String bigCategory, List<SmallCategoryDTO> smallCategory) {
         this.id = id;
         this.bigCategory = bigCategory;
+        this.smallCategory = smallCategory;
     }
 
     public BigCategory toEntity() {

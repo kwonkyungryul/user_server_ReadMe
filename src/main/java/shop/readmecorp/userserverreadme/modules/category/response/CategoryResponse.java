@@ -2,6 +2,7 @@ package shop.readmecorp.userserverreadme.modules.category.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.PageImpl;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
@@ -12,17 +13,14 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class CategoryResponse {
     private List<BigCategoryDTO> bigCategory;
 
-    private List<SmallCategoryDTO> smallCategory;
-
-    private PageImpl<BookDTO> books;
-
     @Builder
-    public CategoryResponse(List<BigCategoryDTO> bigCategory, List<SmallCategoryDTO> smallCategory, PageImpl<BookDTO> books) {
+    public CategoryResponse(List<BigCategoryDTO> bigCategory) {
         this.bigCategory = bigCategory;
-        this.smallCategory = smallCategory;
-        this.books = books;
     }
+
+
 }

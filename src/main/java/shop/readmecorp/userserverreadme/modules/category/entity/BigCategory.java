@@ -42,7 +42,7 @@ public class BigCategory extends BaseTime {
     }
 
     public BigCategoryDTO toDTO() {
-        return new BigCategoryDTO(id, bigCategory.name());
+        return new BigCategoryDTO(id, bigCategory.name(), null);
     }
 
     public BigCategoryResponse toResponse() {

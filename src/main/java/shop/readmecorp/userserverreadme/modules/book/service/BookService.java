@@ -49,15 +49,14 @@ public class BookService {
         this.fileRepository = fileRepository;
     }
 
-    public PageImpl<?> getPage(Pageable pageable) {
+    // TODO 완전 바뀔 예정
+    public PageImpl<?> getPage(Integer bigCategoryId, Integer smallCategoryId, Pageable pageable) {
         Page<Book> page = bookRepository.findAll(pageable);
         List<BookDTO> content = page.getContent()
                 .stream()
                 .filter(book -> book.getStatus().equals(BookStatus.ACTIVE))
                 .map(Book::toDTO)
                 .collect(Collectors.toList());
-
-
 
         for (int i = 0; i < content.size(); i++) {
             File epubFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getEpub().getId());

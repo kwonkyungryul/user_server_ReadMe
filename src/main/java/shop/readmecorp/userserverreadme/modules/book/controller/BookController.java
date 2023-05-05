@@ -50,8 +50,10 @@ public class BookController {
 //    }
 
     @GetMapping
-    public ResponseEntity<?> getPage(Pageable pageable) {
-        return ResponseEntity.ok(new ResponseDTO<>(1, "전체/신간 리스트 조회 성공", bookService.getPage(pageable)));
+    public ResponseEntity<?> getPage(Pageable pageable,
+                                     @RequestParam(defaultValue = "0") Integer bigCategoryId,
+                                     @RequestParam(defaultValue = "0") Integer smallCategoryId) {
+        return ResponseEntity.ok(new ResponseDTO<>(1, "전체/신간 리스트 조회 성공", bookService.getPage(bigCategoryId, smallCategoryId, pageable)));
     }
 
     @GetMapping("/recommends")
