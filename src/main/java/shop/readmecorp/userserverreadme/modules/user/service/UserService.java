@@ -3,9 +3,11 @@ package shop.readmecorp.userserverreadme.modules.user.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
+import shop.readmecorp.userserverreadme.modules.payment.repository.MembershipPaymentRepository;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.modules.user.repository.UserRepository;
 import shop.readmecorp.userserverreadme.modules.user.request.UserSaveRequest;
+import shop.readmecorp.userserverreadme.modules.user.response.UserResponse;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,8 +17,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final MembershipPaymentRepository membershipPaymentRepository;
+
+    public UserService(UserRepository userRepository, MembershipPaymentRepository membershipPaymentRepository) {
         this.userRepository = userRepository;
+        this.membershipPaymentRepository = membershipPaymentRepository;
     }
 
     @Transactional
@@ -34,4 +39,6 @@ public class UserService {
         return userRepository.save(user);
 
     }
+
+    public UserResponse
 }

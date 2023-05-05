@@ -72,7 +72,7 @@ public class CartController {
         }
 
         var cart = cartService.save(request);
-        return ResponseEntity.ok(new ResponseDTO<>(1, "장바구니 등록 성공", cart.toResponse()));
+        return ResponseEntity.ok(new ResponseDTO<>(1, "장바구니 등록 성공", cart));
     }
 
     @DeleteMapping("/{id}")

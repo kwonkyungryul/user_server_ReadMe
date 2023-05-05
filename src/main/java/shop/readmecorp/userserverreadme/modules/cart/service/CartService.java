@@ -86,7 +86,7 @@ public class CartService {
     }
 
     @Transactional
-    public Cart save(CartSaveRequest request) {
+    public CartResponse save(CartSaveRequest request) {
         Optional<User> optionalUser = userRepository.findById(request.getUserId());
         Optional<Book> optionalBook = bookRepository.findById(request.getBookId());
 
@@ -103,11 +103,10 @@ public class CartService {
                 .book(optionalBook.get())
                 .status(CartStatus.ACTIVE)
                 .build();
+        CartResponse response = cartRepository.save(cart).toResponse();
 
-        CartResponse response = cart.toResponse();
 
-
-        return cartRepository.save(cart);
+        return response;
     }
 
 //    @Transactional
