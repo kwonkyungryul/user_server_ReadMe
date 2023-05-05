@@ -9,6 +9,7 @@ import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.membership.dto.MembershipDTO;
 import shop.readmecorp.userserverreadme.modules.membership.enums.MembershipStatus;
 import shop.readmecorp.userserverreadme.modules.membership.response.MembershipResponse;
+import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentNoneUserDTO;
 
 import javax.persistence.*;
 

@@ -1,16 +1,10 @@
 package shop.readmecorp.userserverreadme.modules.category.dto;
 
 import lombok.*;
-import shop.readmecorp.userserverreadme.common.ValueOfEnum;
 import shop.readmecorp.userserverreadme.modules.category.entity.BigCategory;
-import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
 import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
-import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
-import shop.readmecorp.userserverreadme.modules.category.enums.SmallCategoryType;
 import shop.readmecorp.userserverreadme.modules.category.response.BigCategoryResponse;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -20,26 +14,26 @@ public class BigCategoryDTO {
 
     private Integer id;
 
-    private String bigCategory;
+    private String name;
 
     private List<SmallCategoryDTO> smallCategory;
 
     @Builder
-    public BigCategoryDTO(Integer id, String bigCategory, List<SmallCategoryDTO> smallCategory) {
+    public BigCategoryDTO(Integer id, String name, List<SmallCategoryDTO> smallCategory) {
         this.id = id;
-        this.bigCategory = bigCategory;
+        this.name = name;
         this.smallCategory = smallCategory;
     }
 
     public BigCategory toEntity() {
         return BigCategory.builder()
                 .id(id)
-                .bigCategory(BigCategoryType.valueOf(bigCategory))
+                .bigCategory(BigCategoryType.valueOf(name))
                 .build();
     }
 
     public BigCategoryResponse toResponse() {
-        return new BigCategoryResponse(id, bigCategory);
+        return new BigCategoryResponse(id, name);
     }
 
 }

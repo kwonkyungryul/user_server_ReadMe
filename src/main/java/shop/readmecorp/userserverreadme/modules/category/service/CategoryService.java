@@ -9,7 +9,6 @@ import shop.readmecorp.userserverreadme.modules.category.entity.BigCategory;
 import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
 import shop.readmecorp.userserverreadme.modules.category.repository.BigCategoryRepository;
 import shop.readmecorp.userserverreadme.modules.category.repository.SmallCategoryRepository;
-import shop.readmecorp.userserverreadme.modules.category.response.CategoryDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +28,7 @@ public class CategoryService {
     }
 
 
-    public CategoryDTO getCategories() {
+    public List<BigCategoryDTO> getCategories() {
         List<BigCategory> bigCategoryList = bigCategoryRepository.findAll();
         List<BigCategoryDTO> bigCategoryDTOList = bigCategoryList.stream().map(BigCategory::toDTO).collect(Collectors.toList());
         bigCategoryDTOList.forEach(bigCategoryDTO -> {
@@ -39,6 +38,6 @@ public class CategoryService {
             bigCategoryDTO.setSmallCategory(smallCategoryDTOList);
         });
 
-         return new CategoryDTO(bigCategoryDTOList);
+         return bigCategoryDTOList;
     }
 }

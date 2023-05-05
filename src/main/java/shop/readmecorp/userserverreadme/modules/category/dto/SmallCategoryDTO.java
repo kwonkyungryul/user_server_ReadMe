@@ -1,11 +1,7 @@
 package shop.readmecorp.userserverreadme.modules.category.dto;
 
 import lombok.*;
-import shop.readmecorp.userserverreadme.common.ValueOfEnum;
-import shop.readmecorp.userserverreadme.modules.category.entity.BigCategory;
 import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
-import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
-import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
 import shop.readmecorp.userserverreadme.modules.category.enums.SmallCategoryType;
 
 import javax.validation.constraints.NotBlank;
@@ -20,18 +16,18 @@ public class SmallCategoryDTO {
     private Integer id;
 
     @NotBlank
-    private String smallCategory;
+    private String name;
 
     @Builder
-    public SmallCategoryDTO(Integer id, String smallCategory) {
+    public SmallCategoryDTO(Integer id, String name) {
         this.id = id;
-        this.smallCategory = smallCategory;
+        this.name = name;
     }
 
     public SmallCategory toEntity() {
         return SmallCategory.builder()
                 .id(id)
-                .smallCategory(SmallCategoryType.valueOf(smallCategory))
+                .smallCategory(SmallCategoryType.valueOf(name))
                 .build();
     }
 

@@ -8,6 +8,7 @@ import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.membership.entity.Membership;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
+import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentNoneUserDTO;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
 import shop.readmecorp.userserverreadme.modules.payment.response.MembershipPaymentResponse;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
@@ -15,6 +16,7 @@ import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -65,6 +67,10 @@ public class MembershipPayment extends BaseTime {
 
     public MembershipPaymentDTO toDTO() {
         return new MembershipPaymentDTO(id, user.toDTO(), membership.toDTO(), membershipStartTime.toString(), membershipEndTime.toString(), price, paymentTime.toString(), status.name());
+    }
+
+    public MembershipPaymentNoneUserDTO toNoneUserDTO() {
+        return new MembershipPaymentNoneUserDTO(id, membership.toDTO(), membershipStartTime.toString(), membershipEndTime.toString(), price, paymentTime.toString());
     }
 
     public MembershipPaymentResponse toResponse() {

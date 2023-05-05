@@ -18,9 +18,4 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getCategories() {
-
-        return ResponseEntity.ok(new ResponseDTO<>(1, "카테고리 조회 성공", categoryService.getCategories()));
-    }
 }

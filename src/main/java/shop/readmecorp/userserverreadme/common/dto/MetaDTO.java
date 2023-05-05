@@ -4,12 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shop.readmecorp.userserverreadme.common.metadata.MainTab;
-import shop.readmecorp.userserverreadme.common.metadata.NoticeTypeWrapper;
-import shop.readmecorp.userserverreadme.common.metadata.PaymentTab;
-import shop.readmecorp.userserverreadme.common.metadata.StorageBoxTab;
-import shop.readmecorp.userserverreadme.modules.category.response.CategoryDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
+import shop.readmecorp.userserverreadme.modules.user.dto.UserInfoDTO;
 
 import java.util.List;
 
@@ -17,25 +14,25 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class MetaDTO {
-    private CategoryDTO category;
+    private List<BigCategoryDTO> bigCategory;
 
-    private UserDTO user;
+    private UserInfoDTO user;
 
-    private List<StorageBoxTab> storageBoxTabList;
+    private List<CommonDTO> storageBoxTabs;
 
-    private List<MainTab> mainTab;
+    private List<CommonDTO> mainTabs;
 
-    private List<PaymentTab> paymentTab;
+    private List<CommonDTO> paymentTabs;
 
-    private List<NoticeTypeWrapper> noticeTypeWrapper;
+    private List<String> notificationTypes;
 
     @Builder
-    public MetaDTO(CategoryDTO category, UserDTO user, List<StorageBoxTab> storageBoxTabList, List<MainTab> mainTab, List<PaymentTab> paymentTab, List<NoticeTypeWrapper> noticeTypeWrapper) {
-        this.category = category;
+    public MetaDTO(List<BigCategoryDTO> bigCategory, UserInfoDTO user, List<CommonDTO> storageBoxTabs, List<CommonDTO> mainTabs, List<CommonDTO> paymentTabs, List<String> notificationTypes) {
+        this.bigCategory = bigCategory;
         this.user = user;
-        this.storageBoxTabList = storageBoxTabList;
-        this.mainTab = mainTab;
-        this.paymentTab = paymentTab;
-        this.noticeTypeWrapper = noticeTypeWrapper;
+        this.storageBoxTabs = storageBoxTabs;
+        this.mainTabs = mainTabs;
+        this.paymentTabs = paymentTabs;
+        this.notificationTypes = notificationTypes;
     }
 }
