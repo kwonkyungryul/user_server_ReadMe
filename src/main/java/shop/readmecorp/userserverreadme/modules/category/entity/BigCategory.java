@@ -42,10 +42,10 @@ public class BigCategory extends BaseTime {
     }
 
     public BigCategoryDTO toDTO() {
-        return new BigCategoryDTO(id, bigCategory.name(), status.name());
+        return new BigCategoryDTO(id, bigCategory.name());
     }
 
     public BigCategoryResponse toResponse() {
-        return new BigCategoryResponse(id, bigCategory.name(), status.name());
+        return new BigCategoryResponse(id, bigCategory.name());
     }
 }

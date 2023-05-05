@@ -15,6 +15,4 @@ public class BigCategoryResponse {
 
     private String bigCategory;
 
-    private String status;
-
 }

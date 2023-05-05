@@ -48,7 +48,7 @@ public class SmallCategory extends BaseTime {
     }
 
     public SmallCategoryDTO toDTO() {
-        return new SmallCategoryDTO(id, smallCategory.name(), status.name());
+        return new SmallCategoryDTO(id, smallCategory.name());
     }
 
     public SmallCategoryResponse toResponse() {

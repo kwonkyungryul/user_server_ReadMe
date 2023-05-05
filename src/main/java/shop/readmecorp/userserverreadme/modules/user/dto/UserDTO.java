@@ -29,8 +29,6 @@ public class UserDTO {
 
     private String joinTime;
 
-    private String status;
-
     public User toEntity() {
         return User.builder()
                 .username(username)

@@ -13,4 +13,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     @Query("SELECT b FROM Book b INNER JOIN BookPayment bp ON b.id = bp.book.id GROUP BY bp.book.id ORDER BY COUNT(bp) DESC")
     Page<Book> findByBookPaymentDESC(Pageable pageable);
+
+    Page<Book> findByBigCategoryId(Integer bigCategoryId, Pageable pageable);
 }

@@ -62,7 +62,7 @@ public class User extends BaseTime {
     }
 
     public UserDTO toDTO() {
-        return new UserDTO(id, username,role.name(), isMembership,isAutoPayment,joinTime.toString(), status.name());
+        return new UserDTO(id, username,role.name(), isMembership,isAutoPayment,joinTime.toString());
     }
 
     public UserResponse toResponse() {

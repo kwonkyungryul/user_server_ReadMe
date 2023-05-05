@@ -21,25 +21,21 @@ public class BigCategoryDTO {
 
     private String bigCategory;
 
-    private String status;
-
     @Builder
-    public BigCategoryDTO(Integer id, String bigCategory, String status) {
+    public BigCategoryDTO(Integer id, String bigCategory) {
         this.id = id;
         this.bigCategory = bigCategory;
-        this.status = status;
     }
 
     public BigCategory toEntity() {
         return BigCategory.builder()
                 .id(id)
                 .bigCategory(BigCategoryType.valueOf(bigCategory))
-                .status(CategoryStatus.valueOf(status))
                 .build();
     }
 
     public BigCategoryResponse toResponse() {
-        return new BigCategoryResponse(id, bigCategory, status);
+        return new BigCategoryResponse(id, bigCategory);
     }
 
 }

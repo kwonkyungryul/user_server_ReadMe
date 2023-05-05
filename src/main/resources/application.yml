@@ -25,4 +25,6 @@ server:
     encoding:
       force-response: true
 
-
+logging:
+  level:
+    org.springframework.web: DEBUG
