@@ -1,7 +1,6 @@
 package shop.readmecorp.userserverreadme.common.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpStatus;
-import shop.readmecorp.userserverreadme.modules.book.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

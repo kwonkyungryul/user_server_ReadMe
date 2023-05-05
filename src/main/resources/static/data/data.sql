@@ -956,4 +956,12 @@ INSERT INTO CART_TB(user_id, book_id, status) VALUES(9, 19, 'ACTIVE');
 INSERT INTO CART_TB(user_id, book_id, status) VALUES(10, 20, 'ACTIVE');
 INSERT INTO CART_TB(user_id, book_id, status) VALUES(10, 21, 'ACTIVE');
 
+INSERT INTO MEMBERSHIP_TB(membership_name, price, membership_term, status) VALUES ('스탠다드', 9900, 30, 'ACTIVE');
+
+INSERT INTO MEMBERSHIP_PAYMENT_TB(user_id, membership_id, membership_start_time, membership_end_time, price, payment_time, status)
+VALUES (1, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE');
+VALUES (2, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE');
+VALUES (5, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE');
+VALUES (6, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE');
+
 commit;

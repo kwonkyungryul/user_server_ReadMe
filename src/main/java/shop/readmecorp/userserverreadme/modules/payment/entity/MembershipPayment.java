@@ -13,6 +13,7 @@ import shop.readmecorp.userserverreadme.modules.payment.response.MembershipPayme
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -35,10 +36,10 @@ public class MembershipPayment extends BaseTime {
     private Membership membership;
 
     @Comment("멤버십 시작 시간")
-    private String membershipStartTime;
+    private LocalDate membershipStartTime;
 
     @Comment("멤버십 종료 시간")
-    private String membershipEndTime;
+    private LocalDate membershipEndTime;
 
     @Comment("멤버십 가격")
     private Integer price;
@@ -51,7 +52,7 @@ public class MembershipPayment extends BaseTime {
     private PaymentStatus status;
 
     @Builder
-    public MembershipPayment(Integer id, User user, Membership membership, String membershipStartTime, String membershipEndTime, Integer price, LocalDateTime paymentTime, PaymentStatus status) {
+    public MembershipPayment(Integer id, User user, Membership membership, LocalDate membershipStartTime, LocalDate membershipEndTime, Integer price, LocalDateTime paymentTime, PaymentStatus status) {
         this.id = id;
         this.user = user;
         this.membership = membership;
@@ -63,11 +64,11 @@ public class MembershipPayment extends BaseTime {
     }
 
     public MembershipPaymentDTO toDTO() {
-        return new MembershipPaymentDTO(id, user.toDTO(), membership.toDTO(), membershipStartTime, membershipEndTime, price, paymentTime.toString(), status.name());
+        return new MembershipPaymentDTO(id, user.toDTO(), membership.toDTO(), membershipStartTime.toString(), membershipEndTime.toString(), price, paymentTime.toString(), status.name());
     }
 
     public MembershipPaymentResponse toResponse() {
-        return new MembershipPaymentResponse(id, user.toDTO(), membership.toDTO(), membershipStartTime, membershipEndTime, price, paymentTime.toString(), status.name());
+        return new MembershipPaymentResponse(id, user.toDTO(), membership.toDTO(), membershipStartTime.toString(), membershipEndTime.toString(), price, paymentTime.toString(), status.name());
     }
 }
 

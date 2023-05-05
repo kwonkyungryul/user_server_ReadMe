@@ -47,7 +47,7 @@ public class Notification extends BaseTime {
     }
 
     public NotificationDTO toDTO() {
-        return new NotificationDTO(id, title, content,writeTime.toString(), status.name());
+        return new NotificationDTO(id, title, content,writeTime.toString());
     }
 
     public NotificationResponse toResponse() {

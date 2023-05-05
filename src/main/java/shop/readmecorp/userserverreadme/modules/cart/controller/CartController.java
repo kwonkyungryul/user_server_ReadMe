@@ -7,17 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
-import shop.readmecorp.userserverreadme.modules.book.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.cart.CartConst;
 import shop.readmecorp.userserverreadme.modules.cart.dto.CartDTO;
 import shop.readmecorp.userserverreadme.modules.cart.entity.Cart;
 import shop.readmecorp.userserverreadme.modules.cart.request.CartSaveRequest;
-import shop.readmecorp.userserverreadme.modules.cart.request.CartUpdateRequest;
 import shop.readmecorp.userserverreadme.modules.cart.response.CartResponse;
 import shop.readmecorp.userserverreadme.modules.cart.service.CartService;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController

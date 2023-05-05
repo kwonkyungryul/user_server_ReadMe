@@ -1,25 +1,15 @@
 package shop.readmecorp.userserverreadme.modules.book.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
-import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
-import shop.readmecorp.userserverreadme.modules.book.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.request.BookSaveRequest;
 import shop.readmecorp.userserverreadme.modules.book.request.BookUpdateRequest;
-import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse;
 import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 
@@ -28,9 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
