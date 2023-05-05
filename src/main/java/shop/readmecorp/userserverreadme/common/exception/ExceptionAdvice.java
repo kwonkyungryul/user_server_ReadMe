@@ -24,6 +24,36 @@ public class ExceptionAdvice {
         return new ResponseEntity<>(errorMap, headers, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(Exception401.class)
+    public ResponseEntity<Map<String, Object>> handleException401(Exception401 ex) {
+        Map<String, Object> errorMap = new HashMap<>();
+        errorMap.put("status", HttpStatus.UNAUTHORIZED.value());
+        errorMap.put("message", ex.getMessage());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(errorMap, headers, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(Exception403.class)
+    public ResponseEntity<Map<String, Object>> handleException403(Exception401 ex) {
+        Map<String, Object> errorMap = new HashMap<>();
+        errorMap.put("status", HttpStatus.FORBIDDEN.value());
+        errorMap.put("message", ex.getMessage());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(errorMap, headers, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(Exception404.class)
+    public ResponseEntity<Map<String, Object>> handleException404(Exception404 ex) {
+        Map<String, Object> errorMap = new HashMap<>();
+        errorMap.put("status", HttpStatus.BAD_REQUEST.value());
+        errorMap.put("message", ex.getMessage());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(errorMap, headers, HttpStatus.BAD_REQUEST);
+    }
+
     // TODO 리팩토링 어케하는지 물어보기
     @ExceptionHandler(Exception500.class)
     public ResponseEntity<Map<String, Object>> handleException500(Exception500 ex) {

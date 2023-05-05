@@ -21,7 +21,6 @@ public class PublisherResponse {
 
     private String businessName;
 
-    //TODO 이거 써도되나?
     private String joinTime;
 
 }

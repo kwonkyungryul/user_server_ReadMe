@@ -1,13 +1,15 @@
 package shop.readmecorp.userserverreadme.modules.user.controller;
 
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.modules.book.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.file.entity.File;
 import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
 import shop.readmecorp.userserverreadme.modules.file.enums.FileType;
@@ -20,6 +22,7 @@ import shop.readmecorp.userserverreadme.modules.user.service.UserService;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -52,5 +55,16 @@ public class UserController {
         User save = userService.join(request, fileInfo);
 
         return ResponseEntity.ok(save.toResponse());
+    }
+
+    // TODO 시큐리티 설정 후 해야 함.
+    @PostMapping("/login")
+    public ResponseEntity<?> getUser(@RequestBody String idToken) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + idToken);
+
+        log.debug("idToken : " + idToken);
+        return new ResponseEntity<>(new ResponseDTO<>(1, "성공", null), headers, HttpStatus.OK);
     }
 }

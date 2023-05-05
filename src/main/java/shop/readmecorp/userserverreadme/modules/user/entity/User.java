@@ -41,7 +41,6 @@ public class User extends BaseTime {
     @Comment("자동 결제 여부")
     private Boolean isAutoPayment;
 
-    //TODO 이거 써도되나?
     @Comment("유저 가입 시간")
     private LocalDateTime joinTime;
 
@@ -50,11 +49,11 @@ public class User extends BaseTime {
     private UserStatus status;
 
     @Builder
-    public User(Integer id, String username,String password,Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo) {
+    public User(Integer id, String username,String password, String role, Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.role = RoleType.USER;
+        this.role = RoleType.valueOf(role);
         this.isMembership = isMembership;
         this.isAutoPayment = isAutoPayment;
         this.joinTime = joinTime;
