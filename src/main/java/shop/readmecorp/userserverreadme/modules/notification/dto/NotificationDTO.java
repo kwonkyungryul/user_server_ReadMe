@@ -18,7 +18,4 @@ public class NotificationDTO {
     private String content;
 
     private String writeTime;
-
-    private String status;
-
 }

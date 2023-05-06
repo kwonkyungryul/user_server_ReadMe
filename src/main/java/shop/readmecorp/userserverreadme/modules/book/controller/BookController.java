@@ -1,141 +1,92 @@
 package shop.readmecorp.userserverreadme.modules.book.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
-import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
-import shop.readmecorp.userserverreadme.modules.book.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
-import shop.readmecorp.userserverreadme.modules.book.request.BookSaveRequest;
-import shop.readmecorp.userserverreadme.modules.book.request.BookUpdateRequest;
 import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse;
 import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
+import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
+import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
+import shop.readmecorp.userserverreadme.modules.file.entity.File;
+import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
+import shop.readmecorp.userserverreadme.modules.file.service.FileInfoService;
+import shop.readmecorp.userserverreadme.modules.file.service.FileService;
+import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
+import shop.readmecorp.userserverreadme.modules.review.enums.ReviewStatus;
+import shop.readmecorp.userserverreadme.modules.review.service.ReviewService;
 
-import javax.validation.Valid;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @RestController
 @RequestMapping("/books")
 public class BookController {
 
     private final BookService bookService;
+    private final ReviewService reviewService;
+    private final FileService fileService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, ReviewService reviewService, FileService fileService) {
         this.bookService = bookService;
+        this.reviewService = reviewService;
+        this.fileService = fileService;
     }
 
-//    @GetMapping
-//    public ResponseEntity<PageImpl<?>> getPage(Pageable pageable) {
-//        return ResponseEntity.ok(bookService.getPage(pageable));
-//    }
 
     @GetMapping
-    public ResponseEntity<?> getPage(Pageable pageable) {
-        return ResponseEntity.ok(new ResponseDTO<>(1, "전체/신간 리스트 조회 성공", bookService.getPage(pageable)));
+    public ResponseEntity<?> getPage(Pageable pageable,
+                                     @RequestParam(defaultValue = "0") Integer bigCategoryId,
+                                     @RequestParam(defaultValue = "0") Integer smallCategoryId,
+                                     @RequestParam(defaultValue = "") String status,
+                                     @AuthenticationPrincipal MyUserDetails myUserDetails
+                                     ) {
+        return ResponseEntity.ok(new ResponseDTO<>(1, "리스트 조회 성공",
+                bookService.getPage(bigCategoryId, smallCategoryId, pageable, status, myUserDetails)));
     }
 
-    @GetMapping("/recommends")
-    public ResponseEntity<?> getRecommend(Pageable pageable) {
-        return ResponseEntity.ok(new ResponseDTO<>(1, "추천 리스트 조회 성공", bookService.getRecommend(pageable)));
-    }
-
-    @GetMapping("/best-sellers")
-    public ResponseEntity<?> getBestSeller(Pageable pageable) {
-        return ResponseEntity.ok(new ResponseDTO<>(1, "베스트 셀러 리스트 조회 성공", bookService.getBestSellers(pageable)));
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookResponse> getBook(@PathVariable Integer id) {
         var optionalBook = bookService.getBook(id);
+        if (optionalBook.isEmpty()) {
+            throw new Exception400(BookConst.notFound);
+        }
         return ResponseEntity.ok(optionalBook.get().toResponse());
     }
 
-
-
     @GetMapping("/{id}/detail")
     public ResponseEntity<?> getBookDetail(@PathVariable Integer id) {
-        return ResponseEntity.ok(new ResponseDTO<>(1, "도서 상세 조회 성공", bookService.getBookDetail(id)));
-    }
-
-    @GetMapping("/{id}/epub")
-    public ResponseEntity<String> getEpubFile(@PathVariable Integer id) throws IOException {
-        Optional<Book> optionalBook = bookService.getBook(id);
-        Path path = Path.of(optionalBook.get().getFilePath());
-
-        try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(path))) {
-            ZipEntry entry;
-            int i = 0;
-            while ((entry = zis.getNextEntry()) != null) {
-                if (entry.getName().endsWith(".html") || entry.getName().endsWith(".xhtml")) {
-                    byte[] contentBytes = zis.readAllBytes();
-                    return ResponseEntity.ok(new String(contentBytes, StandardCharsets.UTF_8));
-                }
-            }
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping
-    public ResponseEntity<BookResponse> saveBook(
-            @Valid @RequestBody BookSaveRequest request,
-            Errors error) {
-        if (error.hasErrors()) {
-            throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
-        }
-
-        Book save = bookService.save(request);
-
-        return ResponseEntity.ok(save.toResponse());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<BookResponse> updateBook(
-            @PathVariable Integer id,
-            @Valid @RequestBody BookUpdateRequest request,
-            Errors error
-    ) {
-        if (error.hasErrors()) {
-            throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
-        }
-
         Optional<Book> optionalBook = bookService.getBook(id);
         if (optionalBook.isEmpty()) {
             throw new Exception400(BookConst.notFound);
         }
 
-        Book update = bookService.update(request, optionalBook.get());
-        return ResponseEntity.ok(update.toResponse());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
-        Optional<Book> optionalBook = bookService.getBook(id);
-        if (optionalBook.isEmpty()) {
+        Book book = optionalBook.get();
+        List<ReviewDTO> reviewDtoList = reviewService.getReviews(book.getId(), ReviewStatus.ACTIVE);
+        if (reviewDtoList == null) {
             throw new Exception400(BookConst.notFound);
         }
 
-        bookService.delete(optionalBook.get());
+        Optional<FileDTO> optionalEpubFile = fileService.getFile(book.getEpub().getId());
+        if (optionalEpubFile.isEmpty()) {
+            throw new Exception400("Epub 파일을 찾을 수 없습니다.");
+        }
 
-        return ResponseEntity.ok("삭제가 완료되었습니다.");
+        Optional<FileDTO> optionalCoverFile = fileService.getFile(book.getCover().getId());
+        if (optionalCoverFile.isEmpty()) {
+            throw new Exception400("커버 파일을 찾을 수 없습니다.");
+        }
+
+        BookDetailResponse bookDetail = bookService.getBookDetail(book, optionalEpubFile.get(), optionalCoverFile.get(), reviewDtoList);
+        return ResponseEntity.ok(new ResponseDTO<>(1, "도서 상세 조회 성공", bookDetail));
     }
+
+
 }

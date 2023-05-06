@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
+import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
 
 @Getter
 @Setter
@@ -21,10 +22,5 @@ public class UserResponse {
     private Boolean isMembership;
 
     private Boolean isAutoPayment;
-
-    //TODO 이거 써도되나?
-    private String joinTime;
-
-    private String status;
 
 }

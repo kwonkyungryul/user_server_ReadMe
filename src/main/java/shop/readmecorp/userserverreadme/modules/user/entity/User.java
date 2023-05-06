@@ -26,6 +26,7 @@ public class User extends BaseTime {
     private Integer id;
 
     @Comment("아이디")
+    @Column(unique = true)
     private String username;
 
     @Comment("비밀번호")
@@ -41,31 +42,26 @@ public class User extends BaseTime {
     @Comment("자동 결제 여부")
     private Boolean isAutoPayment;
 
-    //TODO 이거 써도되나?
-    @Comment("유저 가입 시간")
-    private LocalDateTime joinTime;
-
     @Comment("유저 활성화 상태")
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     @Builder
-    public User(Integer id, String username,String password,Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo) {
+    public User(Integer id, String username,String password, String role, Boolean isMembership, Boolean isAutoPayment) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.role = RoleType.USER;
+        this.role = RoleType.valueOf(role);
         this.isMembership = isMembership;
         this.isAutoPayment = isAutoPayment;
-        this.joinTime = joinTime;
         this.status = UserStatus.ACTIVE;
     }
 
     public UserDTO toDTO() {
-        return new UserDTO(id, username,role.name(), isMembership,isAutoPayment,joinTime.toString());
+        return new UserDTO(id, username,role.name(), isMembership,isAutoPayment);
     }
 
     public UserResponse toResponse() {
-        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment, joinTime.toString(), status.name());
+        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment);
     }
 }

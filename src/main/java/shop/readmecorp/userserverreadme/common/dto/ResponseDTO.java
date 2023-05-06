@@ -1,4 +1,4 @@
-package shop.readmecorp.userserverreadme.modules.book.dto;
+package shop.readmecorp.userserverreadme.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

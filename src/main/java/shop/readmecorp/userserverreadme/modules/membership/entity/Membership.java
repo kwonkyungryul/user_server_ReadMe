@@ -9,6 +9,7 @@ import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.membership.dto.MembershipDTO;
 import shop.readmecorp.userserverreadme.modules.membership.enums.MembershipStatus;
 import shop.readmecorp.userserverreadme.modules.membership.response.MembershipResponse;
+import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentNoneUserDTO;
 
 import javax.persistence.*;
 
@@ -22,6 +23,9 @@ public class Membership extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("고유번호")
     private Integer id;
+    
+    @Comment("멤버십 이름")
+    private String membershipName;
 
     @Comment("멤버십 가격")
     private Integer price;
@@ -34,8 +38,9 @@ public class Membership extends BaseTime {
     private MembershipStatus status;
 
     @Builder
-    public Membership(Integer id, Integer price, String membershipTerm, MembershipStatus status) {
+    public Membership(Integer id, String membershipName, Integer price, String membershipTerm, MembershipStatus status) {
         this.id = id;
+        this.membershipName = membershipName;
         this.price = price;
         this.membershipTerm = membershipTerm;
         this.status = status;
