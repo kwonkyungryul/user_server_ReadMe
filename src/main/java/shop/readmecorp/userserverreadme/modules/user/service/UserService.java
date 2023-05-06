@@ -40,7 +40,6 @@ public class UserService {
                 .password(UUID.randomUUID().toString()) // 비밀번호 랜덤값 넣기
                 .isMembership(false)
                 .isAutoPayment(false)
-                .fileInfo(fileInfo)
                 .joinTime(LocalDateTime.now())
                 .build();
 

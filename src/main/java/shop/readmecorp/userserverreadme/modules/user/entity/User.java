@@ -26,6 +26,7 @@ public class User extends BaseTime {
     private Integer id;
 
     @Comment("아이디")
+    @Column(unique = true)
     private String username;
 
     @Comment("비밀번호")
@@ -49,7 +50,7 @@ public class User extends BaseTime {
     private UserStatus status;
 
     @Builder
-    public User(Integer id, String username,String password, String role, Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime, FileInfo fileInfo) {
+    public User(Integer id, String username,String password, String role, Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime) {
         this.id = id;
         this.username = username;
         this.password = password;
