@@ -16,7 +16,7 @@ import java.util.List;
 public class MetaDTO {
     private List<BigCategoryDTO> bigCategory;
 
-    private UserInfoDTO user;
+    private UserDTO user;
 
     private List<CommonDTO> storageBoxTabs;
 
@@ -27,7 +27,7 @@ public class MetaDTO {
     private List<String> notificationTypes;
 
     @Builder
-    public MetaDTO(List<BigCategoryDTO> bigCategory, UserInfoDTO user, List<CommonDTO> storageBoxTabs, List<CommonDTO> mainTabs, List<CommonDTO> paymentTabs, List<String> notificationTypes) {
+    public MetaDTO(List<BigCategoryDTO> bigCategory, UserDTO user, List<CommonDTO> storageBoxTabs, List<CommonDTO> mainTabs, List<CommonDTO> paymentTabs, List<String> notificationTypes) {
         this.bigCategory = bigCategory;
         this.user = user;
         this.storageBoxTabs = storageBoxTabs;

@@ -48,7 +48,6 @@ public class CommonController {
     // TODO 블로깅 - 처음엔 ~ 했는데 ~~이유 때문에 ~~ 하게 됐다
     @GetMapping("/meta")
     public ResponseEntity<?> getMetaData(@AuthenticationPrincipal MyUserDetails myUserDetails) {
-
         return ResponseEntity.ok(new ResponseDTO<>(1, "메타데이터 로드 성공", commonService.getMetaData(myUserDetails)));
     }
 

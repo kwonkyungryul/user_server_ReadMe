@@ -42,30 +42,26 @@ public class User extends BaseTime {
     @Comment("자동 결제 여부")
     private Boolean isAutoPayment;
 
-    @Comment("유저 가입 시간")
-    private LocalDateTime joinTime;
-
     @Comment("유저 활성화 상태")
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     @Builder
-    public User(Integer id, String username,String password, String role, Boolean isMembership, Boolean isAutoPayment, LocalDateTime joinTime) {
+    public User(Integer id, String username,String password, String role, Boolean isMembership, Boolean isAutoPayment) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = RoleType.valueOf(role);
         this.isMembership = isMembership;
         this.isAutoPayment = isAutoPayment;
-        this.joinTime = joinTime;
         this.status = UserStatus.ACTIVE;
     }
 
     public UserDTO toDTO() {
-        return new UserDTO(id, username,role.name(), isMembership,isAutoPayment,joinTime.toString());
+        return new UserDTO(id, username,role.name(), isMembership,isAutoPayment);
     }
 
     public UserResponse toResponse() {
-        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment, joinTime.toString());
+        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment);
     }
 }

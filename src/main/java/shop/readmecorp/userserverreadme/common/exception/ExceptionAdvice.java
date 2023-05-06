@@ -35,7 +35,7 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(Exception403.class)
-    public ResponseEntity<Map<String, Object>> handleException403(Exception401 ex) {
+    public ResponseEntity<Map<String, Object>> handleException403(Exception403 ex) {
         Map<String, Object> errorMap = new HashMap<>();
         errorMap.put("status", HttpStatus.FORBIDDEN.value());
         errorMap.put("message", ex.getMessage());

@@ -1,9 +1,6 @@
 package shop.readmecorp.userserverreadme.modules.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import shop.readmecorp.userserverreadme.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
@@ -14,7 +11,6 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
     private Integer id;
@@ -27,16 +23,20 @@ public class UserDTO {
 
     private Boolean isAutoPayment;
 
-    private String joinTime;
-
     public User toEntity() {
         return User.builder()
                 .username(username)
                 .isMembership(isMembership)
                 .isAutoPayment(isAutoPayment)
-                .joinTime(DateTimeConverter.stringToLocalDateTime(joinTime))
                 .build();
     }
 
-
+    @Builder
+    public UserDTO(Integer id, String username, String role, Boolean isMembership, Boolean isAutoPayment) {
+        this.id = id;
+        this.username = username;
+        this.role = role;
+        this.isMembership = isMembership;
+        this.isAutoPayment = isAutoPayment;
+    }
 }

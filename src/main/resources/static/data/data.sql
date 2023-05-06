@@ -115,16 +115,16 @@ insert into FILE_TB(file_info_id, file_name, file_url, file_size, extension, sta
 
 
 
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('kkr0787@nate.com','1234', 'USER', true, true, '2021-01-01 00:01', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('aj124578@nate.com','1234', 'USER', true, false, '2021-01-01 00:02', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('heesun-b@nate.com','1234', 'USER', false, false, '2021-01-01 00:03', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('yuhyunkim@nate.com','1234', 'USER', false, false, '2021-01-01 00:03', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('tero1115@nate.com','1234', 'USER', false, false, '2021-01-01 00:03', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('khh@nate.com','1234', 'USER', true, true, '2021-01-01 00:01', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('pjh@nate.com','1234', 'USER', true, false, '2021-01-01 00:02', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('cjh@nate.com','1234', 'USER', false, false, '2021-01-01 00:03', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('kth@nate.com','1234', 'USER', false, false, '2021-01-01 00:03', 'ACTIVE');
-insert into USER_TB(username, password, role, is_membership, is_auto_payment, join_time, status) values ('hkd@nate.com','1234', 'USER', false, false, '2021-01-01 00:03', 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('kkr0787@nate.com','1234', 'USER', true, true, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('aj124578@nate.com','1234', 'USER', true, false, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('heesun-b@nate.com','1234', 'USER', false, false, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('yuhyunkim@nate.com','1234', 'USER', false, false, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('tero1115@nate.com','1234', 'USER', false, false, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('khh@nate.com','1234', 'USER', true, true, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('pjh@nate.com','1234', 'USER', true, false, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('cjh@nate.com','1234', 'USER', false, false, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('kth@nate.com','1234', 'USER', false, false, 'ACTIVE');
+insert into USER_TB(username, password, role, is_membership, is_auto_payment, status) values ('hkd@nate.com','1234', 'USER', false, false, 'ACTIVE');
 
 insert into BIG_CATEGORY_TB(big_category, status) values ('경영', 'ACTIVE');
 insert into BIG_CATEGORY_TB(big_category, status) values ('자기계발', 'ACTIVE');

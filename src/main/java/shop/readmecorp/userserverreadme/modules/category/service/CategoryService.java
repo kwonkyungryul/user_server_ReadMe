@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional(readOnly = true)
 public class CategoryService {
-
     private final SmallCategoryRepository smallCategoryRepository;
-
     private final BigCategoryRepository bigCategoryRepository;
 
     public CategoryService(SmallCategoryRepository smallCategoryRepository, BigCategoryRepository bigCategoryRepository) {
@@ -27,17 +25,21 @@ public class CategoryService {
         this.bigCategoryRepository = bigCategoryRepository;
     }
 
-
     public List<BigCategoryDTO> getCategories() {
         List<BigCategory> bigCategoryList = bigCategoryRepository.findAll();
         List<BigCategoryDTO> bigCategoryDTOList = bigCategoryList.stream().map(BigCategory::toDTO).collect(Collectors.toList());
-        bigCategoryDTOList.forEach(bigCategoryDTO -> {
-            List<SmallCategory> smallCategoryList = smallCategoryRepository.findByBigCategoryId(bigCategoryDTO.getId());
-            List<SmallCategoryDTO> smallCategoryDTOList = smallCategoryList.stream().map(SmallCategory::toDTO).collect(Collectors.toList());
 
-            bigCategoryDTO.setSmallCategory(smallCategoryDTOList);
-        });
+        List<Integer> bigCategoryIds = bigCategoryList.stream().map(BigCategory :: getId).collect(Collectors.toList());
+        List<SmallCategory> smallCategoryList = smallCategoryRepository.findByBigCategoryIdIn(bigCategoryIds);
 
+        bigCategoryDTOList.forEach(
+                bigCategoryDTO -> bigCategoryDTO.setSmallCategory (
+                    smallCategoryList.stream()
+                            .filter(smallCategory -> smallCategory.getBigCategory().getId().equals(bigCategoryDTO.getId()))
+                            .map(SmallCategory::toDTO)
+                            .collect(Collectors.toList())
+                )
+        );
          return bigCategoryDTOList;
     }
 }

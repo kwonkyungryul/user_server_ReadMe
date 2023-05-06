@@ -24,6 +24,7 @@ import shop.readmecorp.userserverreadme.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.service.CategoryService;
 import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationType;
+import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserInfoDTO;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.modules.user.repository.UserRepository;
@@ -57,35 +58,28 @@ public class CommonService {
     public MetaDTO getMetaData(MyUserDetails myUserDetails) {
         List<BigCategoryDTO> categories = categoryService.getCategories();
 
-        UserInfoDTO userInfoDTO = null;
+        UserDTO userDTO = null;
         if (myUserDetails != null) {
-            userInfoDTO = userService.getUser(myUserDetails.getUser().getId());
+            userDTO = userService.getUser(myUserDetails.getUser().getId());
         }
 
-        List<CommonDTO> storageBoxTabList = List.of(
-                new CommonDTO("최근 본", StorageBoxType.recent.name()),
-                new CommonDTO("스크랩", StorageBoxType.scrap.name()),
-                new CommonDTO("구매", StorageBoxType.purchase.name()),
-                new CommonDTO("북마크", StorageBoxType.bookmark.name())
-        );
+        List<CommonDTO> storageBoxTabList = Arrays.stream(StorageBoxType.values())
+                .map(storageBoxType -> new CommonDTO(storageBoxType.getName(), storageBoxType.getRequestName()))
+                .collect(Collectors.toList());
 
-        List<CommonDTO> mainTabList = List.of(
-                new CommonDTO("전체", MainTabType.ALL.name()),
-                new CommonDTO("베스트셀러", MainTabType.BESTSELLER.name()),
-                new CommonDTO("추천", MainTabType.RECOMMEND.name()),
-                new CommonDTO("신간", MainTabType.NEW.name())
-        );
+        List<CommonDTO> mainTabList = Arrays.stream(MainTabType.values())
+                .map(mainTabType -> new CommonDTO(mainTabType.getName(), mainTabType.getRequestName()))
+                .collect(Collectors.toList());
 
-        List<CommonDTO> paymentTabList = List.of(
-                new CommonDTO("멤버십", PaymentTabType.MEMBERSHIP.name()),
-                new CommonDTO("도서 구매", PaymentTabType.PURCHASE.name())
-        );
+        List<CommonDTO> paymentTabList = Arrays.stream(PaymentTabType.values())
+                .map(paymentTabType -> new CommonDTO(paymentTabType.getName(), paymentTabType.getRequestName()))
+                .collect(Collectors.toList());
 
         List<String> notificationTypes = Arrays.stream(NotificationType.values()).map(Enum::name).collect(Collectors.toList());
 
         return MetaDTO.builder()
                 .bigCategory(categories)
-                .user(userInfoDTO)
+                .user(userDTO)
                 .storageBoxTabs(storageBoxTabList)
                 .mainTabs(mainTabList)
                 .paymentTabs(paymentTabList)
@@ -104,7 +98,7 @@ public class CommonService {
         Optional<User> optionalUser = userRepository.findByUsername(request.getCurrentUserEmail());
         User user = null;
         if (optionalUser.isEmpty()) {
-            user = userRepository.save(new User(null, request.getCurrentUserEmail(), UUID.randomUUID().toString(), RoleType.USER.name(), false, false, LocalDateTime.now()));
+            user = userRepository.save(new User(null, request.getCurrentUserEmail(), UUID.randomUUID().toString(), RoleType.USER.name(), false, false));
         } else {
             user = optionalUser.get();
         }

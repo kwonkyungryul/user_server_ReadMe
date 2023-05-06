@@ -14,12 +14,9 @@ public class UserInfoDTO {
 
     private String username;
 
-    private MembershipPaymentNoneUserDTO membershipPaymentNoneUserDTO;
-
     @Builder
-    public UserInfoDTO(Integer id, String username, MembershipPaymentNoneUserDTO membershipPaymentNoneUserDTO) {
+    public UserInfoDTO(Integer id, String username) {
         this.id = id;
         this.username = username;
-        this.membershipPaymentNoneUserDTO = membershipPaymentNoneUserDTO;
     }
 }

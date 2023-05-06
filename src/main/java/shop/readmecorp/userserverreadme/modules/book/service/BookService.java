@@ -5,30 +5,26 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.readmecorp.userserverreadme.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.common.enums.MainTabType;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
+import shop.readmecorp.userserverreadme.modules.book.entity.Heart;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.book.repository.BookRepository;
 import shop.readmecorp.userserverreadme.modules.book.repository.HeartRepository;
-import shop.readmecorp.userserverreadme.modules.book.request.BookSaveRequest;
-import shop.readmecorp.userserverreadme.modules.book.request.BookUpdateRequest;
 import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse;
+import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
 import shop.readmecorp.userserverreadme.modules.file.entity.File;
-import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
 import shop.readmecorp.userserverreadme.modules.file.repository.FileInfoRepository;
 import shop.readmecorp.userserverreadme.modules.file.repository.FileRepository;
-import shop.readmecorp.userserverreadme.modules.review.entity.Review;
-import shop.readmecorp.userserverreadme.modules.review.enums.ReviewStatus;
+import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
 import shop.readmecorp.userserverreadme.modules.review.repository.ReviewRepository;
+import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,136 +34,95 @@ public class BookService {
 
     private final ReviewRepository reviewRepository;
 
-    private final FileInfoRepository fileInfoRepository;
-
     private final FileRepository fileRepository;
 
-    public BookService(BookRepository bookRepository, ReviewRepository reviewRepository, FileInfoRepository fileInfoRepository, FileRepository fileRepository) {
+    private final HeartRepository heartRepository;
+
+    public BookService(BookRepository bookRepository, ReviewRepository reviewRepository, FileInfoRepository fileInfoRepository, FileRepository fileRepository, HeartRepository heartRepository) {
         this.bookRepository = bookRepository;
         this.reviewRepository = reviewRepository;
-        this.fileInfoRepository = fileInfoRepository;
         this.fileRepository = fileRepository;
+        this.heartRepository = heartRepository;
     }
 
     // TODO 완전 바뀔 예정
-    public PageImpl<?> getPage(Integer bigCategoryId, Integer smallCategoryId, Pageable pageable) {
-        Page<Book> page = bookRepository.findAll(pageable);
-        List<BookDTO> content = page.getContent()
-                .stream()
-                .filter(book -> book.getStatus().equals(BookStatus.ACTIVE))
-                .map(Book::toDTO)
-                .collect(Collectors.toList());
+    public Page<BookDTO> getPage(
+        Integer bigCategoryId,
+        Integer smallCategoryId,
+        Pageable pageable,
+        String status,
+        MyUserDetails myUserDetails
+    ) {
+        Page<Book> page = new PageImpl<>(List.of(), pageable, 0);
 
-        for (int i = 0; i < content.size(); i++) {
-            File epubFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getEpub().getId());
-            File coverFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getCover().getId());
-            Double stars = reviewRepository.findAvgStars(content.get(i).getId());
-            content.get(i).setEpubFile(epubFiles.toDTO());
-            content.get(i).setCoverFile(coverFiles.toDTO());
+        // 전체 (bigCategoryId, smallCategoryID)
+        if (status.equals(MainTabType.ALL.getRequestName())) {
+            if (bigCategoryId != 0) {
+                if (smallCategoryId != 0) {
+                    page = bookRepository.findByBigCategoryIdAndSmallCategoryIdAndStatus(bigCategoryId, smallCategoryId, pageable, BookStatus.ACTIVE);
+                } else {
+                    page = bookRepository.findByBigCategoryIdAndStatus(bigCategoryId, pageable, BookStatus.ACTIVE);
+                }
 
-            // TODO 로그인 시 좋아요 체크(isHeart) 해야함. 아래 것들도 마찬가지
-            content.get(i).setIsHeart(true);
-
-            if (stars != null) {
-                content.get(i).setStars(Math.ceil((stars * 10) / 10));
             } else {
-                content.get(i).setStars(0.0);
+                page = bookRepository.findByStatus(pageable, BookStatus.ACTIVE);
             }
+
+        // heart 가 많은 순
+        } else if (status.equals(MainTabType.NEW.getRequestName())) {
+            page = bookRepository.findByBookHeartCount(pageable, BookStatus.ACTIVE);
+
+        // bestSeller -> payment 판매순
+        } else if (status.equals(MainTabType.BESTSELLER.getRequestName())) {
+            page = bookRepository.findByBookPaymentDESC(pageable, BookStatus.ACTIVE);
+
+        // 신간 OrderBy id Desc
+        } else if (status.equals(MainTabType.RECOMMEND.getRequestName())) {
+            page = bookRepository.findByStatusOrderByIdDesc(pageable, BookStatus.ACTIVE);
         }
 
-
-
-        return new PageImpl<>(content, pageable, page.getTotalElements());
-    }
-
-    public PageImpl<?> getRecommend(Pageable pageable) {
-        Page<Book> page = bookRepository.findByBookHeartCount(pageable);
-
-        List<BookDTO> content = page.getContent()
-                .stream()
-                .filter(book -> book.getStatus().equals(BookStatus.ACTIVE))
-                .map(Book::toDTO)
-                .collect(Collectors.toList());
-
-        for (int i = 0; i < content.size(); i++) {
-            File epubFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getEpub().getId());
-            File coverFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getCover().getId());
-            Double stars = reviewRepository.findAvgStars(content.get(i).getId());
-            content.get(i).setEpubFile(epubFiles.toDTO());
-            content.get(i).setCoverFile(coverFiles.toDTO());
-
-            content.get(i).setIsHeart(true);
-
-            if (stars != null) {
-                content.get(i).setStars(Math.ceil((stars * 10) / 10));
+        return page.map(book -> {
+            BookDTO bookDTO = book.toDTO();
+            List<File> epubFiles = fileRepository.findByFileInfo_Id(book.getEpub().getId());
+            if (epubFiles.size() == 0) {
+                bookDTO.setEpubFile(BookConst.defaultBookFileDTO);
             } else {
-                content.get(i).setStars(0.0);
+                bookDTO.setEpubFile(epubFiles.get(0).toDTO());
             }
-        }
 
-        return new PageImpl<>(content, pageable, page.getTotalElements());
-    }
-
-    public PageImpl<?> getBestSellers(Pageable pageable) {
-        Page<Book> page = bookRepository.findByBookPaymentDESC(pageable);
-
-        List<BookDTO> content = page.getContent()
-                .stream()
-                .filter(book -> book.getStatus().equals(BookStatus.ACTIVE))
-                .map(Book::toDTO)
-                .collect(Collectors.toList());
-
-        for (int i = 0; i < content.size(); i++) {
-            File epubFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getEpub().getId());
-            File coverFiles = fileRepository.findByFileInfo_Id(page.getContent().get(i).getCover().getId());
-            Double stars = reviewRepository.findAvgStars(content.get(i).getId());
-            content.get(i).setEpubFile(epubFiles.toDTO());
-            content.get(i).setCoverFile(coverFiles.toDTO());
-
-            content.get(i).setIsHeart(true);
-
-            if (stars != null) {
-                content.get(i).setStars(Math.ceil((stars * 10) / 10));
+            List<File> coverFiles = fileRepository.findByFileInfo_Id(book.getCover().getId());
+            if (epubFiles.size() == 0) {
+                bookDTO.setCoverFile(BookConst.defaultBookFileDTO);
             } else {
-                content.get(i).setStars(0.0);
+                bookDTO.setCoverFile(coverFiles.get(0).toDTO());
             }
-        }
 
-        return new PageImpl<>(content, pageable, page.getTotalElements());
+            Double stars = reviewRepository.findAvgStars(bookDTO.getId());
+            if (stars != null) {
+                bookDTO.setStars(Math.ceil((stars * 10) / 10));
+            } else {
+                bookDTO.setStars(0.0);
+            }
+
+            bookDTO.setIsHeart(false);
+            if (myUserDetails != null) {
+                User user = myUserDetails.getUser();
+                Optional<Heart> optionalHeart = heartRepository.heartCount(book.getId(), user.getId());
+                if (optionalHeart.isPresent()) {
+                    bookDTO.setIsHeart(true);
+                }
+            }
+            return bookDTO;
+        });
     }
 
     public Optional<Book> getBook(Integer id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        if (optionalBook.isEmpty()) {
-            throw new Exception400(BookConst.notFound);
-        }
-        return optionalBook;
+        return bookRepository.findById(id);
     }
 
-    public BookDetailResponse getBookDetail(Integer id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        if (optionalBook.isEmpty()) {
-            throw new Exception400(BookConst.notFound);
-        }
-        Book book = optionalBook.get();
-        List<Review> reviews = reviewRepository.findByBookId(book.getId());
-        if (reviews == null) {
-            throw new Exception400(BookConst.notFound);
-        }
-
-        Optional<FileInfo> optionalEpubFileInfo = fileInfoRepository.findById(book.getEpub().getId());
-        File epubFile = fileRepository.findByFileInfo_Id(optionalEpubFileInfo.get().getId());
-
-        Optional<FileInfo> optionalCoverFileInfo = fileInfoRepository.findById(book.getCover().getId());
-        File coverFile = fileRepository.findByFileInfo_Id(optionalCoverFileInfo.get().getId());
-
-        var reviewDTOList = reviews.stream()
-                .filter(review -> review.getStatus().equals(ReviewStatus.ACTIVE))
-                .map(Review::toDTO)
-                .collect(Collectors.toList());
-
+    public BookDetailResponse getBookDetail(Book book, FileDTO epubFileDTO, FileDTO coverFileDTO, List<ReviewDTO> reviewDtoList) {
         return BookDetailResponse.builder()
-                .id(id)
+                .id(book.getId())
                 .publisher(book.getPublisher().toDTO())
                 .title(book.getTitle())
                 .author(book.getAuthor())
@@ -176,21 +131,10 @@ public class BookService {
                 .bigCategory(book.getBigCategory().toDTO())
                 .smallCategory(book.getSmallCategory().toDTO())
                 .authorInfo(book.getAuthorInfo())
-                .epubFile(epubFile.toDTO())
-                .coverFile(coverFile.toDTO())
-                .reviews(reviewDTOList)
+                .epubFile(epubFileDTO)
+                .coverFile(coverFileDTO)
+                .reviews(reviewDtoList)
                 .build();
     }
 
-    public Book save(BookSaveRequest request) {
-
-        return null;
-    }
-
-    public Book update(BookUpdateRequest request, Book book) {
-        return null;
-    }
-
-    public void delete(Book book) {
-    }
 }

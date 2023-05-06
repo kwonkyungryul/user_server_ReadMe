@@ -23,6 +23,4 @@ public class UserResponse {
 
     private Boolean isAutoPayment;
 
-    private String joinTime;
-
 }
