@@ -27,8 +27,6 @@ public class BookResponse {
 
     private String introduction;
 
-    private String filepath;
-
     private BigCategoryDTO bigCategory;
 
     private SmallCategoryDTO smallCategory;
@@ -38,7 +36,5 @@ public class BookResponse {
     private FileInfoDTO epubFile;
 
     private FileInfoDTO coverFile;
-
-    private String status;
 
 }

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.http.client.utils.DateUtils;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.common.jpa.RoleType;
@@ -12,6 +13,7 @@ import shop.readmecorp.userserverreadme.modules.claim.enums.ClaimStatus;
 import shop.readmecorp.userserverreadme.modules.claim.response.QuestionResponse;
 import shop.readmecorp.userserverreadme.modules.publisher.entity.Publisher;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
+import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -45,30 +47,27 @@ public class Question extends BaseTime {
     @Comment("문의 내용")
     private String content;
 
-    @Comment("문의 작성 시간")
-    private LocalDateTime writeTime;
 
     @Comment("문의 활성화 상태")
     @Enumerated(EnumType.STRING)
     private ClaimStatus status;
 
     @Builder
-    public Question(Integer id, RoleType role, User user, Publisher publisher, String title, String content, LocalDateTime writeTime, ClaimStatus status) {
+    public Question(Integer id, RoleType role, User user, Publisher publisher, String title, String content, ClaimStatus status) {
         this.id = id;
         this.role = role;
         this.user = user;
         this.publisher = publisher;
         this.title = title;
         this.content = content;
-        this.writeTime = writeTime;
         this.status = status;
     }
 
     public QuestionDTO toDTO() {
-        return new QuestionDTO(id, role.name(), user.toDTO(), publisher.toDTO(), title, content, writeTime.toString(), status.name() );
+        return new QuestionDTO(id, role.name(), user.toDTO(), publisher.toDTO(), title, content, DateTimeConverter.localDateTimeToString(getCreatedDate()), null);
     }
 
     public QuestionResponse toResponse() {
-        return new QuestionResponse(id, role.name(), user.toDTO(), publisher.toDTO(), title, content, writeTime.toString(), status.name());
+        return new QuestionResponse(id, role.name(), user.toDTO(), publisher.toDTO(), title, content, DateTimeConverter.localDateTimeToString(getCreatedDate()));
     }
 }

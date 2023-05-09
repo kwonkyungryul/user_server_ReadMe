@@ -10,4 +10,6 @@ public interface SmallCategoryRepository extends JpaRepository<SmallCategory, In
 
     List<SmallCategory> findByBigCategoryId(Integer bigCategoryId);
     List<SmallCategory> findByBigCategoryIdIn(List<Integer> categoryIds);
+
+
 }

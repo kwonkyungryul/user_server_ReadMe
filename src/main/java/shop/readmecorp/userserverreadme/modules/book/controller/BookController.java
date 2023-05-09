@@ -1,5 +1,6 @@
 package shop.readmecorp.userserverreadme.modules.book.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,12 +14,9 @@ import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse
 import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
-import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
-import shop.readmecorp.userserverreadme.modules.file.entity.File;
-import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
-import shop.readmecorp.userserverreadme.modules.file.service.FileInfoService;
 import shop.readmecorp.userserverreadme.modules.file.service.FileService;
 import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
+import shop.readmecorp.userserverreadme.modules.review.dto.ReviewNoneBookDTO;
 import shop.readmecorp.userserverreadme.modules.review.enums.ReviewStatus;
 import shop.readmecorp.userserverreadme.modules.review.service.ReviewService;
 
@@ -62,15 +60,19 @@ public class BookController {
     }
 
     @GetMapping("/{id}/detail")
-    public ResponseEntity<?> getBookDetail(@PathVariable Integer id) {
+    public ResponseEntity<?> getBookDetail(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            Pageable pageable
+    ) {
         Optional<Book> optionalBook = bookService.getBook(id);
         if (optionalBook.isEmpty()) {
             throw new Exception400(BookConst.notFound);
         }
 
         Book book = optionalBook.get();
-        List<ReviewDTO> reviewDtoList = reviewService.getReviews(book.getId(), ReviewStatus.ACTIVE);
-        if (reviewDtoList == null) {
+        Page<ReviewNoneBookDTO> reviewDTOList = reviewService.getReviews(book.getId(), ReviewStatus.ACTIVE, pageable);
+        if (reviewDTOList == null) {
             throw new Exception400(BookConst.notFound);
         }
 
@@ -84,7 +86,7 @@ public class BookController {
             throw new Exception400("커버 파일을 찾을 수 없습니다.");
         }
 
-        BookDetailResponse bookDetail = bookService.getBookDetail(book, optionalEpubFile.get(), optionalCoverFile.get(), reviewDtoList);
+        BookDetailResponse bookDetail = bookService.getBookDetail(myUserDetails == null ? null : myUserDetails.getUser(), book, optionalEpubFile.get(), optionalCoverFile.get(), reviewDTOList);
         return ResponseEntity.ok(new ResponseDTO<>(1, "도서 상세 조회 성공", bookDetail));
     }
 

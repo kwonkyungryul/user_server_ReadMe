@@ -15,14 +15,10 @@ public class BookPaymentDTO {
 
     private Integer id;
 
-    private UserDTO user;
-
     private BookDTO book;
 
     private Integer price;
 
     private String paymentTime;
-
-    private String status;
 
 }

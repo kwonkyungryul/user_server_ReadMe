@@ -27,6 +27,6 @@ public class QuestionDTO {
 
     private String writeTime;
 
-    private String status;
+    private AnswerDTO answer;
 
 }

@@ -1,7 +1,6 @@
 package shop.readmecorp.userserverreadme.modules.user.response;
 
 import lombok.*;
-import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentNoneUserDTO;
 
 @Getter
@@ -20,16 +19,13 @@ public class UserDetailResponse {
 
     private Boolean isAutoPayment;
 
-    private String joinTime;
-
     @Builder
-    public UserDetailResponse(Integer id, String username, String role, MembershipPaymentNoneUserDTO membershipPaymentNoneUserDTO, Boolean isMembership, Boolean isAutoPayment, String joinTime) {
+    public UserDetailResponse(Integer id, String username, String role, MembershipPaymentNoneUserDTO membershipPaymentNoneUserDTO, Boolean isMembership, Boolean isAutoPayment) {
         this.id = id;
         this.username = username;
         this.role = role;
         this.membershipPaymentNoneUserDTO = membershipPaymentNoneUserDTO;
         this.isMembership = isMembership;
         this.isAutoPayment = isAutoPayment;
-        this.joinTime = joinTime;
     }
 }

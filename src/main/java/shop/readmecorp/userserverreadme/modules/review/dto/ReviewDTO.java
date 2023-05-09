@@ -14,12 +14,11 @@ import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 public class ReviewDTO {
     private Integer id;
 
-    private UserDTO user;
+    private BookDTO book;
 
     private Double stars;
 
     private String content;
 
-    private String status;
-
+    private String writeTime;
 }

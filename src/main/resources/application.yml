@@ -28,3 +28,8 @@ server:
 logging:
   level:
     org.springframework.web: DEBUG
+
+
+bootpay:
+  restapikey: ${BOOTPAY_RESTAPI_KEY}
+  privatekey: ${BOOTPAY_PRIVATE_KEY}

@@ -13,10 +13,10 @@ public class MembershipDTO {
 
     private Integer id;
 
+    private String membershipName;
+
     private Integer price;
 
     private String membershipTerm;
-
-    private String status;
 
 }

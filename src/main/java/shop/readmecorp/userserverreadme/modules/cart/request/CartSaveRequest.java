@@ -20,10 +20,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartSaveRequest {
-
-    @NotNull(message = "유저 정보가 없습니다.")
-    private Integer userId;
-
     @NotNull(message = "책 정보가 없습니다.")
     private Integer bookId;
 }

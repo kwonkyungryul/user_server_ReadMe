@@ -25,7 +25,9 @@ public class UserDTO {
 
     public User toEntity() {
         return User.builder()
+                .id(id)
                 .username(username)
+                .role(role)
                 .isMembership(isMembership)
                 .isAutoPayment(isAutoPayment)
                 .build();

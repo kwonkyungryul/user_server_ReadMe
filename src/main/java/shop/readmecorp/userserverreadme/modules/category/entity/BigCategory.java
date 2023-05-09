@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.SingleBigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.dto.SmallCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.enums.BigCategoryType;
 import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
@@ -43,6 +44,10 @@ public class BigCategory extends BaseTime {
 
     public BigCategoryDTO toDTO() {
         return new BigCategoryDTO(id, bigCategory.name(), null);
+    }
+
+    public SingleBigCategoryDTO toSingleDTO() {
+        return new SingleBigCategoryDTO(id, bigCategory.name());
     }
 
     public BigCategoryResponse toResponse() {

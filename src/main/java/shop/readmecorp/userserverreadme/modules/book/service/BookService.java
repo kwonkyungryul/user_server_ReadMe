@@ -12,19 +12,28 @@ import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.entity.Heart;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
+import shop.readmecorp.userserverreadme.modules.book.enums.HeartStatus;
 import shop.readmecorp.userserverreadme.modules.book.repository.BookRepository;
 import shop.readmecorp.userserverreadme.modules.book.repository.HeartRepository;
 import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse;
+import shop.readmecorp.userserverreadme.modules.category.entity.BigCategory;
+import shop.readmecorp.userserverreadme.modules.category.entity.SmallCategory;
+import shop.readmecorp.userserverreadme.modules.category.repository.BigCategoryRepository;
+import shop.readmecorp.userserverreadme.modules.category.repository.SmallCategoryRepository;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
 import shop.readmecorp.userserverreadme.modules.file.entity.File;
 import shop.readmecorp.userserverreadme.modules.file.repository.FileInfoRepository;
 import shop.readmecorp.userserverreadme.modules.file.repository.FileRepository;
-import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
+import shop.readmecorp.userserverreadme.modules.payment.entity.BookPayment;
+import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
+import shop.readmecorp.userserverreadme.modules.payment.repository.BookPaymentRepository;
+import shop.readmecorp.userserverreadme.modules.review.dto.ReviewNoneBookDTO;
 import shop.readmecorp.userserverreadme.modules.review.repository.ReviewRepository;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,14 +47,22 @@ public class BookService {
 
     private final HeartRepository heartRepository;
 
-    public BookService(BookRepository bookRepository, ReviewRepository reviewRepository, FileInfoRepository fileInfoRepository, FileRepository fileRepository, HeartRepository heartRepository) {
+    private final BookPaymentRepository bookPaymentRepository;
+
+    private final SmallCategoryRepository smallCategoryRepository;
+
+    private final BigCategoryRepository bigCategoryRepository;
+
+    public BookService(BookRepository bookRepository, ReviewRepository reviewRepository, FileInfoRepository fileInfoRepository, FileRepository fileRepository, HeartRepository heartRepository, BookPaymentRepository bookPaymentRepository, SmallCategoryRepository smallCategoryRepository, BigCategoryRepository bigCategoryRepository) {
         this.bookRepository = bookRepository;
         this.reviewRepository = reviewRepository;
         this.fileRepository = fileRepository;
         this.heartRepository = heartRepository;
+        this.bookPaymentRepository = bookPaymentRepository;
+        this.smallCategoryRepository = smallCategoryRepository;
+        this.bigCategoryRepository = bigCategoryRepository;
     }
 
-    // TODO 완전 바뀔 예정
     public Page<BookDTO> getPage(
         Integer bigCategoryId,
         Integer smallCategoryId,
@@ -59,17 +76,17 @@ public class BookService {
         if (status.equals(MainTabType.ALL.getRequestName())) {
             if (bigCategoryId != 0) {
                 if (smallCategoryId != 0) {
-                    page = bookRepository.findByBigCategoryIdAndSmallCategoryIdAndStatus(bigCategoryId, smallCategoryId, pageable, BookStatus.ACTIVE);
+                    page = bookRepository.findByStatusAndSmallCategoryId(BookStatus.ACTIVE, smallCategoryId, pageable);
                 } else {
-                    page = bookRepository.findByBigCategoryIdAndStatus(bigCategoryId, pageable, BookStatus.ACTIVE);
+                    List<Integer> smallCategoryIds = smallCategoryRepository.findByBigCategoryId(bigCategoryId).stream().map(SmallCategory::getId).collect(Collectors.toList());
+                    page = bookRepository.findByStatusAndSmallCategoryIdIn(BookStatus.ACTIVE, smallCategoryIds, pageable);
                 }
-
             } else {
                 page = bookRepository.findByStatus(pageable, BookStatus.ACTIVE);
             }
 
         // heart 가 많은 순
-        } else if (status.equals(MainTabType.NEW.getRequestName())) {
+        } else if (status.equals(MainTabType.RECOMMEND.getRequestName())) {
             page = bookRepository.findByBookHeartCount(pageable, BookStatus.ACTIVE);
 
         // bestSeller -> payment 판매순
@@ -77,11 +94,13 @@ public class BookService {
             page = bookRepository.findByBookPaymentDESC(pageable, BookStatus.ACTIVE);
 
         // 신간 OrderBy id Desc
-        } else if (status.equals(MainTabType.RECOMMEND.getRequestName())) {
+        } else if (status.equals(MainTabType.NEW.getRequestName())) {
             page = bookRepository.findByStatusOrderByIdDesc(pageable, BookStatus.ACTIVE);
+
         }
 
         return page.map(book -> {
+            BigCategory bigCategory = book.getSmallCategory().getBigCategory();
             BookDTO bookDTO = book.toDTO();
             List<File> epubFiles = fileRepository.findByFileInfo_Id(book.getEpub().getId());
             if (epubFiles.size() == 0) {
@@ -112,6 +131,7 @@ public class BookService {
                     bookDTO.setIsHeart(true);
                 }
             }
+            bookDTO.setBigCategory(bigCategory.toSingleDTO());
             return bookDTO;
         });
     }
@@ -120,7 +140,13 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
-    public BookDetailResponse getBookDetail(Book book, FileDTO epubFileDTO, FileDTO coverFileDTO, List<ReviewDTO> reviewDtoList) {
+    public List<Book> getBooks(List<Integer> bookIds) {
+        return bookRepository.findByIdIn(bookIds);
+    }
+
+    public BookDetailResponse getBookDetail(User user, Book book, FileDTO epubFileDTO, FileDTO coverFileDTO, Page<ReviewNoneBookDTO> reviewDTOList) {
+        Boolean isHeart = heartRepository.findByUserAndStatusNotAndBook(user, HeartStatus.DELETE, book).isEmpty();
+        BookPayment userBookPayment = bookPaymentRepository.findByStatusNotAndUserAndBook(PaymentStatus.DELETE, user, book);
         return BookDetailResponse.builder()
                 .id(book.getId())
                 .publisher(book.getPublisher().toDTO())
@@ -128,12 +154,14 @@ public class BookService {
                 .author(book.getAuthor())
                 .price(book.getPrice())
                 .introduction(book.getIntroduction())
-                .bigCategory(book.getBigCategory().toDTO())
+                .bigCategory(book.getSmallCategory().getBigCategory().toSingleDTO())
                 .smallCategory(book.getSmallCategory().toDTO())
                 .authorInfo(book.getAuthorInfo())
+                .isHeart(isHeart)
+                .isPurchase(userBookPayment != null)
                 .epubFile(epubFileDTO)
                 .coverFile(coverFileDTO)
-                .reviews(reviewDtoList)
+                .reviews(reviewDTOList)
                 .build();
     }
 

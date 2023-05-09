@@ -4,15 +4,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.HeartConst;
 import shop.readmecorp.userserverreadme.modules.book.dto.HeartDTO;
+import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.entity.Heart;
 import shop.readmecorp.userserverreadme.modules.book.request.HeartSaveRequest;
-import shop.readmecorp.userserverreadme.modules.book.request.HeartUpdateRequest;
 import shop.readmecorp.userserverreadme.modules.book.response.HeartResponse;
+import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 import shop.readmecorp.userserverreadme.modules.book.service.HeartService;
 
 import javax.validation.Valid;
@@ -24,10 +28,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/hearts")
 public class HeartController {
 
-    private HeartService heartService;
+    private final HeartService heartService;
+    private final BookService bookService;
 
-    public HeartController(HeartService heartService) {
+    public HeartController(HeartService heartService, BookService bookService) {
         this.heartService = heartService;
+        this.bookService = bookService;
     }
 
     @GetMapping
@@ -52,46 +58,20 @@ public class HeartController {
     }
 
     @PostMapping
-    public ResponseEntity<HeartResponse> saveBook(
+    public ResponseEntity<ResponseDTO<Void>> saveAndDeleteBook(
             @Valid @RequestBody HeartSaveRequest request,
-            Errors error) {
-        if (error.hasErrors()) {
-            throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
-        }
-
-        Heart save = heartService.save(request);
-
-        return ResponseEntity.ok(save.toResponse());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<HeartResponse> updateBook(
-            @PathVariable Integer id,
-            @Valid @RequestBody HeartUpdateRequest request,
-            Errors error
+            Errors error,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
         if (error.hasErrors()) {
             throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
         }
 
-        Optional<Heart> optionalHeart = heartService.getHeart(id);
-        if (optionalHeart.isEmpty()) {
-            throw new Exception400(HeartConst.notFound);
+        Optional<Book> optionalBook = bookService.getBook(request.getBookId());
+        if(optionalBook.isEmpty()) {
+            throw new Exception400("도서 정보가 없습니다.");
         }
-
-        Heart update = heartService.update(request, optionalHeart.get());
-        return ResponseEntity.ok(update.toResponse());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
-        Optional<Heart> optionalHeart = heartService.getHeart(id);
-        if (optionalHeart.isEmpty()) {
-            throw new Exception400(HeartConst.notFound);
-        }
-
-        heartService.delete(optionalHeart.get());
-
-        return ResponseEntity.ok("삭제가 완료되었습니다.");
+        heartService.save(request, optionalBook.get(), myUserDetails.getUser());
+        return ResponseEntity.ok(new ResponseDTO<>(1, request.getCheck() ? "좋아요가 완료되었습니다." : "좋아요가 취소되었습니다.", null));
     }
 }

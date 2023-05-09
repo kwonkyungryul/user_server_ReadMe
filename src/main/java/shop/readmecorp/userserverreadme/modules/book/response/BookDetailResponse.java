@@ -2,16 +2,18 @@ package shop.readmecorp.userserverreadme.modules.book.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
+import lombok.Setter;
+import org.springframework.data.domain.Page;
+import shop.readmecorp.userserverreadme.modules.category.dto.SingleBigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.dto.SmallCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
-import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
-import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
+import shop.readmecorp.userserverreadme.modules.review.dto.ReviewNoneBookDTO;
 
 import java.util.List;
 
 @Getter
+@Setter
 public class BookDetailResponse {
     private Integer id;
 
@@ -25,20 +27,24 @@ public class BookDetailResponse {
 
     private String introduction;
 
-    private BigCategoryDTO bigCategory;
+    private SingleBigCategoryDTO bigCategory;
 
     private SmallCategoryDTO smallCategory;
 
     private String authorInfo;
 
+    private Boolean isHeart;
+
+    private Boolean isPurchase;
+
     private FileDTO epubFile;
 
     private FileDTO coverFile;
 
-    private List<ReviewDTO> reviews;
+    private Page<ReviewNoneBookDTO> reviews;
 
     @Builder
-    public BookDetailResponse(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, FileDTO epubFile, FileDTO coverFile, List<ReviewDTO> reviews) {
+    public BookDetailResponse(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, SingleBigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, Boolean isHeart, Boolean isPurchase, FileDTO epubFile, FileDTO coverFile, Page<ReviewNoneBookDTO> reviews) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;
@@ -48,6 +54,8 @@ public class BookDetailResponse {
         this.bigCategory = bigCategory;
         this.smallCategory = smallCategory;
         this.authorInfo = authorInfo;
+        this.isHeart = isHeart;
+        this.isPurchase = isPurchase;
         this.epubFile = epubFile;
         this.coverFile = coverFile;
         this.reviews = reviews;

@@ -1,84 +1,82 @@
 package shop.readmecorp.userserverreadme.modules.cart.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
-import shop.readmecorp.userserverreadme.modules.cart.CartConst;
+import shop.readmecorp.userserverreadme.modules.book.entity.Book;
+import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 import shop.readmecorp.userserverreadme.modules.cart.dto.CartDTO;
 import shop.readmecorp.userserverreadme.modules.cart.entity.Cart;
 import shop.readmecorp.userserverreadme.modules.cart.request.CartSaveRequest;
 import shop.readmecorp.userserverreadme.modules.cart.response.CartResponse;
 import shop.readmecorp.userserverreadme.modules.cart.service.CartService;
+import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
+import shop.readmecorp.userserverreadme.modules.user.service.UserService;
 
 import javax.validation.Valid;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/carts")
 public class CartController {
 
     private final CartService cartService;
+    private final BookService bookService;
+    private final UserService userService;
 
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, BookService bookService, UserService userService) {
         this.cartService = cartService;
+        this.bookService = bookService;
+        this.userService = userService;
     }
-
 
     @GetMapping
-    public ResponseEntity<Page<CartDTO>> getPage(Pageable pageable) {
-        var page = cartService.getPage(pageable);
-        var content = page.getContent()
-                .stream()
-                .map(Cart::toDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(
-                new PageImpl<>(content, pageable, page.getTotalElements())
-        );
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CartResponse> getCart (@PathVariable Integer id) {
-        var optionalCart = cartService.getCart(id);
-        if (optionalCart.isEmpty()) {
-            throw new Exception400(CartConst.notFound);
-        }
-
-        return ResponseEntity.ok(
-                optionalCart.get().toResponse()
-        );
-    }
-
-    @GetMapping("/{userId}/users")
-    public ResponseEntity<?> getCartByUserId (@PathVariable Integer userId){
-
-        return ResponseEntity.ok(new ResponseDTO<>(1, "유저 장바구니 조회 성공", cartService.getCartByUserId(userId)));
+    public ResponseEntity<ResponseDTO<List<CartDTO>>> getCartByUserId (
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ){
+        return ResponseEntity.ok(new ResponseDTO<>(1, "유저 장바구니 조회 성공", cartService.getCartList(myUserDetails.getUser())));
     }
 
     @PostMapping
-    public ResponseEntity<?> saveCart (
+    public ResponseEntity<ResponseDTO<CartResponse>> saveCart (
             @Valid @RequestBody CartSaveRequest request,
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
             Errors error
     ) {
         if (error.hasErrors()) {
             throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
         }
 
-        var cart = cartService.save(request);
-        return ResponseEntity.ok(new ResponseDTO<>(1, "장바구니 등록 성공", cart));
+        Optional<Book> optionalBook = bookService.getBook(request.getBookId());
+        if (optionalBook.isEmpty()) {
+            throw new Exception400("책 정보를 찾을 수 없습니다.");
+        }
+
+        if (cartService.isCart(optionalBook.get(), myUserDetails.getUser())) {
+            throw new Exception400("이미 장바구니에 있는 책입니다.");
+        }
+
+        UserDTO userDTO = userService.getUser(myUserDetails.getUser());
+
+        return ResponseEntity.ok(new ResponseDTO<>(1, "장바구니 등록 성공", cartService.save(userDTO.toEntity(), optionalBook.get())));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCart (
-            @PathVariable Integer id
+            @PathVariable Integer id,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
+        Optional<Cart> cartOptional = cartService.getCart(id);
+        if (cartOptional.isEmpty() || cartOptional.get().getUser().getId().intValue() != myUserDetails.getUser().getId()) {
+            throw new Exception400("내 장바구니 내역이 아닙니다.");
+        }
         cartService.delete(id);
-
         return ResponseEntity.ok(new ResponseDTO<>(1, "삭제가 완료되었습니다.", null));
     }
+
 }

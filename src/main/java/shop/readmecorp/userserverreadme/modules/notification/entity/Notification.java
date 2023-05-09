@@ -8,7 +8,10 @@ import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.notification.dto.NotificationDTO;
 import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationStatus;
+import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationType;
+import shop.readmecorp.userserverreadme.modules.notification.enums.OSType;
 import shop.readmecorp.userserverreadme.modules.notification.response.NotificationResponse;
+import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +32,16 @@ public class Notification extends BaseTime {
 
     @Comment("알림 내용")
     private String content;
+
+    @Comment("OS 타입")
+    private OSType OSType;
+
+    @Comment("알림 타입")
+    private NotificationType notificationType;
+
+    @Comment("알림 받는 유저")
+    @ManyToOne
+    private User user;
 
     @Comment("알림 작성 시간")
     private LocalDateTime writeTime;

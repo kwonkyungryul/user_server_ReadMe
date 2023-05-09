@@ -18,6 +18,8 @@ public class MetaDTO {
 
     private UserDTO user;
 
+    private String jwt;
+
     private List<CommonDTO> storageBoxTabs;
 
     private List<CommonDTO> mainTabs;
@@ -27,9 +29,10 @@ public class MetaDTO {
     private List<String> notificationTypes;
 
     @Builder
-    public MetaDTO(List<BigCategoryDTO> bigCategory, UserDTO user, List<CommonDTO> storageBoxTabs, List<CommonDTO> mainTabs, List<CommonDTO> paymentTabs, List<String> notificationTypes) {
+    public MetaDTO(List<BigCategoryDTO> bigCategory, UserDTO user, String jwt, List<CommonDTO> storageBoxTabs, List<CommonDTO> mainTabs, List<CommonDTO> paymentTabs, List<String> notificationTypes) {
         this.bigCategory = bigCategory;
         this.user = user;
+        this.jwt = jwt;
         this.storageBoxTabs = storageBoxTabs;
         this.mainTabs = mainTabs;
         this.paymentTabs = paymentTabs;

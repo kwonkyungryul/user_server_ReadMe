@@ -16,7 +16,5 @@ public class CartDTO {
 
     private Integer id;
 
-    private UserDTO user;
-
     private BookDTO book;
 }

@@ -16,6 +16,7 @@ import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
 import shop.readmecorp.userserverreadme.modules.file.enums.FileType;
 import shop.readmecorp.userserverreadme.modules.file.service.FileInfoService;
 import shop.readmecorp.userserverreadme.modules.file.service.FileService;
+import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.modules.user.request.UserSaveRequest;
 import shop.readmecorp.userserverreadme.modules.user.response.UserDetailResponse;
@@ -30,38 +31,20 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-    private final FileInfoService fileInfoService;
-    private final FileService fileService;
 
-    public UserController(UserService userService, FileInfoService fileInfoService, FileService fileService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.fileInfoService = fileInfoService;
-        this.fileService = fileService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> saveUser(
-            @Valid @RequestBody UserSaveRequest request,
-            Errors error) {
-        if (error.hasErrors()) {
-            throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
-        }
-
-        // fileInfo 생성
-        FileInfo fileInfo = fileInfoService.save(FileType.USER);
-
-        // file 생성 (파일이름, url 등 빈값)
-        File file = fileService.save(fileInfo);
-
-        // 계정 생성
-        User save = userService.join(request, fileInfo);
-
-        return ResponseEntity.ok(save.toResponse());
-    }
-
-    @GetMapping("/{userId}")
+    @GetMapping("/my")
     public ResponseEntity<?> getMyPage(@AuthenticationPrincipal MyUserDetails myUserDetails) {
 
-        return ResponseEntity.ok(new ResponseDTO<>(1, "마이페이지 조회 성공", userService.getMyPage(myUserDetails)));
+        return ResponseEntity.ok(new ResponseDTO<>(1, "마이페이지 조회가 완료되었습니다.", userService.getMyPage(myUserDetails)));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDTO<UserDTO>> getUser(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+
+        return ResponseEntity.ok(new ResponseDTO<>(1, "유저 조회가 완료되었습니다.", userService.getUser(myUserDetails.getUser())));
     }
 }

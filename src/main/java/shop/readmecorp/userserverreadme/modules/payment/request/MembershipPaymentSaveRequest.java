@@ -13,13 +13,9 @@ import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 @NoArgsConstructor
 public class MembershipPaymentSaveRequest {
 
-    private UserDTO user;
-
-    private MembershipDTO membership;
+    private Integer membershipId;
 
     private String membershipStartTime;
-
-    private String membershipEndTime;
 
     private Integer price;
 

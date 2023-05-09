@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shop.readmecorp.userserverreadme.modules.membership.dto.MembershipDTO;
-import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 
 @Getter
 @Setter
@@ -15,18 +13,15 @@ public class MembershipPaymentDTO {
 
     private Integer id;
 
-    private UserDTO user;
+    private String membershipName;
 
-    private MembershipDTO membership;
+    private String membershipStartTime; // yyyy.mm.dd
 
-    private String membershipStartTime;
-
-    private String membershipEndTime;
+    private String membershipEndTime; // yyyy.mm.dd
 
     private Integer price;
 
-    private String paymentTime;
+    private String paymentTime; // yyyy.mm.dd
 
-    private String status;
 
 }

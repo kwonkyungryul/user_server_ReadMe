@@ -8,7 +8,6 @@ import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.claim.dto.AnswerDTO;
 import shop.readmecorp.userserverreadme.modules.claim.enums.ClaimStatus;
-import shop.readmecorp.userserverreadme.modules.claim.response.AnswerResponse;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -48,10 +47,7 @@ public class Answer extends BaseTime {
     }
 
     public AnswerDTO toDTO() {
-        return new AnswerDTO(id, question.toDTO(), content, writeTime.toString(), status.name());
+        return new AnswerDTO(id, content, writeTime.toString());
     }
 
-    public AnswerResponse toResponse() {
-        return new AnswerResponse(id, question.toDTO(), content, writeTime.toString(), status.name());
-    }
 }

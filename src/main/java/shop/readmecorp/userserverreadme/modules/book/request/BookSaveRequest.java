@@ -70,8 +70,6 @@ public class BookSaveRequest {
                 .author(author)
                 .price(price)
                 .introduction(introduction)
-                .filePath(null)
-                .bigCategory(bigCategory.toEntity())
                 .smallCategory(smallCategory.toEntity())
                 .authorInfo(authorInfo)
                 .epub(null)

@@ -1,8 +1,5 @@
 package shop.readmecorp.userserverreadme.common.controller;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,25 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import shop.readmecorp.userserverreadme.common.auth.jwt.MyJwtProvider;
 import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
-import shop.readmecorp.userserverreadme.common.dto.CommonDTO;
-import shop.readmecorp.userserverreadme.common.dto.FireBaseRequest;
-import shop.readmecorp.userserverreadme.common.dto.MetaDTO;
+import shop.readmecorp.userserverreadme.common.dto.FirebaseRequest;
 import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
-import shop.readmecorp.userserverreadme.common.enums.MainTabType;
-import shop.readmecorp.userserverreadme.common.enums.PaymentTabType;
-import shop.readmecorp.userserverreadme.common.enums.StorageBoxType;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.common.service.CommonService;
-import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
-import shop.readmecorp.userserverreadme.modules.category.service.CategoryService;
-import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationType;
-import shop.readmecorp.userserverreadme.modules.user.dto.UserInfoDTO;
-import shop.readmecorp.userserverreadme.modules.user.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -53,14 +37,15 @@ public class CommonController {
 
     // TODO 시큐리티 설정 후 해야 함.
     @PostMapping("/login")
-    public ResponseEntity<?> getUser(@Valid @RequestBody FireBaseRequest request, Errors error) {
+    public ResponseEntity<?> getUser(@Valid @RequestBody FirebaseRequest request, Errors error) {
         if (error.hasErrors()) {
             throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(MyJwtProvider.HEADER, commonService.getUser(request));
+        String jwt = commonService.getUser(request);
+        headers.add(MyJwtProvider.HEADER, jwt);
         headers.add("Content-Type", "application/json;charset=utf-8");
-        return new ResponseEntity<>(new ResponseDTO<>(1, "성공", null), headers, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO<>(1, "성공", jwt), headers, HttpStatus.OK);
     }
 }

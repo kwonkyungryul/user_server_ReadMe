@@ -7,14 +7,15 @@ import lombok.Setter;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class HeartSaveRequest {
-
-    private UserDTO user;
-
-    private BookDTO book;
+    @NotNull(message = "도서 정보가 없습니다.")
+    private Integer bookId;
+    private Boolean check;
 
 }

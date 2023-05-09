@@ -13,13 +13,8 @@ public class AnswerDTO {
 
     private Integer id;
 
-    private QuestionDTO question;
-
     private String content;
 
     private String writeTime;
-
-    private String status;
-
 }
 

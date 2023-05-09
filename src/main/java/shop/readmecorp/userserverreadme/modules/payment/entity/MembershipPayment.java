@@ -10,13 +10,13 @@ import shop.readmecorp.userserverreadme.modules.membership.entity.Membership;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentNoneUserDTO;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
-import shop.readmecorp.userserverreadme.modules.payment.response.MembershipPaymentResponse;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
+import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -29,6 +29,9 @@ public class MembershipPayment extends BaseTime {
     @Comment("고유번호")
     private Integer id;
 
+    @Comment("결제 번호")
+    private Integer paymentNo;
+
     @Comment("리뷰 작성한 유저")
     @ManyToOne
     private User user;
@@ -38,10 +41,10 @@ public class MembershipPayment extends BaseTime {
     private Membership membership;
 
     @Comment("멤버십 시작 시간")
-    private LocalDate membershipStartTime;
+    private LocalDateTime membershipStartTime;
 
     @Comment("멤버십 종료 시간")
-    private LocalDate membershipEndTime;
+    private LocalDateTime membershipEndTime;
 
     @Comment("멤버십 가격")
     private Integer price;
@@ -54,8 +57,9 @@ public class MembershipPayment extends BaseTime {
     private PaymentStatus status;
 
     @Builder
-    public MembershipPayment(Integer id, User user, Membership membership, LocalDate membershipStartTime, LocalDate membershipEndTime, Integer price, LocalDateTime paymentTime, PaymentStatus status) {
+    public MembershipPayment(Integer id, Integer paymentNo, User user, Membership membership, LocalDateTime membershipStartTime, LocalDateTime membershipEndTime, Integer price, LocalDateTime paymentTime, PaymentStatus status) {
         this.id = id;
+        this.paymentNo = paymentNo;
         this.user = user;
         this.membership = membership;
         this.membershipStartTime = membershipStartTime;
@@ -66,15 +70,16 @@ public class MembershipPayment extends BaseTime {
     }
 
     public MembershipPaymentDTO toDTO() {
-        return new MembershipPaymentDTO(id, user.toDTO(), membership.toDTO(), membershipStartTime.toString(), membershipEndTime.toString(), price, paymentTime.toString(), status.name());
+        return new MembershipPaymentDTO(id, membership.getMembershipName(),
+                DateTimeConverter.localDateTimeToString(membershipStartTime),
+                DateTimeConverter.localDateTimeToString(membershipEndTime),
+                price,
+                DateTimeConverter.localDateTimeToString(paymentTime));
     }
 
     public MembershipPaymentNoneUserDTO toNoneUserDTO() {
         return new MembershipPaymentNoneUserDTO(id, membership.toDTO(), membershipStartTime.toString(), membershipEndTime.toString(), price, paymentTime.toString());
     }
 
-    public MembershipPaymentResponse toResponse() {
-        return new MembershipPaymentResponse(id, user.toDTO(), membership.toDTO(), membershipStartTime.toString(), membershipEndTime.toString(), price, paymentTime.toString(), status.name());
-    }
 }
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
+import shop.readmecorp.userserverreadme.modules.review.dto.ReviewNoneBookDTO;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 
 @Getter

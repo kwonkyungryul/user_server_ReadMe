@@ -47,10 +47,10 @@ public class Membership extends BaseTime {
     }
 
     public MembershipDTO toDTO() {
-        return new MembershipDTO(id,price,membershipTerm, status.name());
+        return new MembershipDTO(id, membershipName, price,membershipTerm);
     }
 
     public MembershipResponse toResponse() {
-        return new MembershipResponse(id,price,membershipTerm, status.name());
+        return new MembershipResponse(id, membershipName, price, membershipTerm);
     }
 }

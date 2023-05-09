@@ -8,12 +8,13 @@ import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
+import shop.readmecorp.userserverreadme.modules.review.dto.ReviewNoneBookDTO;
 import shop.readmecorp.userserverreadme.modules.review.enums.ReviewStatus;
-import shop.readmecorp.userserverreadme.modules.review.response.ReviewResponse;
+import shop.readmecorp.userserverreadme.modules.review.dto.MyReviewDTO;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
+import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -55,10 +56,14 @@ public class Review extends BaseTime {
     }
 
     public ReviewDTO toDTO() {
-        return new ReviewDTO(id, user.toDTO(), stars, content, status.name());
+        return new ReviewDTO(id, book.toDTO(), stars, content, DateTimeConverter.localDateTimeToString(getCreatedDate()));
     }
 
-    public ReviewResponse toResponse() {
-        return new ReviewResponse(id, user.toDTO(), book.toDTO(), stars, content, status.name());
+    public ReviewNoneBookDTO toNoneBookDTO() {
+        return new ReviewNoneBookDTO(id, user.toDTO(), stars, content, DateTimeConverter.localDateTimeToString(getCreatedDate()));
+    }
+
+    public MyReviewDTO toMyReviewDTO() {
+        return new MyReviewDTO(id, book.toBookToReviewDTO(), stars, content, DateTimeConverter.localDateTimeToString(getCreatedDate()));
     }
 }

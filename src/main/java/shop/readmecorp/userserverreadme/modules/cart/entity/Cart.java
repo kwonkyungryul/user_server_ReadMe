@@ -46,7 +46,7 @@ public class Cart extends BaseTime {
     }
 
     public CartDTO toDTO() {
-        return new CartDTO(id, user.toDTO(), book.toDTO());
+        return new CartDTO(id, book.toDTO());
     }
 
     public CartResponse toResponse() {

@@ -9,8 +9,8 @@ import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.payment.dto.BookPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
-import shop.readmecorp.userserverreadme.modules.payment.response.BookPaymentResponse;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
+import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,6 +25,9 @@ public class BookPayment extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("고유번호")
     private Integer id;
+
+    @Comment("결제 번호")
+    private Integer paymentNo;
 
     @Comment("구매한 유저")
     @ManyToOne
@@ -55,11 +58,8 @@ public class BookPayment extends BaseTime {
     }
 
     public BookPaymentDTO toDTO() {
-        return new BookPaymentDTO(id, user.toDTO(), book.toDTO(), price, paymentTime.toString(), status.name());
+        return new BookPaymentDTO(id, book.toDTO(), price, DateTimeConverter.localDateTimeToString(paymentTime));
     }
 
-    public BookPaymentResponse toResponse() {
-        return new BookPaymentResponse(id, user.toDTO(), book.toDTO(), price, paymentTime.toString(), status.name());
-    }
 }
 

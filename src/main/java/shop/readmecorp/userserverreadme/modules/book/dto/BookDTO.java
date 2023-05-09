@@ -4,6 +4,7 @@ import lombok.*;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
+import shop.readmecorp.userserverreadme.modules.category.dto.SingleBigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.dto.SmallCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.category.entity.BigCategory;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
@@ -30,7 +31,7 @@ public class BookDTO {
 
     private String introduction;
 
-    private BigCategoryDTO bigCategory;
+    private SingleBigCategoryDTO bigCategory;
 
     private SmallCategoryDTO smallCategory;
 
@@ -45,7 +46,7 @@ public class BookDTO {
     private Double stars;
 
     @Builder
-    public BookDTO(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, BigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, Boolean isHeart, FileDTO epubFile, FileDTO coverFile, Double stars) {
+    public BookDTO(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, SingleBigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, Boolean isHeart, FileDTO epubFile, FileDTO coverFile, Double stars) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;

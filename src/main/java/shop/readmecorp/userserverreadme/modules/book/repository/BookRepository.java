@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 
+import java.util.List;
+
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b FROM Book b INNER JOIN Heart h ON b.id = h.book.id where b.status = :bookStatus GROUP BY h.book.id ORDER BY COUNT(h) DESC")
@@ -18,7 +20,13 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Page<Book> findByStatusOrderByIdDesc(Pageable pageable, BookStatus bookStatus);
     Page<Book> findByStatus(Pageable pageable, BookStatus bookStatus);
 
-    Page<Book> findByBigCategoryIdAndStatus(Integer bigCategoryId, Pageable pageable, BookStatus bookStatus);
+    Page<Book> findByStatusAndSmallCategoryIdIn(BookStatus status, List<Integer> smallCategoryId, Pageable pageable);
 
-    Page<Book> findByBigCategoryIdAndSmallCategoryIdAndStatus(Integer bigCategoryId, Integer smallCategoryId, Pageable pageable, BookStatus bookStatus);
+    Page<Book> findBySmallCategoryIdAndStatus(Integer smallCategoryId, Pageable pageable, BookStatus bookStatus);
+
+    List<Book> findByIdIn(List<Integer> id);
+
+    Integer countBy();
+
+    Page<Book> findByStatusAndSmallCategoryId(BookStatus bookStatus, Integer smallCategoryIds, Pageable pageable);
 }

@@ -11,10 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FireBaseRequest {
+public class FirebaseRequest {
     @NotBlank(message = "idToken을 전송해주세요.")
     private String idToken;
-
-    @NotBlank(message = "사용자 이메일을 전송해주세요.")
-    private String currentUserEmail;
 }
