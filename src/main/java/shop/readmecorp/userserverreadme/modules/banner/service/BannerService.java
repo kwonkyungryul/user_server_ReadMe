@@ -24,14 +24,9 @@ public class BannerService {
         this.fileRepository = fileRepository;
     }
 
-    public List<BannerDTO> getList() {
-        List<Banner> bannerList = bannerRepository.findByStatus(BannerStatus.ACTIVE);
-        return bannerList.stream().map(banner -> {
-            BannerDTO bannerDTO = banner.toDTO();
-            List<File> files = fileRepository.findByFileInfo_Id(banner.getImage().getId());
-            bannerDTO.setImageFile(files.get(0).toDTO());
-            return bannerDTO;
-        }).collect(Collectors.toList());
+    public List<Banner> getList() {
+        return bannerRepository.findByStatus(BannerStatus.ACTIVE);
+
 
     }
 }
