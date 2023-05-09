@@ -217,6 +217,7 @@ insert into USER_TB(created_date, modified_date, username, password, role, is_me
 insert into USER_TB(created_date, modified_date, username, password, role, is_membership, is_auto_payment, status) values('2023-02-01 00:01', '2021-01-01 00:01', 'cjh@nate.com','1234', 'USER', false, false, 'ACTIVE');
 insert into USER_TB(created_date, modified_date, username, password, role, is_membership, is_auto_payment, status) values('2023-02-01 00:01', '2021-01-01 00:01', 'kth@nate.com','1234', 'USER', false, false, 'ACTIVE');
 insert into USER_TB(created_date, modified_date, username, password, role, is_membership, is_auto_payment, status) values('2023-02-01 00:01', '2021-01-01 00:01', 'hkd@nate.com','1234', 'USER', false, false, 'ACTIVE');
+insert into USER_TB(created_date, modified_date, username, password, role, is_membership, is_auto_payment, status) values('2023-02-01 00:01', '2021-01-01 00:01', 'heesun9793@naver.com','1234', 'USER', true, true, 'ACTIVE');
 
 insert into BIG_CATEGORY_TB(created_date, modified_date, big_category, status) values('2023-02-01 00:01', '2021-01-01 00:01', '경영', 'ACTIVE');
 insert into BIG_CATEGORY_TB(created_date, modified_date, big_category, status) values('2023-02-01 00:01', '2021-01-01 00:01', '자기계발', 'ACTIVE');
@@ -873,6 +874,12 @@ insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, cont
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 3, 50, 2.6, '리뷰내용5', 'ACTIVE');
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 1, 50, 4.6, '리뷰내용6', 'ACTIVE');
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 2, 50, 4.6, '리뷰내용6', 'ACTIVE');
+insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '진짜 노잼 ㅋㅋ;', 'ACTIVE');
+insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '머 이런 책이 다 있나요 ㅡㅡ; 판매중지좀 ;;', 'ACTIVE');
+insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '이건 좀 재밌네 ㅋ;', 'ACTIVE');insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '진짜 노잼 ㅋㅋ;', 'ACTIVE');
+insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 12, 52, 4.6, '진짜 노잼 ㅋㅋ;', 'ACTIVE');
+insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 12, 52, 4.6, '머 이런 책이 다 있나요 ㅡㅡ; 판매중지좀 ;;', 'ACTIVE');
+insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 12, 52, 4.6, '이건 좀 재밌네 ㅋ;', 'ACTIVE');
 
 INSERT INTO BOOK_PAYMENT_TB(created_date, modified_date, user_id, book_id, price, payment_time, status) values('2023-02-01 00:01', '2021-01-01 00:01', 1, 1, 15000, '2021-01-01 00:01', 'ACTIVE');
 INSERT INTO BOOK_PAYMENT_TB(created_date, modified_date, user_id, book_id, price, payment_time, status) values('2023-02-01 00:01', '2021-01-01 00:01', 2, 1, 15000, '2021-01-01 00:01', 'ACTIVE');

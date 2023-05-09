@@ -1,22 +1,22 @@
 package shop.readmecorp.userserverreadme.modules.payment.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.modules.book.BookConst;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
-import shop.readmecorp.userserverreadme.modules.bootpay.request.BootPaySaveRequest;
-import shop.readmecorp.userserverreadme.modules.bootpay.service.BootPayService;
+import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
+import shop.readmecorp.userserverreadme.modules.file.service.FileService;
 import shop.readmecorp.userserverreadme.modules.membership.entity.Membership;
 import shop.readmecorp.userserverreadme.modules.membership.service.MembershipService;
 import shop.readmecorp.userserverreadme.modules.payment.dto.BookPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.entity.MembershipPayment;
+import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentConst;
 import shop.readmecorp.userserverreadme.modules.payment.request.BookPaymentSaveRequest;
 import shop.readmecorp.userserverreadme.modules.payment.request.MembershipPaymentSaveRequest;
 import shop.readmecorp.userserverreadme.modules.payment.response.MyPaymentResponse;
@@ -24,9 +24,9 @@ import shop.readmecorp.userserverreadme.modules.payment.service.BookPaymentServi
 import shop.readmecorp.userserverreadme.modules.payment.service.MembershipPaymentService;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/payments")
@@ -36,12 +36,14 @@ public class PaymentController {
     private final MembershipPaymentService membershipPaymentService;
     private final MembershipService membershipService;
     private final BookService bookService;
+    private final FileService fileService;
 
-    public PaymentController(BookPaymentService bookPaymentService, MembershipPaymentService membershipPaymentService, MembershipService membershipService, BookService bookService, BootPayService bootPayService) {
+    public PaymentController(BookPaymentService bookPaymentService, MembershipPaymentService membershipPaymentService, MembershipService membershipService, BookService bookService, FileService fileService) {
         this.bookPaymentService = bookPaymentService;
         this.membershipPaymentService = membershipPaymentService;
         this.membershipService = membershipService;
         this.bookService = bookService;
+        this.fileService = fileService;
     }
 
     @GetMapping("/my")
@@ -49,6 +51,22 @@ public class PaymentController {
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
         List<BookPaymentDTO> bookPayments = bookPaymentService.getMyList(myUserDetails.getUser());
+        bookPayments = bookPayments
+                .stream()
+                .map(bookPaymentDTO -> {
+                    Optional<Book> optionalBook = bookService.getBook(bookPaymentDTO.getBook().getId());
+                    if (optionalBook.isEmpty()) {
+                        throw new Exception400(BookConst.notFound);
+                    }
+                    Book book = optionalBook.get();
+                    Optional<FileDTO> optionalFile = fileService.getFile(book.getCover().getId());
+                    if (optionalFile.isEmpty()) {
+                        bookPaymentDTO.getBook().setCoverFile(PaymentConst.defaultBookFileDTO);
+                    } else {
+                        bookPaymentDTO.getBook().setCoverFile(optionalFile.get());
+                    }
+                    return bookPaymentDTO;
+                }).collect(Collectors.toList());
         List<MembershipPaymentDTO> membershipPayments = membershipPaymentService.getMyList(myUserDetails.getUser());
         return ResponseEntity.ok(new ResponseDTO<>(1, "결제 목록 조회가 완료되었습니다.", new MyPaymentResponse(bookPayments, membershipPayments)));
     }
@@ -77,7 +95,6 @@ public class PaymentController {
         return ResponseEntity.ok(new ResponseDTO<>(1, "도서 구매가 완료 완료되었습니다.", bookPayments));
     }
 
-
     @PostMapping("/book")
     public ResponseEntity<ResponseDTO<Integer>> saveBook(
             @AuthenticationPrincipal MyUserDetails myUserDetails,
@@ -85,7 +102,7 @@ public class PaymentController {
     ) {
         List<Book> books = bookService.getBooks(request.getBookId());
         if (books.size() != request.getBookId().size()) {
-            throw new Exception400("존재하지 않는 도서입니다.");
+            throw new Exception400(BookConst.notFound);
         }
 
         Integer paymentNo = bookPaymentService.save(myUserDetails.getUser(), books);

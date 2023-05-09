@@ -7,21 +7,26 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.modules.banner.dto.BannerDTO;
+import shop.readmecorp.userserverreadme.modules.banner.entity.Banner;
+import shop.readmecorp.userserverreadme.modules.banner.service.BannerService;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
 import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookMainDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse;
 import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
 import shop.readmecorp.userserverreadme.modules.file.service.FileService;
-import shop.readmecorp.userserverreadme.modules.review.dto.ReviewDTO;
 import shop.readmecorp.userserverreadme.modules.review.dto.ReviewNoneBookDTO;
 import shop.readmecorp.userserverreadme.modules.review.enums.ReviewStatus;
 import shop.readmecorp.userserverreadme.modules.review.service.ReviewService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
@@ -30,11 +35,13 @@ public class BookController {
     private final BookService bookService;
     private final ReviewService reviewService;
     private final FileService fileService;
+    private final BannerService bannerService;
 
-    public BookController(BookService bookService, ReviewService reviewService, FileService fileService) {
+    public BookController(BookService bookService, ReviewService reviewService, FileService fileService, BannerService bannerService) {
         this.bookService = bookService;
         this.reviewService = reviewService;
         this.fileService = fileService;
+        this.bannerService = bannerService;
     }
 
 

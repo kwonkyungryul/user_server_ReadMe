@@ -45,7 +45,7 @@ public class NoticeController {
         NoticeDTO noticeDTO = notice.toDTO();
         Optional<FileDTO> optionalFileDTO = fileService.getFile(notice.getImage().getId());
         if (optionalFileDTO.isEmpty()) {
-            noticeDTO.setImageFile(NoticeConst.defaultBookFileDTO);
+            noticeDTO.setImageFile(NoticeConst.defaultNoticeFileDTO);
         }
         noticeDTO.setImageFile(optionalFileDTO.get());
         return ResponseEntity.ok(new ResponseDTO<>(1, "공지사항 단건 조회 완료되었습니다.", noticeDTO));

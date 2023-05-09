@@ -1,5 +1,6 @@
 package shop.readmecorp.userserverreadme.modules.payment.service;
 
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
@@ -27,10 +28,8 @@ public class BookPaymentService {
     }
 
     public List<BookPaymentDTO> getMyList(User user) {
-        return bookPaymentRepository.findByStatusNotAndUser(PaymentStatus.DELETE, user)
-                .stream()
-                .map(BookPayment::toDTO)
-                .collect(Collectors.toList());
+        return bookPaymentRepository.findByStatusNotAndUser(PaymentStatus.DELETE, user).stream()
+                .map(BookPayment::toDTO).collect(Collectors.toList());
     }
 
     public List<BookPaymentDTO> getBookPayments(Integer paymentNo, User user) {

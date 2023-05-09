@@ -33,7 +33,7 @@ public class BannerController {
     public ResponseEntity<ResponseDTO<List<BannerDTO>>> getList() {
         List<Banner> bannerList = bannerService.getList();
         if (bannerList.size() == 0) {
-            throw new Exception400(BannerConst.notFound); // 널 ?
+            throw new Exception400(BannerConst.notFound);
         }
 
         return ResponseEntity.ok(new ResponseDTO<>(1, "배너 조회가 완료되었습니다.",

@@ -58,7 +58,7 @@ public class BookPayment extends BaseTime {
     }
 
     public BookPaymentDTO toDTO() {
-        return new BookPaymentDTO(id, book.toDTO(), price, DateTimeConverter.localDateTimeToString(paymentTime));
+        return new BookPaymentDTO(id, book.toBookToPaymentDTO(), price, DateTimeConverter.localDateTimeToString(paymentTime));
     }
 
 }

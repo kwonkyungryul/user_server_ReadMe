@@ -51,16 +51,14 @@ public class BookService {
 
     private final SmallCategoryRepository smallCategoryRepository;
 
-    private final BigCategoryRepository bigCategoryRepository;
 
-    public BookService(BookRepository bookRepository, ReviewRepository reviewRepository, FileInfoRepository fileInfoRepository, FileRepository fileRepository, HeartRepository heartRepository, BookPaymentRepository bookPaymentRepository, SmallCategoryRepository smallCategoryRepository, BigCategoryRepository bigCategoryRepository) {
+    public BookService(BookRepository bookRepository, ReviewRepository reviewRepository, FileRepository fileRepository, HeartRepository heartRepository, BookPaymentRepository bookPaymentRepository, SmallCategoryRepository smallCategoryRepository) {
         this.bookRepository = bookRepository;
         this.reviewRepository = reviewRepository;
         this.fileRepository = fileRepository;
         this.heartRepository = heartRepository;
         this.bookPaymentRepository = bookPaymentRepository;
         this.smallCategoryRepository = smallCategoryRepository;
-        this.bigCategoryRepository = bigCategoryRepository;
     }
 
     public Page<BookDTO> getPage(

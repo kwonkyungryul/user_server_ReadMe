@@ -36,7 +36,7 @@ public class NoticeService {
             NoticeDTO noticeDTO = notice.toDTO();
             List<File> files = fileRepository.findByFileInfo_Id(notice.getImage().getId());
             if (files.size() == 0) {
-                noticeDTO.setImageFile(NoticeConst.defaultBookFileDTO);
+                noticeDTO.setImageFile(NoticeConst.defaultNoticeFileDTO);
             }
             noticeDTO.setImageFile(files.get(0).toDTO());
             return noticeDTO;

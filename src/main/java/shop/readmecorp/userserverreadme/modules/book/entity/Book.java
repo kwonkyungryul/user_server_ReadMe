@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookToPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookToReviewDTO;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
@@ -93,6 +94,10 @@ public class Book extends BaseTime {
 
     public BookToReviewDTO toBookToReviewDTO() {
         return new BookToReviewDTO(id, title, null, author);
+    }
+
+    public BookToPaymentDTO toBookToPaymentDTO() {
+        return new BookToPaymentDTO(id, title, publisher.getBusinessName(), price, null);
     }
 
     public BookResponse toResponse() {
