@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.modules.book.BookConst;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 import shop.readmecorp.userserverreadme.modules.cart.dto.CartDTO;
@@ -14,12 +15,15 @@ import shop.readmecorp.userserverreadme.modules.cart.entity.Cart;
 import shop.readmecorp.userserverreadme.modules.cart.request.CartSaveRequest;
 import shop.readmecorp.userserverreadme.modules.cart.response.CartResponse;
 import shop.readmecorp.userserverreadme.modules.cart.service.CartService;
+import shop.readmecorp.userserverreadme.modules.payment.dto.BookPaymentDTO;
+import shop.readmecorp.userserverreadme.modules.payment.service.BookPaymentService;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 import shop.readmecorp.userserverreadme.modules.user.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/carts")
@@ -28,11 +32,13 @@ public class CartController {
     private final CartService cartService;
     private final BookService bookService;
     private final UserService userService;
+    private final BookPaymentService bookPaymentService;
 
-    public CartController(CartService cartService, BookService bookService, UserService userService) {
+    public CartController(CartService cartService, BookService bookService, UserService userService, BookPaymentService bookPaymentService) {
         this.cartService = cartService;
         this.bookService = bookService;
         this.userService = userService;
+        this.bookPaymentService = bookPaymentService;
     }
 
     @GetMapping
@@ -60,6 +66,18 @@ public class CartController {
         if (cartService.isCart(optionalBook.get(), myUserDetails.getUser())) {
             throw new Exception400("이미 장바구니에 있는 책입니다.");
         }
+
+        List<Integer> myBookIds = bookPaymentService.getMyList(myUserDetails.getUser())
+                .stream()
+                .map(BookPaymentDTO::getId)
+                .collect(Collectors.toList());
+
+        for (Integer bookId : myBookIds) {
+            if (myBookIds.contains(bookId)) {
+                throw new Exception400("이미 구매한 도서가 존재합니다.");
+            }
+        }
+
 
         UserDTO userDTO = userService.getUser(myUserDetails.getUser());
 

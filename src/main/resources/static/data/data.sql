@@ -703,23 +703,27 @@ INSERT INTO HEART_TB(user_id, book_id, status) VALUES
     (2, 31, 'ACTIVE'),
     (2, 15, 'ACTIVE'),
     (2, 4, 'ACTIVE'),
-    (2, 24, 'ACTIVE'),
+    (2, 23, 'ACTIVE'),
     (2, 16, 'ACTIVE'),
     (2, 26, 'ACTIVE'),
-    (2, 27, 'ACTIVE'),
+    (2, 22, 'ACTIVE'),
     (2, 28, 'ACTIVE'),
-    (2, 29, 'ACTIVE'),
-    (2, 31, 'ACTIVE'),
+    (3, 29, 'ACTIVE'),
+    (3, 3, 'ACTIVE'),
     (2, 2, 'ACTIVE'),
-    (2, 23, 'ACTIVE'),
-    (2, 24, 'ACTIVE'),
-    (2, 25, 'ACTIVE'),
-    (2, 26, 'ACTIVE'),
-    (2, 27, 'ACTIVE'),
-    (2, 28, 'ACTIVE'),
+    (3, 23, 'ACTIVE'),
+    (2, 8, 'ACTIVE'),
+    (3, 25, 'ACTIVE'),
+    (3, 26, 'ACTIVE'),
+    (3, 27, 'ACTIVE'),
+    (3, 28, 'ACTIVE'),
     (2, 3, 'ACTIVE'),
-    (2, 31, 'ACTIVE'),
-    (2, 32, 'ACTIVE');
+    (3, 31, 'ACTIVE'),
+    (2, 32, 'ACTIVE'),
+    (11, 1, 'ACTIVE'),
+    (11, 2, 'ACTIVE'),
+    (11, 6, 'ACTIVE'),
+    (11, 9, 'ACTIVE');
 
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 1, 1, 2.4, '리뷰내용1', 'ACTIVE');
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 2, 1, 3.2, '리뷰내용2', 'ACTIVE');
@@ -876,10 +880,7 @@ insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, cont
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 2, 50, 4.6, '리뷰내용6', 'ACTIVE');
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '진짜 노잼 ㅋㅋ;', 'ACTIVE');
 insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '머 이런 책이 다 있나요 ㅡㅡ; 판매중지좀 ;;', 'ACTIVE');
-insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '이건 좀 재밌네 ㅋ;', 'ACTIVE');insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '진짜 노잼 ㅋㅋ;', 'ACTIVE');
-insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 12, 52, 4.6, '진짜 노잼 ㅋㅋ;', 'ACTIVE');
-insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 12, 52, 4.6, '머 이런 책이 다 있나요 ㅡㅡ; 판매중지좀 ;;', 'ACTIVE');
-insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 12, 52, 4.6, '이건 좀 재밌네 ㅋ;', 'ACTIVE');
+insert into REVIEW_TB(created_date, modified_date, user_id, book_id, stars, content,  status) values('2023-02-01 00:01', '2021-01-01 00:01', 11, 51, 4.6, '이건 좀 재밌네 ㅋ;', 'ACTIVE');
 
 INSERT INTO BOOK_PAYMENT_TB(created_date, modified_date, user_id, book_id, price, payment_time, status) values('2023-02-01 00:01', '2021-01-01 00:01', 1, 1, 15000, '2021-01-01 00:01', 'ACTIVE');
 INSERT INTO BOOK_PAYMENT_TB(created_date, modified_date, user_id, book_id, price, payment_time, status) values('2023-02-01 00:01', '2021-01-01 00:01', 2, 1, 15000, '2021-01-01 00:01', 'ACTIVE');
@@ -1060,7 +1061,8 @@ values
 ('2023-02-01 00:01', '2021-01-01 00:01', 1, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE'),
 ('2023-02-01 00:01', '2021-01-01 00:01', 2, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE'),
 ('2023-02-01 00:01', '2021-01-01 00:01', 5, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE'),
-('2023-02-01 00:01', '2021-01-01 00:01', 6, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE');
+('2023-02-01 00:01', '2021-01-01 00:01', 6, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE'),
+('2023-02-01 00:01', '2021-01-01 00:01', 11, 1, '2023-05-01', '2023-05-31', 9900, '2023-05-01 00:01', 'ACTIVE');
 
 INSERT INTO QUESTION_TB(created_date, modified_date, role, user_id, publisher_id, title, content, status)
 values

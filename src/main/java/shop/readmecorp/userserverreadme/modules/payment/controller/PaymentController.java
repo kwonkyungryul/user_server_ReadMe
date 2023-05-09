@@ -7,6 +7,7 @@ import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookToPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.service.BookService;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
@@ -15,6 +16,7 @@ import shop.readmecorp.userserverreadme.modules.membership.entity.Membership;
 import shop.readmecorp.userserverreadme.modules.membership.service.MembershipService;
 import shop.readmecorp.userserverreadme.modules.payment.dto.BookPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
+import shop.readmecorp.userserverreadme.modules.payment.entity.BookPayment;
 import shop.readmecorp.userserverreadme.modules.payment.entity.MembershipPayment;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentConst;
 import shop.readmecorp.userserverreadme.modules.payment.request.BookPaymentSaveRequest;
@@ -24,6 +26,8 @@ import shop.readmecorp.userserverreadme.modules.payment.service.BookPaymentServi
 import shop.readmecorp.userserverreadme.modules.payment.service.MembershipPaymentService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,9 +55,11 @@ public class PaymentController {
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
         List<BookPaymentDTO> bookPayments = bookPaymentService.getMyList(myUserDetails.getUser());
-        bookPayments = bookPayments
-                .stream()
-                .map(bookPaymentDTO -> {
+        if (bookPayments.size() == 0) {
+            return ResponseEntity.ok(new ResponseDTO<>(1, "구매 결제 내역이 없습니다.", new MyPaymentResponse(new ArrayList<>(), new ArrayList<>())));
+        }
+        bookPayments
+                .forEach(bookPaymentDTO -> {
                     Optional<Book> optionalBook = bookService.getBook(bookPaymentDTO.getBook().getId());
                     if (optionalBook.isEmpty()) {
                         throw new Exception400(BookConst.notFound);
@@ -65,48 +71,58 @@ public class PaymentController {
                     } else {
                         bookPaymentDTO.getBook().setCoverFile(optionalFile.get());
                     }
-                    return bookPaymentDTO;
-                }).collect(Collectors.toList());
+                });
         List<MembershipPaymentDTO> membershipPayments = membershipPaymentService.getMyList(myUserDetails.getUser());
         return ResponseEntity.ok(new ResponseDTO<>(1, "결제 목록 조회가 완료되었습니다.", new MyPaymentResponse(bookPayments, membershipPayments)));
     }
 
-    @GetMapping("/membership/{id}")
-    public ResponseEntity<ResponseDTO<MembershipPaymentDTO>> getMembershipPaymentResponse(
-            @AuthenticationPrincipal MyUserDetails myUserDetails,
-            @PathVariable Integer id
-    ) {
-        Optional<MembershipPaymentDTO> membershipPaymentOptional = membershipPaymentService.getMemberShipPayment(id, myUserDetails.getUser());
-        if (membershipPaymentOptional.isEmpty()) {
-            throw new Exception400("멤버십 결제 내역이 없습니다.");
-        }
-        return ResponseEntity.ok(new ResponseDTO<>(1, "멤버십 결제가 완료되었습니다.", membershipPaymentOptional.get()));
-    }
+//    @GetMapping("/membership/{id}")
+//    public ResponseEntity<ResponseDTO<MembershipPaymentDTO>> getMembershipPaymentResponse(
+//            @AuthenticationPrincipal MyUserDetails myUserDetails,
+//            @PathVariable Integer id
+//    ) {
+//        Optional<MembershipPaymentDTO> membershipPaymentOptional = membershipPaymentService.getMemberShipPayment(id, myUserDetails.getUser());
+//        if (membershipPaymentOptional.isEmpty()) {
+//            throw new Exception400("멤버십 결제 내역이 없습니다.");
+//        }
+//        return ResponseEntity.ok(new ResponseDTO<>(1, "멤버십 결제 조회가 완료되었습니다.", membershipPaymentOptional.get()));
+//    }
+//
+//    @GetMapping("/books/{paymentNo}")
+//    public ResponseEntity<ResponseDTO<List<BookPaymentDTO>>> getBooksPaymentResponse(
+//            @AuthenticationPrincipal MyUserDetails myUserDetails,
+//            @PathVariable Integer paymentNo
+//    ) {
+//        List<BookPaymentDTO> bookPayments = bookPaymentService.getBookPayments(paymentNo, myUserDetails.getUser());
+//        if(bookPayments.size() == 0) {
+//            throw new Exception400("도서 구매 내역이 없습니다.");
+//        }
+//        return ResponseEntity.ok(new ResponseDTO<>(1, "도서 구매가 완료 완료되었습니다.", bookPayments));
+//    }
 
-    @GetMapping("/books/{paymentNo}")
-    public ResponseEntity<ResponseDTO<List<BookPaymentDTO>>> getBooksPaymentResponse(
-            @AuthenticationPrincipal MyUserDetails myUserDetails,
-            @PathVariable Integer paymentNo
-    ) {
-        List<BookPaymentDTO> bookPayments = bookPaymentService.getBookPayments(paymentNo, myUserDetails.getUser());
-        if(bookPayments.size() == 0) {
-            throw new Exception400("도서 구매 내역이 없습니다.");
-        }
-        return ResponseEntity.ok(new ResponseDTO<>(1, "도서 구매가 완료 완료되었습니다.", bookPayments));
-    }
-
-    @PostMapping("/book")
+    @PostMapping("/books")
     public ResponseEntity<ResponseDTO<Integer>> saveBook(
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @Valid @RequestBody BookPaymentSaveRequest request
     ) {
-        List<Book> books = bookService.getBooks(request.getBookId());
-        if (books.size() != request.getBookId().size()) {
-            throw new Exception400(BookConst.notFound);
+        List<Book> books = bookService.getBooks(request.getBookIds());
+        for (Book book : books) {
+            if (!request.getBookIds().contains(book.getId())) {
+                throw new Exception400(BookConst.notFound);
+            }
         }
 
-        Integer paymentNo = bookPaymentService.save(myUserDetails.getUser(), books);
+        List<Integer> myBookIds = bookPaymentService.getMyList(myUserDetails.getUser())
+                .stream()
+                .map(BookPaymentDTO::getId)
+                .collect(Collectors.toList());
 
+        for (Book book : books) {
+            if (myBookIds.contains(book.getId())) {
+                throw new Exception400("이미 구매한 도서가 존재합니다.");
+            }
+        }
+        Integer paymentNo = bookPaymentService.save(myUserDetails.getUser(), books);
         return ResponseEntity.ok(new ResponseDTO<>(1, "결제 데이터 삽입 완료되었습니다.", paymentNo));
     }
 

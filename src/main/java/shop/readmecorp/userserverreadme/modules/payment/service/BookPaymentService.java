@@ -40,7 +40,7 @@ public class BookPaymentService {
     }
 
     public Integer save(User user, List<Book> books) {
-        Integer paymentNo = bookRepository.countBy() + 1;
+        Integer paymentNo = bookPaymentRepository.countBy() + 1;
 
         books.forEach(book -> {
             bookPaymentRepository.save(
@@ -57,12 +57,4 @@ public class BookPaymentService {
 
         return paymentNo;
     }
-
-    // Save Logic
-    // Max(payment_no) + 1
-    // List<Book> request - 저장하는데 payment_no은 똑같이 묶기
-
-    // BootPay -> payment_no
-    // 가격 체크
-
 }

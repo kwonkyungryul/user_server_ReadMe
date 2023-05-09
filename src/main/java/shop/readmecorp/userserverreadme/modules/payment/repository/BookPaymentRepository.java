@@ -13,4 +13,6 @@ public interface BookPaymentRepository extends JpaRepository<BookPayment, Intege
     List<BookPayment> findByStatusNotAndUser(PaymentStatus status, User user);
     List<BookPayment> findByStatusNotAndUserAndPaymentNo(PaymentStatus status, User user, Integer paymentNo);
     BookPayment findByStatusNotAndUserAndBook(PaymentStatus status, User user, Book book);
+
+    Integer countBy();
 }

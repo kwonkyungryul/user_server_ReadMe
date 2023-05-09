@@ -26,6 +26,7 @@ public class BookPayment extends BaseTime {
     @Comment("고유번호")
     private Integer id;
 
+    @Column(unique = true)
     @Comment("결제 번호")
     private Integer paymentNo;
 

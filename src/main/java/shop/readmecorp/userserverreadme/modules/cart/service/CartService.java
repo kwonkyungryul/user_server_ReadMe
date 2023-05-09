@@ -88,7 +88,9 @@ public class CartService {
         }).collect(Collectors.toList());
     }
 
-    public boolean isCart(Book book, User user) {
+    public Boolean isCart(Book book, User user) {
+
+
         return cartRepository.findByUserAndStatusNotAndBook(user, CartStatus.DELETE, book).isPresent();
     }
 

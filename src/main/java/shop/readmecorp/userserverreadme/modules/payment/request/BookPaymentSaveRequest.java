@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BookPaymentSaveRequest {
 
-    private List<Integer> bookId;
+    private List<Integer> bookIds;
 
     private String paymentTime;
 

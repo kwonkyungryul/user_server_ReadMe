@@ -139,7 +139,7 @@ public class BookService {
     }
 
     public List<Book> getBooks(List<Integer> bookIds) {
-        return bookRepository.findByIdIn(bookIds);
+        return bookRepository.findByIdInAndStatusNot(bookIds, BookStatus.DELETE);
     }
 
     public BookDetailResponse getBookDetail(User user, Book book, FileDTO epubFileDTO, FileDTO coverFileDTO, Page<ReviewNoneBookDTO> reviewDTOList) {
