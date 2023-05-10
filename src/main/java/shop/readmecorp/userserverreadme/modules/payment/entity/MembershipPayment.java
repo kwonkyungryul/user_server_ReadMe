@@ -10,6 +10,7 @@ import shop.readmecorp.userserverreadme.modules.membership.entity.Membership;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentNoneUserDTO;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
+import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentType;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
@@ -52,12 +53,15 @@ public class MembershipPayment extends BaseTime {
     @Comment("구매한 시간")
     private LocalDateTime paymentTime;
 
+    @Comment("결제 타입")
+    private PaymentType type;
+
     @Comment("멤버십 구매내역 활성화 상태")
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
     @Builder
-    public MembershipPayment(Integer id, Integer paymentNo, User user, Membership membership, LocalDateTime membershipStartTime, LocalDateTime membershipEndTime, Integer price, LocalDateTime paymentTime, PaymentStatus status) {
+    public MembershipPayment(Integer id, Integer paymentNo, User user, Membership membership, LocalDateTime membershipStartTime, LocalDateTime membershipEndTime, Integer price, LocalDateTime paymentTime, PaymentType type, PaymentStatus status) {
         this.id = id;
         this.paymentNo = paymentNo;
         this.user = user;
@@ -66,6 +70,7 @@ public class MembershipPayment extends BaseTime {
         this.membershipEndTime = membershipEndTime;
         this.price = price;
         this.paymentTime = paymentTime;
+        this.type = type;
         this.status = status;
     }
 

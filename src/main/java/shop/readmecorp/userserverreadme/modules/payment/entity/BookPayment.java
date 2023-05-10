@@ -9,6 +9,7 @@ import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.payment.dto.BookPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
+import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentType;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
@@ -26,7 +27,6 @@ public class BookPayment extends BaseTime {
     @Comment("고유번호")
     private Integer id;
 
-    @Column(unique = true)
     @Comment("결제 번호")
     private Integer paymentNo;
 
@@ -44,17 +44,23 @@ public class BookPayment extends BaseTime {
     @Comment("구매한 시간")
     private LocalDateTime paymentTime;
 
+    @Comment("결제 타입")
+    @Enumerated(EnumType.STRING)
+    private PaymentType type;
+
     @Comment("책 구매내역 활성화 상태")
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
     @Builder
-    public BookPayment(Integer id, User user, Book book, Integer price, LocalDateTime paymentTime, PaymentStatus status) {
+    public BookPayment(Integer id, Integer paymentNo, User user, Book book, Integer price, LocalDateTime paymentTime, PaymentType type, PaymentStatus status) {
         this.id = id;
+        this.paymentNo = paymentNo;
         this.user = user;
         this.book = book;
         this.price = price;
         this.paymentTime = paymentTime;
+        this.type = type;
         this.status = status;
     }
 

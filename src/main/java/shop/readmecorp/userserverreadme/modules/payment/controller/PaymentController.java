@@ -2,10 +2,12 @@ package shop.readmecorp.userserverreadme.modules.payment.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookToPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
@@ -19,9 +21,11 @@ import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO
 import shop.readmecorp.userserverreadme.modules.payment.entity.BookPayment;
 import shop.readmecorp.userserverreadme.modules.payment.entity.MembershipPayment;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentConst;
+import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentType;
 import shop.readmecorp.userserverreadme.modules.payment.request.BookPaymentSaveRequest;
 import shop.readmecorp.userserverreadme.modules.payment.request.MembershipPaymentSaveRequest;
 import shop.readmecorp.userserverreadme.modules.payment.response.MyPaymentResponse;
+import shop.readmecorp.userserverreadme.modules.payment.response.PaymentResponse;
 import shop.readmecorp.userserverreadme.modules.payment.service.BookPaymentService;
 import shop.readmecorp.userserverreadme.modules.payment.service.MembershipPaymentService;
 
@@ -101,29 +105,34 @@ public class PaymentController {
 //    }
 
     @PostMapping("/books")
-    public ResponseEntity<ResponseDTO<Integer>> saveBook(
+    public ResponseEntity<ResponseDTO<PaymentResponse>> saveBook(
             @AuthenticationPrincipal MyUserDetails myUserDetails,
-            @Valid @RequestBody BookPaymentSaveRequest request
+            @Valid @RequestBody BookPaymentSaveRequest request,
+            Errors error
     ) {
+        if (error.hasErrors()) {
+            throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
+        }
+
         List<Book> books = bookService.getBooks(request.getBookIds());
         for (Book book : books) {
             if (!request.getBookIds().contains(book.getId())) {
                 throw new Exception400(BookConst.notFound);
             }
         }
-
-        List<Integer> myBookIds = bookPaymentService.getMyList(myUserDetails.getUser())
-                .stream()
+        List<BookPaymentDTO> myBookIds = bookPaymentService.getMyList(myUserDetails.getUser());
+        List<Integer> collect = myBookIds.stream()
                 .map(BookPaymentDTO::getId)
                 .collect(Collectors.toList());
 
         for (Book book : books) {
-            if (myBookIds.contains(book.getId())) {
+            if (collect.contains(book.getId())) {
                 throw new Exception400("이미 구매한 도서가 존재합니다.");
             }
         }
         Integer paymentNo = bookPaymentService.save(myUserDetails.getUser(), books);
-        return ResponseEntity.ok(new ResponseDTO<>(1, "결제 데이터 삽입 완료되었습니다.", paymentNo));
+
+        return ResponseEntity.ok(new ResponseDTO<>(1, "결제 데이터 삽입 완료되었습니다.", new PaymentResponse(paymentNo, PaymentType.BOOK.name())));
     }
 
     @PostMapping("/membership")

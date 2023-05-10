@@ -28,7 +28,7 @@ public class Review extends BaseTime {
     private Integer id;
 
     @Comment("리뷰 작성한 유저")
-    @OneToOne
+    @ManyToOne
     private User user;
 
     @Comment("리뷰 작성된 책")

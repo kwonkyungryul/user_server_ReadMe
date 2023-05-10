@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
+import shop.readmecorp.userserverreadme.modules.bootpay.dto.CardDataDTO;
 
 import javax.persistence.*;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "CARD_DATA_TB")
 public class CardData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,5 +51,17 @@ public class CardData {
         this.cardQuota = cardQuota;
         this.cardCompanyCode = cardCompanyCode;
         this.cardCompany = cardCompany;
+    }
+
+    public CardDataDTO toDTO() {
+        CardDataDTO dto = new CardDataDTO();
+        dto.setId(this.id);
+        dto.setTid(this.tid);
+        dto.setCardApproveNo(this.cardApproveNo);
+        dto.setCardNo(this.cardNo);
+        dto.setCardQuota(this.cardQuota);
+        dto.setCardCompanyCode(this.cardCompanyCode);
+        dto.setCardCompany(this.cardCompany);
+        return dto;
     }
 }

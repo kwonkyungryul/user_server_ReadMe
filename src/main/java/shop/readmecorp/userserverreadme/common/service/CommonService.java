@@ -98,8 +98,8 @@ public class CommonService {
 
         User user = null;
 //         user 1번 테스트
-//        Optional<User> optionalUser = userRepository.findByUsername(firebaseToken.getEmail());
-        Optional<User> optionalUser = userRepository.findByUsername("kkr0787@nate.com");
+        Optional<User> optionalUser = userRepository.findByUsername(firebaseToken.getEmail());
+//        Optional<User> optionalUser = userRepository.findByUsername("kkr0787@nate.com");
         if (optionalUser.isEmpty()) {
             user = userRepository.save(new User(null, firebaseToken.getEmail(), UUID.randomUUID().toString(), RoleType.USER.name(), false, false));
         } else {

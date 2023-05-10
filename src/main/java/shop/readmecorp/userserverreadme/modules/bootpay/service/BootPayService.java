@@ -2,6 +2,7 @@ package shop.readmecorp.userserverreadme.modules.bootpay.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.readmecorp.userserverreadme.modules.bootpay.dto.BootPayDTO;
 import shop.readmecorp.userserverreadme.modules.bootpay.entity.BootPayLog;
 import shop.readmecorp.userserverreadme.modules.bootpay.entity.BootPayMaster;
 import shop.readmecorp.userserverreadme.modules.bootpay.entity.CardData;
@@ -31,7 +32,7 @@ public class BootPayService {
     }
 
     @Transactional
-    public void save(BootPaySaveRequest request) {
+    public BootPayDTO save(BootPaySaveRequest request) {
         BootPayLog logEntity = BootPayLog.builder()
                 .id(null)
                 .sandbox(request.isSandbox())
@@ -90,7 +91,10 @@ public class BootPayService {
         CardData cardEntity = request.getCardData().toEntity();
         cardEntity.setBootPayMaster(bootPay);
 
-        metadataRepository.save(metaEntity);
-        cardDataRepository.save(cardEntity);
+        Metadata metaSave = metadataRepository.save(metaEntity);
+        CardData cardSave = cardDataRepository.save(cardEntity);
+
+
+        return new BootPayDTO(bootPay.toDTO(), cardSave.toDTO(), metaSave.toDTO());
     }
 }

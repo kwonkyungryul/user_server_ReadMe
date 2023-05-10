@@ -10,6 +10,8 @@ import shop.readmecorp.userserverreadme.modules.bootpay.entity.CardData;
 @Setter
 @NoArgsConstructor
 public class CardDataDTO {
+    private Integer id;
+
     private String tid;
 
     private String cardApproveNo;

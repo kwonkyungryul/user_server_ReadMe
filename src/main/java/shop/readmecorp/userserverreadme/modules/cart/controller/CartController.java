@@ -50,8 +50,8 @@ public class CartController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<CartResponse>> saveCart (
-            @Valid @RequestBody CartSaveRequest request,
             @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @Valid @RequestBody CartSaveRequest request,
             Errors error
     ) {
         if (error.hasErrors()) {
@@ -72,11 +72,11 @@ public class CartController {
                 .map(BookPaymentDTO::getId)
                 .collect(Collectors.toList());
 
-        for (Integer bookId : myBookIds) {
-            if (myBookIds.contains(bookId)) {
-                throw new Exception400("이미 구매한 도서가 존재합니다.");
-            }
-        }
+//        for (Integer bookId : myBookIds) {
+//            if (myBookIds.contains(bookId)) {
+//                throw new Exception400("이미 구매한 도서가 존재합니다.");
+//            }
+//        }
 
 
         UserDTO userDTO = userService.getUser(myUserDetails.getUser());

@@ -19,8 +19,8 @@ public class FirebaseConfig {
     public void init() {
         try {
             // TODO 배포 시 임시로 만듦
-            FileInputStream serviceAccount = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/static/readmeoauth.json");
-//            FileInputStream serviceAccount = new FileInputStream("/home/ubuntu/projects/readmeoauth.json");
+//            FileInputStream serviceAccount = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/static/readmeoauth.json");
+            FileInputStream serviceAccount = new FileInputStream("/home/ubuntu/projects/readmeoauth.json");
 
             FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
             FirebaseApp.initializeApp(options);

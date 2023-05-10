@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
+import shop.readmecorp.userserverreadme.modules.bootpay.dto.BootPayMasterDTO;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -108,4 +109,31 @@ public class BootPayMaster {
         this.statusLocale = statusLocale;
         this.receiptUrl = receiptUrl;
     }
+
+    public BootPayMasterDTO toDTO() {
+        BootPayMasterDTO dto = new BootPayMasterDTO();
+        dto.setSandbox(this.sandbox);
+        dto.setPg(this.pg);
+        dto.setMethod(this.method);
+        dto.setStatus(this.status);
+        dto.setReceiptId(this.receiptId);
+        dto.setOrderId(this.orderId);
+        dto.setPrice(this.price);
+        dto.setTaxFree(this.taxFree);
+        dto.setCancelledPrice(this.cancelledPrice);
+        dto.setCancelledTaxFree(this.cancelledTaxFree);
+        dto.setOrderName(this.orderName);
+        dto.setCompanyName(this.companyName);
+        dto.setGatewayUrl(this.gatewayUrl);
+        dto.setMethodSymbol(this.methodSymbol);
+        dto.setMethodOrigin(this.methodOrigin);
+        dto.setMethodOriginSymbol(this.methodOriginSymbol);
+        dto.setPurchasedAt(this.purchasedAt);
+        dto.setCancelledAt(this.cancelledAt);
+        dto.setRequestedAt(this.requestedAt);
+        dto.setStatusLocale(this.statusLocale);
+        dto.setReceiptUrl(this.receiptUrl);
+        return dto;
+    }
+
 }

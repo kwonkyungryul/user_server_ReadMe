@@ -138,12 +138,13 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
+    @Transactional
     public List<Book> getBooks(List<Integer> bookIds) {
         return bookRepository.findByIdInAndStatusNot(bookIds, BookStatus.DELETE);
     }
 
     public BookDetailResponse getBookDetail(User user, Book book, FileDTO epubFileDTO, FileDTO coverFileDTO, Page<ReviewNoneBookDTO> reviewDTOList) {
-        Boolean isHeart = heartRepository.findByUserAndStatusNotAndBook(user, HeartStatus.DELETE, book).isEmpty();
+        Boolean isHeart = heartRepository.findByUserAndStatusNotAndBook(user, HeartStatus.DELETE, book).isPresent();
         BookPayment userBookPayment = bookPaymentRepository.findByStatusNotAndUserAndBook(PaymentStatus.DELETE, user, book);
         return BookDetailResponse.builder()
                 .id(book.getId())

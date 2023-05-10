@@ -7,6 +7,9 @@ import lombok.Setter;
 import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -15,8 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class BookPaymentSaveRequest {
 
+    @NotNull
     private List<Integer> bookIds;
-
-    private String paymentTime;
-
 }

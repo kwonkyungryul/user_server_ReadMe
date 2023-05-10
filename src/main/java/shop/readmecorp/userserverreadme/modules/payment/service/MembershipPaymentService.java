@@ -7,6 +7,7 @@ import shop.readmecorp.userserverreadme.modules.membership.repository.Membership
 import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentDTO;
 import shop.readmecorp.userserverreadme.modules.payment.entity.MembershipPayment;
 import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentStatus;
+import shop.readmecorp.userserverreadme.modules.payment.enums.PaymentType;
 import shop.readmecorp.userserverreadme.modules.payment.repository.MembershipPaymentRepository;
 import shop.readmecorp.userserverreadme.modules.payment.request.MembershipPaymentSaveRequest;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
@@ -65,6 +66,7 @@ public class MembershipPaymentService {
                 DateTimeConverter.stringToLocalDateTime(request.getMembershipStartTime()).plus(Period.ofDays(Integer.parseInt(membership.getMembershipTerm()))),
                 request.getPrice(),
                 DateTimeConverter.stringToLocalDateTime(request.getPaymentTime()),
+                PaymentType.MEMBERSHIP,
                 PaymentStatus.ACTIVE
         ));
         return paymentNo;
