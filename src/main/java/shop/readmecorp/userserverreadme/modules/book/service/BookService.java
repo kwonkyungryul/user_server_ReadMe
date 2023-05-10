@@ -95,41 +95,7 @@ public class BookService {
 
         }
 
-        return page.map(book -> {
-            BigCategory bigCategory = book.getSmallCategory().getBigCategory();
-            BookDTO bookDTO = book.toDTO();
-            List<File> epubFiles = fileRepository.findByFileInfo_Id(book.getEpub().getId());
-            if (epubFiles.size() == 0) {
-                bookDTO.setEpubFile(BookConst.defaultBookFileDTO);
-            } else {
-                bookDTO.setEpubFile(epubFiles.get(0).toDTO());
-            }
-
-            List<File> coverFiles = fileRepository.findByFileInfo_Id(book.getCover().getId());
-            if (epubFiles.size() == 0) {
-                bookDTO.setCoverFile(BookConst.defaultBookFileDTO);
-            } else {
-                bookDTO.setCoverFile(coverFiles.get(0).toDTO());
-            }
-
-            Double stars = reviewRepository.findAvgStars(bookDTO.getId());
-            if (stars != null) {
-                bookDTO.setStars(Math.ceil((stars * 10) / 10));
-            } else {
-                bookDTO.setStars(0.0);
-            }
-
-            bookDTO.setIsHeart(false);
-            if (myUserDetails != null) {
-                User user = myUserDetails.getUser();
-                Optional<Heart> optionalHeart = heartRepository.heartCount(book.getId(), user.getId());
-                if (optionalHeart.isPresent()) {
-                    bookDTO.setIsHeart(true);
-                }
-            }
-            bookDTO.setBigCategory(bigCategory.toSingleDTO());
-            return bookDTO;
-        });
+        return page.map(book -> getBookDTO(book, myUserDetails));
     }
 
     public Optional<Book> getBook(Integer id) {
@@ -162,4 +128,51 @@ public class BookService {
                 .build();
     }
 
+    public List<BookDTO> getSearch(
+            String keyword,
+            MyUserDetails myUserDetails
+    ) {
+        return bookRepository.findByStatusNotAndTitleLike(BookStatus.DELETE, "%" + keyword + "%").stream()
+                .map(book -> {
+                    return getBookDTO(book, myUserDetails);
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    private BookDTO getBookDTO(Book book, MyUserDetails myUserDetails) {
+        BigCategory bigCategory = book.getSmallCategory().getBigCategory();
+        BookDTO bookDTO = book.toDTO();
+        List<File> epubFiles = fileRepository.findByFileInfo_Id(book.getEpub().getId());
+        if (epubFiles.size() == 0) {
+            bookDTO.setEpubFile(BookConst.defaultBookFileDTO);
+        } else {
+            bookDTO.setEpubFile(epubFiles.get(0).toDTO());
+        }
+
+        List<File> coverFiles = fileRepository.findByFileInfo_Id(book.getCover().getId());
+        if (epubFiles.size() == 0) {
+            bookDTO.setCoverFile(BookConst.defaultBookFileDTO);
+        } else {
+            bookDTO.setCoverFile(coverFiles.get(0).toDTO());
+        }
+
+        Double stars = reviewRepository.findAvgStars(bookDTO.getId());
+        if (stars != null) {
+            bookDTO.setStars(Math.ceil((stars * 10) / 10));
+        } else {
+            bookDTO.setStars(0.0);
+        }
+
+        bookDTO.setIsHeart(false);
+        if (myUserDetails != null) {
+            User user = myUserDetails.getUser();
+            Optional<Heart> optionalHeart = heartRepository.heartCount(book.getId(), user.getId());
+            if (optionalHeart.isPresent()) {
+                bookDTO.setIsHeart(true);
+            }
+        }
+        bookDTO.setBigCategory(bigCategory.toSingleDTO());
+        return bookDTO;
+    }
 }

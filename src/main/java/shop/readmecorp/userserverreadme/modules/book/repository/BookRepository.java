@@ -22,11 +22,9 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     Page<Book> findByStatusAndSmallCategoryIdIn(BookStatus status, List<Integer> smallCategoryId, Pageable pageable);
 
-    Page<Book> findBySmallCategoryIdAndStatus(Integer smallCategoryId, Pageable pageable, BookStatus bookStatus);
-
     List<Book> findByIdInAndStatusNot(List<Integer> id, BookStatus bookStatus);
 
-    Integer countBy();
-
     Page<Book> findByStatusAndSmallCategoryId(BookStatus bookStatus, Integer smallCategoryIds, Pageable pageable);
+
+    List<Book> findByStatusNotAndTitleLike(BookStatus status, String title);
 }
