@@ -50,55 +50,36 @@ public class PaymentController {
         this.fileService = fileService;
     }
 
+    @GetMapping("/books/my")
+    public ResponseEntity<ResponseDTO<List<BookPaymentDTO>>> getMyPaymentBook(
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        List<BookPaymentDTO> bookPayments = bookPaymentService.getMyPaymentList(
+                myUserDetails.getUser(),
+                bookService,
+                fileService
+        );
+        return ResponseEntity.ok(new ResponseDTO<>(1, "보관함 - 구매내역 조회가 완료되었습니다.", bookPayments));
+    }
+
+
     @GetMapping("/my")
     public ResponseEntity<ResponseDTO<MyPaymentResponse>> getMyPaymentResponse(
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
-        List<BookPaymentDTO> bookPayments = bookPaymentService.getMyList(myUserDetails.getUser());
-        if (bookPayments.size() == 0) {
-            return ResponseEntity.ok(new ResponseDTO<>(1, "구매 결제 내역이 없습니다.", new MyPaymentResponse(new ArrayList<>(), new ArrayList<>())));
-        }
-        bookPayments
-                .forEach(bookPaymentDTO -> {
-                    Optional<Book> optionalBook = bookService.getBook(bookPaymentDTO.getBook().getId());
-                    if (optionalBook.isEmpty()) {
-                        throw new Exception400(BookConst.notFound);
-                    }
-                    Book book = optionalBook.get();
-                    Optional<FileDTO> optionalFile = fileService.getFile(book.getCover().getId());
-                    if (optionalFile.isEmpty()) {
-                        bookPaymentDTO.getBook().setCoverFile(PaymentConst.defaultBookFileDTO);
-                    } else {
-                        bookPaymentDTO.getBook().setCoverFile(optionalFile.get());
-                    }
-                });
+        List<BookPaymentDTO> bookPayments = bookPaymentService.getMyPaymentList(
+                myUserDetails.getUser(),
+                bookService,
+                fileService
+        );
+        // TODO 굳이 할필요없을듯 ㅎ -> 이렇게 되면 멤버십 결제 내역을 볼 수 없음
+//        if (bookPayments.size() == 0) {
+//            return ResponseEntity.ok(new ResponseDTO<>(1, "구매 결제 내역이 없습니다.", new MyPaymentResponse(new ArrayList<>(), new ArrayList<>())));
+//        }
         List<MembershipPaymentDTO> membershipPayments = membershipPaymentService.getMyList(myUserDetails.getUser());
         return ResponseEntity.ok(new ResponseDTO<>(1, "결제 목록 조회가 완료되었습니다.", new MyPaymentResponse(bookPayments, membershipPayments)));
     }
 
-//    @GetMapping("/membership/{id}")
-//    public ResponseEntity<ResponseDTO<MembershipPaymentDTO>> getMembershipPaymentResponse(
-//            @AuthenticationPrincipal MyUserDetails myUserDetails,
-//            @PathVariable Integer id
-//    ) {
-//        Optional<MembershipPaymentDTO> membershipPaymentOptional = membershipPaymentService.getMemberShipPayment(id, myUserDetails.getUser());
-//        if (membershipPaymentOptional.isEmpty()) {
-//            throw new Exception400("멤버십 결제 내역이 없습니다.");
-//        }
-//        return ResponseEntity.ok(new ResponseDTO<>(1, "멤버십 결제 조회가 완료되었습니다.", membershipPaymentOptional.get()));
-//    }
-//
-//    @GetMapping("/books/{paymentNo}")
-//    public ResponseEntity<ResponseDTO<List<BookPaymentDTO>>> getBooksPaymentResponse(
-//            @AuthenticationPrincipal MyUserDetails myUserDetails,
-//            @PathVariable Integer paymentNo
-//    ) {
-//        List<BookPaymentDTO> bookPayments = bookPaymentService.getBookPayments(paymentNo, myUserDetails.getUser());
-//        if(bookPayments.size() == 0) {
-//            throw new Exception400("도서 구매 내역이 없습니다.");
-//        }
-//        return ResponseEntity.ok(new ResponseDTO<>(1, "도서 구매가 완료 완료되었습니다.", bookPayments));
-//    }
 
     @PostMapping("/books")
     public ResponseEntity<ResponseDTO<PaymentResponse>> saveBook(
