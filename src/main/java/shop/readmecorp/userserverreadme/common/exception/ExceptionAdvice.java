@@ -54,7 +54,6 @@ public class ExceptionAdvice {
         return new ResponseEntity<>(errorMap, headers, HttpStatus.BAD_REQUEST);
     }
 
-    // TODO 리팩토링 어케하는지 물어보기
     @ExceptionHandler(Exception500.class)
     public ResponseEntity<Map<String, Object>> handleException500(Exception500 ex) {
         Map<String, Object> errorMap = new HashMap<>();

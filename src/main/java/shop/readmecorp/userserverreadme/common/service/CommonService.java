@@ -106,6 +106,9 @@ public class CommonService {
             user = optionalUser.get();
         }
 
+        // TODO: FCM Token, OS Type 받아서 UserFcm 테이블에 저장해야함
+        // Logout 시에는 UserFcm 테이블에서 삭제해야함 - EndPoint 추가
+
 //        User user = optionalUser.orElseGet(() -> userRepository.save(new User(null, request.getCurrentUserEmail(), UUID.randomUUID().toString(), RoleType.USER.name(), false, false, LocalDateTime.now())));
 
         return MyJwtProvider.create(user);

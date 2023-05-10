@@ -17,5 +17,9 @@ public class NotificationDTO {
 
     private String content;
 
+    private String notificationType;
+
+    private String notificationData;
+
     private String writeTime;
 }

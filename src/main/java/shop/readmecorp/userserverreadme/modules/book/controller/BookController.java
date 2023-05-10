@@ -51,7 +51,7 @@ public class BookController {
                                      @RequestParam(defaultValue = "0") Integer smallCategoryId,
                                      @RequestParam(defaultValue = "") String status,
                                      @AuthenticationPrincipal MyUserDetails myUserDetails
-                                     ) {
+    ) {
         return ResponseEntity.ok(new ResponseDTO<>(1, "리스트 조회 성공",
                 bookService.getPage(bigCategoryId, smallCategoryId, pageable, status, myUserDetails)));
     }

@@ -35,7 +35,6 @@ public class CommonController {
         return ResponseEntity.ok(new ResponseDTO<>(1, "메타데이터 로드 성공", commonService.getMetaData(myUserDetails)));
     }
 
-    // TODO 시큐리티 설정 후 해야 함.
     @PostMapping("/login")
     public ResponseEntity<?> getUser(@Valid @RequestBody FirebaseRequest request, Errors error) {
         if (error.hasErrors()) {
