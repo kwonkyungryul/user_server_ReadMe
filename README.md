@@ -62,6 +62,9 @@ https://github.com/ReadMeCorporation/app_ReadMe/blob/dev/3%EC%A1%B0%20%ED%8C%8C%
 ## ERD
 **전체**
 
+<img width="603" alt="image" src="https://github.com/ReadMeCorporation/user_server_ReadMe/assets/68271830/c35de783-e208-4fe7-b2d9-7cad6d72d114">
+
+
 **유저 관련 테이블**
 
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/4c0e2dfb-544f-46ba-ae22-e4062f5ae7e6)
