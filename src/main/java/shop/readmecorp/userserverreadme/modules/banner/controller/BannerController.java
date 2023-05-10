@@ -4,14 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
-import shop.readmecorp.userserverreadme.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.modules.common.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.modules.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.banner.dto.BannerDTO;
 import shop.readmecorp.userserverreadme.modules.banner.entity.Banner;
 import shop.readmecorp.userserverreadme.modules.banner.enums.BannerConst;
 import shop.readmecorp.userserverreadme.modules.banner.service.BannerService;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
-import shop.readmecorp.userserverreadme.modules.file.entity.File;
 import shop.readmecorp.userserverreadme.modules.file.service.FileService;
 
 import java.util.List;

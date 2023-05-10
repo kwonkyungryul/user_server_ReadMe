@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public class MembershipService {
 
-    private MembershipRepository membershipRepository;
+    private final MembershipRepository membershipRepository;
 
     public MembershipService(MembershipRepository membershipRepository) {
         this.membershipRepository = membershipRepository;

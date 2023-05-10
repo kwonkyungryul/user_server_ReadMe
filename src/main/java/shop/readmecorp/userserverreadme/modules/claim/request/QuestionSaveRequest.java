@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shop.readmecorp.userserverreadme.common.ValueOfEnum;
-import shop.readmecorp.userserverreadme.common.jpa.RoleType;
-import shop.readmecorp.userserverreadme.modules.category.enums.CategoryStatus;
-import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
-import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
+import shop.readmecorp.userserverreadme.modules.common.custom_annotation.ValueOfEnum;
+import shop.readmecorp.userserverreadme.modules.common.jpa.RoleType;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

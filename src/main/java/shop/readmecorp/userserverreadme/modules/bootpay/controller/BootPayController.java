@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
-import shop.readmecorp.userserverreadme.common.exception.Exception400;
-import shop.readmecorp.userserverreadme.common.exception.Exception500;
+import shop.readmecorp.userserverreadme.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.modules.common.exception.Exception400;
+import shop.readmecorp.userserverreadme.modules.common.exception.Exception500;
 import shop.readmecorp.userserverreadme.modules.bootpay.dto.BootPayDTO;
 import shop.readmecorp.userserverreadme.modules.bootpay.request.BootPaySaveRequest;
 import shop.readmecorp.userserverreadme.modules.bootpay.service.BootPayService;
@@ -22,7 +22,6 @@ import shop.readmecorp.userserverreadme.modules.payment.service.BookPaymentServi
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/boot-pay")

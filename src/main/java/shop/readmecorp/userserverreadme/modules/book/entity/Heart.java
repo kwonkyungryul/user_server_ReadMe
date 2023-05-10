@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.book.dto.HeartDTO;
 import shop.readmecorp.userserverreadme.modules.book.enums.HeartStatus;
 import shop.readmecorp.userserverreadme.modules.book.response.HeartResponse;

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.notification.dto.NotificationDTO;
 import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationStatus;
 import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationType;
@@ -14,7 +14,6 @@ import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

@@ -5,15 +5,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
-import shop.readmecorp.userserverreadme.common.exception.Exception400;
-import shop.readmecorp.userserverreadme.modules.banner.dto.BannerDTO;
-import shop.readmecorp.userserverreadme.modules.banner.entity.Banner;
+import shop.readmecorp.userserverreadme.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.modules.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.banner.service.BannerService;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
-import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
-import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
-import shop.readmecorp.userserverreadme.modules.book.dto.BookMainDTO;
+import shop.readmecorp.userserverreadme.modules.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.response.BookDetailResponse;
 import shop.readmecorp.userserverreadme.modules.book.response.BookResponse;
@@ -24,9 +20,7 @@ import shop.readmecorp.userserverreadme.modules.review.dto.ReviewNoneBookDTO;
 import shop.readmecorp.userserverreadme.modules.review.enums.ReviewStatus;
 import shop.readmecorp.userserverreadme.modules.review.service.ReviewService;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")

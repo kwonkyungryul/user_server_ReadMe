@@ -5,11 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.membership.dto.MembershipDTO;
 import shop.readmecorp.userserverreadme.modules.membership.enums.MembershipStatus;
-import shop.readmecorp.userserverreadme.modules.membership.response.MembershipResponse;
-import shop.readmecorp.userserverreadme.modules.payment.dto.MembershipPaymentNoneUserDTO;
 
 import javax.persistence.*;
 
@@ -50,7 +48,4 @@ public class Membership extends BaseTime {
         return new MembershipDTO(id, membershipName, price,membershipTerm);
     }
 
-    public MembershipResponse toResponse() {
-        return new MembershipResponse(id, membershipName, price, membershipTerm);
-    }
 }

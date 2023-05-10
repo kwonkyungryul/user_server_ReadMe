@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
-import shop.readmecorp.userserverreadme.common.jpa.RoleType;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.enums.PublisherStatus;
-import shop.readmecorp.userserverreadme.modules.publisher.response.PublisherResponse;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -62,9 +61,5 @@ public class Publisher extends BaseTime {
 
     public PublisherDTO toDTO() {
         return new PublisherDTO(id, username, role.name(),businessNumber, businessName, joinTime.toString() );
-    }
-
-    public PublisherResponse toResponse() {
-        return new PublisherResponse(id, username, role.name(),businessNumber, businessName, joinTime.toString());
     }
 }

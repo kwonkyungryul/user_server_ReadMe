@@ -2,7 +2,7 @@ package shop.readmecorp.userserverreadme.modules.file.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.file.dto.FileDTO;
 import shop.readmecorp.userserverreadme.modules.file.enums.FileStatus;
 import shop.readmecorp.userserverreadme.modules.file.response.FileResponse;

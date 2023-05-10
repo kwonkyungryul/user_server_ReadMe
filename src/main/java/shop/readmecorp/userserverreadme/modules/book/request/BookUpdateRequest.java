@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shop.readmecorp.userserverreadme.common.ValueOfEnum;
+import shop.readmecorp.userserverreadme.modules.common.custom_annotation.ValueOfEnum;
 import shop.readmecorp.userserverreadme.modules.book.enums.BookStatus;
 import shop.readmecorp.userserverreadme.modules.category.dto.BigCategoryDTO;
 import shop.readmecorp.userserverreadme.modules.publisher.dto.PublisherDTO;

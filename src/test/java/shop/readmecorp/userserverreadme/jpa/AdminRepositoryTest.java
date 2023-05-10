@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import shop.readmecorp.userserverreadme.common.jpa.RoleType;
+import shop.readmecorp.userserverreadme.modules.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.admin.entity.Admin;
 import shop.readmecorp.userserverreadme.modules.admin.enums.AdminStatus;
 import shop.readmecorp.userserverreadme.modules.admin.repository.AdminRepository;

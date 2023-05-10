@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.history.dto.SearchHistoryDTO;
 import shop.readmecorp.userserverreadme.modules.history.enums.HistoryStatus;
 import shop.readmecorp.userserverreadme.modules.history.response.SearchHistoryResponse;

@@ -1,13 +1,7 @@
 package shop.readmecorp.userserverreadme.modules.user.dto;
 
 import lombok.*;
-import shop.readmecorp.userserverreadme.common.jpa.RoleType;
-import shop.readmecorp.userserverreadme.modules.file.dto.FileInfoDTO;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
-import shop.readmecorp.userserverreadme.modules.user.enums.UserStatus;
-import shop.readmecorp.userserverreadme.util.DateTimeConverter;
-
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

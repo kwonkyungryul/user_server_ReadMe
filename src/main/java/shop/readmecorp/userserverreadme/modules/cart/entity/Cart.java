@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.cart.dto.CartDTO;
 import shop.readmecorp.userserverreadme.modules.cart.enums.CartStatus;

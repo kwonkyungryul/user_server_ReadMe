@@ -4,10 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.http.client.utils.DateUtils;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
-import shop.readmecorp.userserverreadme.common.jpa.RoleType;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.claim.dto.QuestionDTO;
 import shop.readmecorp.userserverreadme.modules.claim.enums.ClaimStatus;
 import shop.readmecorp.userserverreadme.modules.claim.response.QuestionResponse;
@@ -16,7 +15,6 @@ import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

@@ -2,16 +2,12 @@ package shop.readmecorp.userserverreadme.modules.user.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Comment;
-import shop.readmecorp.userserverreadme.common.jpa.BaseTime;
-import shop.readmecorp.userserverreadme.common.jpa.RoleType;
-import shop.readmecorp.userserverreadme.modules.file.entity.FileInfo;
+import shop.readmecorp.userserverreadme.modules.common.jpa.BaseTime;
+import shop.readmecorp.userserverreadme.modules.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 import shop.readmecorp.userserverreadme.modules.user.enums.UserStatus;
-import shop.readmecorp.userserverreadme.modules.user.response.UserResponse;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
-import java.time.LocalDateTime;
 
 // checkpoint : user model
 @Entity
@@ -59,9 +55,5 @@ public class User extends BaseTime {
 
     public UserDTO toDTO() {
         return new UserDTO(id, username,role.name(), isMembership,isAutoPayment);
-    }
-
-    public UserResponse toResponse() {
-        return new UserResponse(id, username,role.name(), isMembership,isAutoPayment);
     }
 }

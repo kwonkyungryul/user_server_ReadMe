@@ -1,11 +1,9 @@
 package shop.readmecorp.userserverreadme.modules.notice.service;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.readmecorp.userserverreadme.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.file.entity.File;
 import shop.readmecorp.userserverreadme.modules.file.repository.FileRepository;
 import shop.readmecorp.userserverreadme.modules.notice.dto.NoticeDTO;
@@ -15,7 +13,6 @@ import shop.readmecorp.userserverreadme.modules.notice.repository.NoticeReposito
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)

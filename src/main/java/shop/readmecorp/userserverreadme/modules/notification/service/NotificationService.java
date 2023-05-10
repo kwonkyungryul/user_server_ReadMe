@@ -2,7 +2,7 @@ package shop.readmecorp.userserverreadme.modules.notification.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.auth.session.MyUserDetails;
 import shop.readmecorp.userserverreadme.modules.notification.dto.NotificationDTO;
 import shop.readmecorp.userserverreadme.modules.notification.entity.Notification;
 import shop.readmecorp.userserverreadme.modules.notification.enums.NotificationStatus;

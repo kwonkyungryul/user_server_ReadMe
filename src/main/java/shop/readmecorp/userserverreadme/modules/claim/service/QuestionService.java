@@ -2,7 +2,6 @@ package shop.readmecorp.userserverreadme.modules.claim.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.readmecorp.userserverreadme.modules.claim.dto.AnswerDTO;
 import shop.readmecorp.userserverreadme.modules.claim.dto.QuestionDTO;
 import shop.readmecorp.userserverreadme.modules.claim.entity.Answer;
 import shop.readmecorp.userserverreadme.modules.claim.entity.Question;

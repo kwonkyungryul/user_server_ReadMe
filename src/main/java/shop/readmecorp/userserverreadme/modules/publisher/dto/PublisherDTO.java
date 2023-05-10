@@ -6,10 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-import shop.readmecorp.userserverreadme.common.ValueOfEnum;
-import shop.readmecorp.userserverreadme.common.jpa.RoleType;
+import shop.readmecorp.userserverreadme.modules.common.jpa.RoleType;
 import shop.readmecorp.userserverreadme.modules.publisher.entity.Publisher;
-import shop.readmecorp.userserverreadme.modules.publisher.enums.PublisherStatus;
 import shop.readmecorp.userserverreadme.util.DateTimeConverter;
 
 import javax.validation.constraints.NotBlank;

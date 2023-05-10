@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import shop.readmecorp.userserverreadme.common.auth.session.MyUserDetails;
-import shop.readmecorp.userserverreadme.common.dto.ResponseDTO;
+import shop.readmecorp.userserverreadme.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.modules.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.notification.dto.NotificationDTO;
-import shop.readmecorp.userserverreadme.modules.notification.entity.Notification;
 import shop.readmecorp.userserverreadme.modules.notification.enums.OSType;
 import shop.readmecorp.userserverreadme.modules.notification.service.NotificationService;
 
