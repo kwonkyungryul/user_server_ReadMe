@@ -11,7 +11,6 @@ import shop.readmecorp.userserverreadme.modules.user.dto.UserDTO;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookmarkDTO {
-
     private Integer id;
 
     private UserDTO user;
@@ -19,5 +18,4 @@ public class BookmarkDTO {
     private BookDTO book;
 
     private String pageNum;
-
 }

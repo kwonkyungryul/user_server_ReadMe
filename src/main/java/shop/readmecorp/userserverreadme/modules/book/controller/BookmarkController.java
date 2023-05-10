@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
 import shop.readmecorp.userserverreadme.modules.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.BookConst;
@@ -20,10 +21,11 @@ import shop.readmecorp.userserverreadme.modules.book.service.BookmarkService;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/bookmarks")
-public class BookmarkController {
+public class  BookmarkController {
 
     private final BookmarkService bookmarkService;
     private final BookService bookService;
@@ -31,6 +33,21 @@ public class BookmarkController {
     public BookmarkController(BookmarkService bookmartService, BookService bookService) {
         this.bookmarkService = bookmartService;
         this.bookService = bookService;
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDTO<List<BookDTO>>> getBooks (
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        List<BookmarkDTO> bookmarkList = bookmarkService.getBookmarks(myUserDetails.getUser());
+        return ResponseEntity.ok(
+                new ResponseDTO<>(1, "조회 성공",
+                    bookmarkList.stream()
+                            .map(BookmarkDTO::getBook)
+                            .distinct()
+                            .collect(Collectors.toList())
+                )
+        );
     }
 
     @GetMapping("/{bookId}")

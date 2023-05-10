@@ -13,4 +13,5 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Integer> {
     Optional<Bookmark> findByStatusNotAndIdAndUser(BookmarkStatus status, Integer id, User user);
 
     List<Bookmark> findByBookAndStatusNotAndUser(Book book, BookmarkStatus status, User user);
+    List<Bookmark> findByStatusNotAndUser(BookmarkStatus status, User user);
 }

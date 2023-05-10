@@ -25,7 +25,14 @@ public class BookmarkService {
 
     public List<BookmarkDTO> getBookmarks(Book book, User user) {
         return bookmarkRepository.findByBookAndStatusNotAndUser(book, BookmarkStatus.DELETE, user)
-                .stream().map(Bookmark::toDTO).collect(Collectors.toList());
+                .stream()
+                .map(Bookmark::toDTO).collect(Collectors.toList());
+    }
+
+    public List<BookmarkDTO> getBookmarks(User user) {
+        return bookmarkRepository.findByStatusNotAndUser(BookmarkStatus.DELETE, user)
+                .stream()
+                .map(Bookmark::toDTO).collect(Collectors.toList());
     }
 
     public Optional<Bookmark> getBookmark(Integer id, User user) {
@@ -49,5 +56,6 @@ public class BookmarkService {
     public void delete(Bookmark bookmark) {
         bookmarkRepository.delete(bookmark);
     }
+
 
 }
