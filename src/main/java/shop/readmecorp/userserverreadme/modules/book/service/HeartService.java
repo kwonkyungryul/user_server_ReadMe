@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
+import shop.readmecorp.userserverreadme.modules.book.dto.HeartDTO;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.entity.Heart;
 import shop.readmecorp.userserverreadme.modules.book.enums.HeartStatus;
@@ -12,7 +14,9 @@ import shop.readmecorp.userserverreadme.modules.book.request.HeartSaveRequest;
 import shop.readmecorp.userserverreadme.modules.book.request.HeartUpdateRequest;
 import shop.readmecorp.userserverreadme.modules.user.entity.User;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,5 +48,13 @@ public class HeartService {
         } else {
             optional.ifPresent(heartRepository::delete);
         }
+    }
+
+    public List<BookDTO> getBooks(User user) {
+        return heartRepository.findByUserAndStatusNot(user, HeartStatus.DELETE)
+                .stream()
+                .map(Heart::toDTO)
+                .map(HeartDTO::getBook)
+                .collect(Collectors.toList());
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.readmecorp.userserverreadme.auth.session.MyUserDetails;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookDTO;
+import shop.readmecorp.userserverreadme.modules.book.dto.BookmarkDTO;
 import shop.readmecorp.userserverreadme.modules.common.dto.ResponseDTO;
 import shop.readmecorp.userserverreadme.modules.common.exception.Exception400;
 import shop.readmecorp.userserverreadme.modules.book.HeartConst;
@@ -34,6 +36,17 @@ public class HeartController {
     public HeartController(HeartService heartService, BookService bookService) {
         this.heartService = heartService;
         this.bookService = bookService;
+    }
+
+    @GetMapping("/my/books")
+    public ResponseEntity<ResponseDTO<List<BookDTO>>> getBooks (
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        return ResponseEntity.ok(
+                new ResponseDTO<>(1, "조회 성공",
+                        heartService.getBooks(myUserDetails.getUser())
+                )
+        );
     }
 
     @GetMapping

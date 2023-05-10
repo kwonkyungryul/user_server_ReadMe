@@ -46,7 +46,11 @@ public class BookDTO {
     private Double stars;
 
     @Builder
-    public BookDTO(Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction, SingleBigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, Boolean isHeart, FileDTO epubFile, FileDTO coverFile, Double stars) {
+    public BookDTO(
+            Integer id, PublisherDTO publisher, String title, String author, Integer price, String introduction,
+            SingleBigCategoryDTO bigCategory, SmallCategoryDTO smallCategory, String authorInfo, Boolean isHeart,
+            FileDTO epubFile, FileDTO coverFile, Double stars
+    ) {
         this.id = id;
         this.publisher = publisher;
         this.title = title;
