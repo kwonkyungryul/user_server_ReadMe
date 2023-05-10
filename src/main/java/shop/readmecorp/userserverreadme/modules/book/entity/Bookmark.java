@@ -49,10 +49,10 @@ public class Bookmark extends BaseTime {
     }
 
     public BookmarkDTO toDTO() {
-        return new BookmarkDTO(id, user.toDTO(), book.toDTO(), pageNum, status.name()  );
+        return new BookmarkDTO(id, user.toDTO(), book.toDTO(), pageNum);
     }
 
     public BookmarkResponse toResponse() {
-        return new BookmarkResponse(id, user.toDTO(), book.toDTO(), pageNum, status.name());
+        return new BookmarkResponse(id, user.toDTO(), book.toDTO(), pageNum);
     }
 }

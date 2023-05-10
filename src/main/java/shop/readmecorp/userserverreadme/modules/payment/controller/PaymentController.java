@@ -120,13 +120,13 @@ public class PaymentController {
                 throw new Exception400(BookConst.notFound);
             }
         }
-        List<BookPaymentDTO> myBookIds = bookPaymentService.getMyList(myUserDetails.getUser());
-        List<Integer> collect = myBookIds.stream()
-                .map(BookPaymentDTO::getId)
-                .collect(Collectors.toList());
+        List<BookPaymentDTO> myBookPaymentDtoList = bookPaymentService.getMyList(myUserDetails.getUser());
+        List<Integer> myBookIds = myBookPaymentDtoList.stream()
+                                                      .map(BookPaymentDTO::getId)
+                                                      .collect(Collectors.toList());
 
         for (Book book : books) {
-            if (collect.contains(book.getId())) {
+            if (myBookIds.contains(book.getId())) {
                 throw new Exception400("이미 구매한 도서가 존재합니다.");
             }
         }

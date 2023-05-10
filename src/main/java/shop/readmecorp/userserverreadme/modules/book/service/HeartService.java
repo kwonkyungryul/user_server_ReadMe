@@ -3,6 +3,7 @@ package shop.readmecorp.userserverreadme.modules.book.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import shop.readmecorp.userserverreadme.modules.book.entity.Book;
 import shop.readmecorp.userserverreadme.modules.book.entity.Heart;
 import shop.readmecorp.userserverreadme.modules.book.enums.HeartStatus;
@@ -14,6 +15,7 @@ import shop.readmecorp.userserverreadme.modules.user.entity.User;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class HeartService {
 
     private final HeartRepository heartRepository;
@@ -30,7 +32,8 @@ public class HeartService {
         return heartRepository.findById(id);
     }
 
-    public void save(HeartSaveRequest request, Book book, User user) {
+    @Transactional
+    public void saveAndDelete(HeartSaveRequest request, Book book, User user) {
         Optional<Heart> optional = heartRepository.findByUserAndStatusNotAndBook(user, HeartStatus.DELETE, book);
         if (request.getCheck()) {
             if (optional.isEmpty()) {
@@ -41,12 +44,5 @@ public class HeartService {
         } else {
             optional.ifPresent(heartRepository::delete);
         }
-    }
-
-    public Heart update(HeartUpdateRequest request, Heart heart) {
-        return null;
-    }
-
-    public void delete(Heart heart) {
     }
 }

@@ -21,6 +21,4 @@ public class BookmarkResponse {
 
     private String pageNum;
 
-    private String status;
-
 }

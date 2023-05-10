@@ -20,6 +20,4 @@ public class BookmarkDTO {
 
     private String pageNum;
 
-    private String status;
-
 }

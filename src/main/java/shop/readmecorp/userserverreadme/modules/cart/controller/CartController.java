@@ -68,26 +68,22 @@ public class CartController {
         }
 
         List<Integer> myBookIds = bookPaymentService.getMyList(myUserDetails.getUser())
-                .stream()
-                .map(BookPaymentDTO::getId)
-                .collect(Collectors.toList());
+                                                    .stream()
+                                                    .map(BookPaymentDTO::getId)
+                                                    .collect(Collectors.toList());
 
-//        for (Integer bookId : myBookIds) {
-//            if (myBookIds.contains(bookId)) {
-//                throw new Exception400("이미 구매한 도서가 존재합니다.");
-//            }
-//        }
-
+        if (myBookIds.contains(request.getBookId())) {
+            throw new Exception400("이미 구매한 도서가 존재합니다.");
+        }
 
         UserDTO userDTO = userService.getUser(myUserDetails.getUser());
-
         return ResponseEntity.ok(new ResponseDTO<>(1, "장바구니 등록 성공", cartService.save(userDTO.toEntity(), optionalBook.get())));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCart (
-            @PathVariable Integer id,
-            @AuthenticationPrincipal MyUserDetails myUserDetails
+        @PathVariable Integer id,
+        @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
         Optional<Cart> cartOptional = cartService.getCart(id);
         if (cartOptional.isEmpty() || cartOptional.get().getUser().getId().intValue() != myUserDetails.getUser().getId()) {

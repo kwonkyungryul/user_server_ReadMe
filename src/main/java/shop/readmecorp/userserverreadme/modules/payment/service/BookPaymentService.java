@@ -30,8 +30,10 @@ public class BookPaymentService {
     }
 
     public List<BookPaymentDTO> getMyList(User user) {
-        return bookPaymentRepository.findByStatusNotAndUser(PaymentStatus.DELETE, user).stream()
-                .map(BookPayment::toDTO).collect(Collectors.toList());
+        return bookPaymentRepository.findByStatusNotAndUser(PaymentStatus.DELETE, user)
+                .stream()
+                .map(BookPayment::toDTO)
+                .collect(Collectors.toList());
     }
 
     public List<BookPaymentDTO> getBookPayments(Integer paymentNo, User user) {

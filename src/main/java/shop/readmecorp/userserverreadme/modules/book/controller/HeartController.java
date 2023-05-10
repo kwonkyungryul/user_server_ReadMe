@@ -40,10 +40,9 @@ public class HeartController {
     public ResponseEntity<Page<HeartDTO>> getPage(Pageable pageable) {
         Page<Heart> page = heartService.getPage(pageable);
         List<HeartDTO> content = page.getContent()
-                .stream()
-                .map(Heart::toDTO)
-                .collect(Collectors.toList());
-
+                                     .stream()
+                                     .map(Heart::toDTO)
+                                     .collect(Collectors.toList());
         return ResponseEntity.ok(new PageImpl<>(content, pageable, page.getTotalElements()));
     }
 
@@ -53,7 +52,6 @@ public class HeartController {
         if (optionalHeart.isEmpty()) {
             throw new Exception400(HeartConst.notFound);
         }
-
         return ResponseEntity.ok(optionalHeart.get().toResponse());
     }
 
@@ -71,7 +69,7 @@ public class HeartController {
         if(optionalBook.isEmpty()) {
             throw new Exception400("도서 정보가 없습니다.");
         }
-        heartService.save(request, optionalBook.get(), myUserDetails.getUser());
+        heartService.saveAndDelete(request, optionalBook.get(), myUserDetails.getUser());
         return ResponseEntity.ok(new ResponseDTO<>(1, request.getCheck() ? "좋아요가 완료되었습니다." : "좋아요가 취소되었습니다.", null));
     }
 }

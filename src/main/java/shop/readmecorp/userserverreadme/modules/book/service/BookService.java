@@ -61,7 +61,7 @@ public class BookService {
         this.smallCategoryRepository = smallCategoryRepository;
     }
 
-    public Page<BookDTO> getPage(
+    public Page<BookDTO> getPage (
         Integer bigCategoryId,
         Integer smallCategoryId,
         Pageable pageable,
