@@ -9,6 +9,7 @@
 수많은 전자책을 한 곳에서 쉽게 찾아 읽을 수 있는 편리함과 함께 즐겨찾은 페이지를 표시하고,</br> 읽은 책에 대한 리뷰를 공유하는 등 독서를 더욱 풍부하게 즐길 수 있습니다. </br>
 
 # 시연영상
+https://www.youtube.com/watch?v=MDKwmzJHqKE
 
 # 발표자료
 [3조_파이널_PDF.pdf](https://github.com/ReadMeCorporation/user_server_ReadMe/files/11448362/3._._PDF.pdf)
