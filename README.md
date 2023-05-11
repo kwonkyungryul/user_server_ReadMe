@@ -11,7 +11,8 @@
 # 시연영상
 
 # 발표자료
-https://github.com/ReadMeCorporation/app_ReadMe/blob/dev/3%EC%A1%B0%20%ED%8C%8C%EC%9D%B4%EB%84%90%20PPT.pdf
+[3조_파이널_PDF.pdf](https://github.com/ReadMeCorporation/user_server_ReadMe/files/11448362/3._._PDF.pdf)
+
 
 # 프로젝트 기간
 - 2023-04-10 ~ 2023.05.10
