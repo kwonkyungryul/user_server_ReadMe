@@ -31,5 +31,5 @@ logging:
 
 
 bootpay:
-  restapikey: ${BOOTPAY_RESTAPI_KEY}
-  privatekey: ${BOOTPAY_PRIVATE_KEY}
+  restapikey: ""
+  privatekey: ""
