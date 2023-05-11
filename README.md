@@ -88,7 +88,7 @@ https://www.youtube.com/watch?v=MDKwmzJHqKE
 - 권경렬(http://blog.naver.com/dereklabs)
 - 장희선(https://blue-run-083.notion.site/e8cc4fcc0d6f435b8fe7d56d15e6a876)
 - 임지상((https://fishy-lychee-822.notion.site/6be2adcff0254e499b109fbe4a8dbb0b))
-- 안정훈(업로드 예정)
+- 안정훈(https://sandy-rail-5f3.notion.site/3-c0ef6f0024b54ce4819b4c768837febf)
 - 김유현((https://quiver-ease-2cb.notion.site/3-7ff8c3a923df429f8b33100d2a09ea13))
 
 ## 유저 시나리오
