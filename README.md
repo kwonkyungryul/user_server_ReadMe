@@ -12,7 +12,7 @@
 https://www.youtube.com/watch?v=MDKwmzJHqKE
 
 # 발표자료
-[3조_파이널_PDF.pdf](https://github.com/ReadMeCorporation/user_server_ReadMe/files/11448362/3._._PDF.pdf)
+[3조_파이널.pdf](https://github.com/ReadMeCorporation/user_server_ReadMe/files/11477830/3._.pdf)
 
 
 # 프로젝트 기간
