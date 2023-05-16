@@ -11,6 +11,28 @@
 # 시연영상
 https://www.youtube.com/watch?v=MDKwmzJHqKE
 
+# 핵심기능
+1. **부트페이**</br>
+클라이언트가 결제 요청을 클릭시 먼저 서버에 결제 데이터를 저장하고 그 id 값을 부트페이 서버에 전송합니다.</br>
+클라이언트에서 결제 완료를 하고 부트페이 서버에서 스프링 서버로 결제 대기 상태의 웹훅 통지를 날립니다.</br>
+웹훅 통지 안의 수량, 재고를 클라이언트를 통해 넘겨받은 id로 검증합니다.</br>
+서버 검증을 두 번 마치고 정상적이면 부트페이에 결제 승인 처리 데이터를 전송하고 실패하면 결제 승인 취소를 보냅니다. </br>
+결제 승인 처리, 실패처리가 되면 부트 페이 서버에서 클라이언트와 서버쪽으로 데이터를 보내고 클라이언트는 결제 창이 닫히고 서버는 웹훅을 통해 데이터를 받습니다.</br></br>
+![image](https://github.com/ReadMeCorporation/user_server_ReadMe/assets/68271830/6d351a21-4168-4980-b66e-a3926a2c8361)
+
+
+2. **FCM**
+
+
+3. **S3**
+S3 SDK를 설정하고 인스턴스를 생성하는 Configuration을 생성합니다.
+생성된 인스턴스로 S3 putObject 메서드를 호출해 버킷과 파일이름, 파일의 용량을 S3에 업로드. 이후 getUrl메서드를 리턴해 해당 파일의 경로를 받아옵니다.
+S3 버킷의 폴더경로로 파일의 출처를 구분짓고 받아온 파일의 경로를 리턴합니다.
+
+4. **OAuth 2.0**
+클라이언트로 부터 받은 FirebaseToken을 서버에 설치한 FireBase SDK로 FireBase서버에 유효한 토큰인지 검증을 하고,</br>
+토큰이 유효하다면 클라이언트에게 JWT Token을 내어줍니다.
+
 # 발표자료
 [3조_파이널.pdf](https://github.com/ReadMeCorporation/user_server_ReadMe/files/11477830/3._.pdf)
 
@@ -83,13 +105,6 @@ https://www.youtube.com/watch?v=MDKwmzJHqKE
 - Jira를 이용해 작업 항목을 관리하고 이슈 생성
 - 각 이슈에 대해 새로운 브랜치를 생성하고, 해당 브랜치에서 작업을 수행
 - 작업이 완료되면 해당 브랜치에서 코드 리뷰 진행. 리뷰어는 변경 사항 확인 후 피드백. 리뷰 완료되면 MERGE.
-
-## 기술 블로그
-- 권경렬(http://blog.naver.com/dereklabs)
-- 장희선(https://blue-run-083.notion.site/e8cc4fcc0d6f435b8fe7d56d15e6a876)
-- 임지상((https://fishy-lychee-822.notion.site/6be2adcff0254e499b109fbe4a8dbb0b))
-- 안정훈(https://sandy-rail-5f3.notion.site/3-c0ef6f0024b54ce4819b4c768837febf)
-- 김유현((https://quiver-ease-2cb.notion.site/3-7ff8c3a923df429f8b33100d2a09ea13))
 
 ## 유저 시나리오
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/6ef610ff-c958-415a-ac21-cb409863666f)
