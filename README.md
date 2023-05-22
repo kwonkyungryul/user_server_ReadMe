@@ -29,11 +29,10 @@ https://www.youtube.com/watch?v=MDKwmzJHqKE
   * [6] 결제 승인 처리, 실패처리가 되면 부트 페이 서버에서 클라이언트와 서버쪽으로 데이터를 보내고 클라이언트는 결제 창이 닫히고 정상적으로 결제처리를 완료시킵니다.</br></br>
 ![image](https://github.com/ReadMeCorporation/user_server_ReadMe/assets/68271830/9a0c3dd6-ea6c-4200-a0f6-90e12a8b249d)
 
-> **FCM**
+<!-- > **FCM**
 * 개념</br>
 
-
-* 적용</br>
+* 적용</br> -->
 
 > **S3**</br>
 * 개념</br>
