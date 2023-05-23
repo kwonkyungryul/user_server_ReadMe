@@ -119,11 +119,16 @@
 
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/1f479158-2d32-4c9c-9ad7-ee0610c08159)
 
-## Jira를 이용한 브랜치 전략
+## Jira를 이용한 브랜치 전략 & Slack을 이용한 협업
 - Jira를 이용해 작업 항목을 관리하고 이슈 생성
 - 각 이슈에 대해 새로운 브랜치를 생성하고, 해당 브랜치에서 작업을 수행
 - 작업이 완료되면 해당 브랜치에서 코드 리뷰 진행. 리뷰어는 변경 사항 확인 후 피드백. 리뷰 완료되면 MERGE.
+- Slack으로 Github PR요청 또는 Issue사항 확인
 
+![image](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/2e580d9d-c772-4792-a759-0b6c8c6baa67)
+![image](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/64df3710-1385-4fc1-90db-965204b5bb88)
+
+---
 ## 유저 시나리오
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/6ef610ff-c958-415a-ac21-cb409863666f)
 > CommonService
@@ -138,8 +143,6 @@
             throw new Exception400("잘못된 FirebaseToken 입니다.");
         }
 
-        System.out.println(firebaseToken.getEmail());
-
         User user = null;
         Optional<User> optionalUser = userRepository.findByUsername(firebaseToken.getEmail());
         if (optionalUser.isEmpty()) {
@@ -152,7 +155,6 @@
 ```
 
 ```java
-@Component
 public class MyJwtProvider {
 
     private static final String SUBJECT = "ReadMeCorpJWT";
@@ -186,7 +188,10 @@ public class MyJwtProvider {
 조회 결과가 존재하지 않는다면 Firebase의 토큰안의 email을 토대로 회원가입을 진행시킨 후 결과로 JWT 토큰을 생성 후 리턴합니다
 ```
 
+---
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/9c2ada18-3b49-4ea2-adc7-4bb09f526ec3)
+![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/ea54798f-048a-4d2a-9fa0-563596447c5d)
 > CommonService
 ```java
     public MetaDTO getMetaData(MyUserDetails myUserDetails) {
@@ -224,9 +229,29 @@ public class MyJwtProvider {
     }
 ```
 
+```java
+    public MembershipPaymentNoneUserDTO getMyPage(MyUserDetails myUserDetails) {
+        Optional<User> optionalUser = userRepository.findById(myUserDetails.getUser().getId());
+        if (optionalUser.isEmpty()) {
+            throw new Exception400(UserConst.notFound);
+        }
+        User user = optionalUser.get();
+        Optional<MembershipPayment> optionalMembershipPayment = membershipPaymentRepository.findByUserIdAndStatusNot(user.getId(), PaymentStatus.DELETE);
+
+        MembershipPaymentNoneUserDTO noneUserDTO = null;
+
+        if (optionalMembershipPayment.isPresent()) {
+            noneUserDTO = optionalMembershipPayment.get().toNoneUserDTO();
+        }
+
+        return noneUserDTO;
+    }
 ```
-앱 최초 로드시에 불변하는 데이터(인증된 유저 정보, 탭 이름, 등)들을 해당 페이지 로드시마다 조회하지 않게
-한 번에 프론트에 전송해준다.(앱은 SQLFlite 에 저장 후 사용)
+
+```
+앱 최초 로드시에 '공통(정적) 데이터(탭 이름 등)', '로그인 데이터'를 해당 페이지 로드시마다 요청하지 않게
+한 번에 프론트에 전송해준다.(앱은 SQFlite 에 저장 후 사용)
+만약 로그인을 한 상태이면(myUserDetails != null) 해당 유저의 정보로 jwt 토큰을 생성해준다.
 ```
 > BookService
 ```java
@@ -268,14 +293,42 @@ public class MyJwtProvider {
 
         return page.map(book -> getBookDTO(book, myUserDetails));
     }
-
-    public Optional<Book> getBook(Integer id) {
-        return bookRepository.findById(id);
-    }
 ```
 
 ```
-하나의 엔드포인트로 쿼리파라미터의 유무에 따라 조회하는 쿼리문이 달라진다.
+하나의 엔드포인트로 Query Parameter의 유무에 따라 조회하는 쿼리문이 달라집니다.
+Query Parameter로 받아온 status가 ALL이라면 Query Parameter의 bigCategoryId, smallCategoryId가 0인지 0이 아닌지에 따라
+전체조회를 할 것인지 대분류 조회를 할 것인지 소분류 조회를 할 것인지 분기합니다.
+status가 RECOMMEND라면 책에 대한 Heart(좋아요)가 많은 순으로 조회합니다.(추천)
+status가 BESTSELLER라면 책에 대한 판매가 가장 많은 순으로 조회합니다.(베스트셀러)
+status가 NEW라면 최근 등록된 순서로 조회합니다.(신간)
+
+동적으로 파라미터를 쉽게 받아서 사용하는 방법으로 변경할 예정[QueryDSL]
+```
+> bookService
+```java
+...
+Double stars = reviewRepository.findAvgStars(bookDTO.getId());
+        if (stars != null) {
+            bookDTO.setStars(Math.ceil((stars * 10) / 10));
+        } else {
+            bookDTO.setStars(0.0);
+        }
+
+        bookDTO.setIsHeart(false);
+        if (myUserDetails != null) {
+            User user = myUserDetails.getUser();
+            Optional<Heart> optionalHeart = heartRepository.heartCount(book.getId(), user.getId());
+            if (optionalHeart.isPresent()) {
+                bookDTO.setIsHeart(true);
+            }
+        }
+...
+```
+
+```
+도서 조회에 들어가는 공통 로직입니다.
+책에 대한 리뷰의 평균값, 로그인 한 유저가 좋아요를 했는지의 여부를 조회합니다.
 ```
 
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/89f81900-cacd-4761-b565-b4afdad7bb24)
@@ -321,67 +374,11 @@ public class MyJwtProvider {
 ```
 받아온 책의 정보로 전자책파일(epub)과 표지사진을 조회하고 해당 책의 평점을 조회합니다.
 유저가 로그인을 한 상태이면 해당 책에 좋아요를 했는지에 대한 정보를 받아줍니다.(로그인을 하지 않았다면 false)
-```
-
-![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/7cb39d8d-c7aa-4301-8b32-b8fb518c29f5)
-```
-도서 상세페이지에 전달한 전자책 파일(epub)을 앱에서 압축해제 후 HTML파일을 출력합니다.
-```
-
-![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/ea54798f-048a-4d2a-9fa0-563596447c5d)
-> BookService
-```java
-    public Page<BookDTO> getPage (
-        Integer bigCategoryId,
-        Integer smallCategoryId,
-        Pageable pageable,
-        String status,
-        MyUserDetails myUserDetails
-    ) {
-        Page<Book> page = new PageImpl<>(List.of(), pageable, 0);
-
-        // 전체 (bigCategoryId, smallCategoryID)
-        if (status.equals(MainTabType.ALL.getRequestName())) {
-            if (bigCategoryId != 0) {
-                if (smallCategoryId != 0) {
-                    page = bookRepository.findByStatusAndSmallCategoryId(BookStatus.ACTIVE, smallCategoryId, pageable);
-                } else {
-                    List<Integer> smallCategoryIds = smallCategoryRepository.findByBigCategoryId(bigCategoryId).stream().map(SmallCategory::getId).collect(Collectors.toList());
-                    page = bookRepository.findByStatusAndSmallCategoryIdIn(BookStatus.ACTIVE, smallCategoryIds, pageable);
-                }
-            } else {
-                page = bookRepository.findByStatus(pageable, BookStatus.ACTIVE);
-            }
-
-        // heart 가 많은 순
-        } else if (status.equals(MainTabType.RECOMMEND.getRequestName())) {
-            page = bookRepository.findByBookHeartCount(pageable, BookStatus.ACTIVE);
-
-        // bestSeller -> payment 판매순
-        } else if (status.equals(MainTabType.BESTSELLER.getRequestName())) {
-            page = bookRepository.findByBookPaymentDESC(pageable, BookStatus.ACTIVE);
-
-        // 신간 OrderBy id Desc
-        } else if (status.equals(MainTabType.NEW.getRequestName())) {
-            page = bookRepository.findByStatusOrderByIdDesc(pageable, BookStatus.ACTIVE);
-
-        }
-
-        return page.map(book -> getBookDTO(book, myUserDetails));
-    }
-
-    public Optional<Book> getBook(Integer id) {
-        return bookRepository.findById(id);
-    }
-```
-
-```
-메인 도서 목록의 코드와 동일합니다.(하나의 엔드포인트)
-해당 코드에서 BigCategory와 SmallCategory의 id 값에 따라 해당하는 카테고리의 책 정보를 조회합니다.
+공통 파일 테이블은 파일이 여러개인데 epub, cover는 1개의 데이터만 저장되기 때문에 index를 0으로 고정합니다.[어드민과의 약속]
 ```
 
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/0ec6d7c3-ed76-4d22-b560-42c96bdb2101)
-> CommonController
+> CommonController [ADMIN]
 ```java
     @GetMapping("/push")
     public ResponseEntity<?> push (
@@ -421,7 +418,7 @@ public class MyJwtProvider {
 ```
 
 ```
-요청 시 사용자의 Firbase Token, 알림의 타입(공지, 결제, 관리자, 광고), 데이터(index번호), 제목, 내용을 쿼리파라미터로 받고
+요청 시 사용자의 Firbase Token, 알림의 타입(공지, 결제, 관리자, 광고), 데이터(index번호), 제목, 내용을 Query Parameter로 받고
 Message 객체를 생성해 FCM서버로 전송합니다.
 앱에서는 알림 타입과 데이터로, 알림 터치 시에 이동될 경로를 설정해줍니다.
 ```
@@ -442,7 +439,8 @@ public List<BookDTO> getSearch(
 ```
 
 ```
-키워드를 쿼리파라미터로 받아주고 Like쿼리로 해당하는 정보를 조회합니다.
+키워드를 Query Parameter로 받아주고 Like쿼리로 해당하는 정보를 조회합니다.
+통합검색을 시도했는데 속도가 너무 느려지는 이슈가 발생해 해결법을 찾고 있는 중입니다.
 ```
 
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/78f107ea-1309-4022-ba9e-d6573eb56a80)
@@ -487,33 +485,22 @@ public List<BookDTO> getSearch(
 인증된 유저 정보로 Book 테이블을 조회하고 stream framework를 이용해 map 메서드로 응답해줄 타입으로 변환해주었습니다.
 peek(중간처리 메서드) 반복문을 돌려 조회된 리스트들(결제내역)의 도서정보가 현재 존재하는지와, 존재한다면 화면에 필요한 사진정보를 set해줍니다.
 이후 최종처리 메서드로 해당 데이터를 List로 변경후 리턴합니다.
-```
-
-![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/150d0448-230d-4e4c-9fe1-0dde14a07689)
-> UserService
-```java
-    public MembershipPaymentNoneUserDTO getMyPage(MyUserDetails myUserDetails) {
-        Optional<User> optionalUser = userRepository.findById(myUserDetails.getUser().getId());
-        if (optionalUser.isEmpty()) {
-            throw new Exception400(UserConst.notFound);
-        }
-        User user = optionalUser.get();
-        Optional<MembershipPayment> optionalMembershipPayment = membershipPaymentRepository.findByUserIdAndStatusNot(user.getId(), PaymentStatus.DELETE);
-
-        MembershipPaymentNoneUserDTO noneUserDTO = null;
-
-        if (optionalMembershipPayment.isPresent()) {
-            noneUserDTO = optionalMembershipPayment.get().toNoneUserDTO();
-        }
-
-        return noneUserDTO;
-    }
-```
 
 ```
-인증된 유저 정보를 받아주고 해당 유저의 정보로 멤버십 여부를 조회합니다.
-만약 멤버십에 가입이 되어있다면 멤버십의 정보를 리턴해주고, 멤버십 가입이 되어있지 않다면 null을 리턴해줍니다.
-```
+
+**peek와 forEach** </br>
+
+ `peek`는 중간처리 메서드 이하 중간연산 입니다.</br>
+`forEach`는 최종처리 메서드 이하 최종연산 입니다.</br></br>
+두 메서드 전부 반복문을 돌리는 것은 동일합니다.</br>
+`peek`는 중간연산이기 때문에 최종연산이 존재하지 않으면 동작하지 않습니다.</br>
+`forEach`는 최종연산이기 때문에 이후 또다른 연산을 할 수 없습니다.</br></br>
+위 코드에서, 조회 결과 List타입을 stream()을 이용해 타입을 Stream으로 변경해 주었습니다. -> 실제 데이터(Entity)를 DTO타입으로 변환하기 위한 과정</br>
+실제 데이터를 map()을 이용해 DTO로 변환 후 데이터를 set하는 과정에서 반복문 중간연산이 필요하고 Stream타입을 List로 변경할 최종 연산이 필요합니다.</br>
+`forEach`를 사용해 데이터를 set하게 되면 연산이 끝나고 최종적으로 Stream이 닫히게 됩니다.(List로 변환 불가)</br>
+따라서, `peek`를 이용해 중간연산을 하고 최종적으로 collect(Collectors.toList())메서드로 Stream타입을 List타입으로 변경합니다.
+
+---
 
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/a949919d-1444-4b9e-a96e-0aafcb18a36d)
 > BootPayController
@@ -524,47 +511,55 @@ peek(중간처리 메서드) 반복문을 돌려 조회된 리스트들(결제�
             @AuthenticationPrincipal MyUserDetails myUserDetails
             ) throws Exception {
 
+        BootPayDTO bootPayDTO = new BootPayDTO();
+        if (request.getStatus() == 0) { // 결제 대기 상태
+            bootPayDTO = bootPayService.save(request);
 
-        BootPayDTO bootPayDTO = bootPayService.save(request);
+            // 토큰 검증
+            Bootpay bootpay = new Bootpay(restApiKey, privateKey);
+            HashMap<String, Object> res = bootpay.getAccessToken();
 
-        // 토큰 검증
-        Bootpay bootpay = new Bootpay(restApiKey, privateKey);
-        HashMap<String, Object> res = bootpay.getAccessToken();
-
-        if(res.get("error_code") == null) { //success
-            System.out.println("goGetToken success: " + res);
-        } else {
-            System.out.println("goGetToken false: " + res);
-            throw new Exception500("토큰 발급에 실패하였습니다.");
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", res.get("access_token").toString());
-
-
-        // 영수증 ID 검증
-        String receiptId = request.getReceiptId();
-        HashMap<String, Object> receiptConfirm = bootpay.confirm(receiptId);
-        if (receiptConfirm.get("error_code") == null) {
-            System.out.println("confirm success: " + res);
-        } else {
-            System.out.println("confirm false: " + res);
-        }
-
-        Integer paymentId = request.getMetadata().getPaymentId();
-        List<BookPaymentDTO> bookPaymentList = bookPaymentService.getBookPayments(paymentId, myUserDetails.getUser());
-        bookPaymentList.forEach(bookPaymentDTO -> {
-            Integer paymentPk = bootPayDTO.getMetadataDTO().getPaymentId();
-            String paymentType = bootPayDTO.getMetadataDTO().getPaymentType();
-
-            if (!paymentPk.equals(request.getMetadata().getPaymentId()) && !paymentType.equals(request.getMetadata().getPaymentType())) {
-                throw new Exception400("결제 타입이 일치하지 않습니다.");
+            if(res.get("error_code") == null) { //success
+                System.out.println("goGetToken success: " + res);
+            } else {
+                System.out.println("goGetToken false: " + res);
+                throw new Exception500("토큰 발급에 실패하였습니다.");
             }
 
-            if (bookPaymentDTO.getPrice() != request.getPrice()) {
-                throw new Exception400("결제 금액이 일치하지 않습니다.");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", res.get("access_token").toString());
+
+
+            // 영수증 ID 검증
+            String receiptId = request.getReceiptId();
+            HashMap<String, Object> receiptConfirm = bootpay.confirm(receiptId);
+            if (receiptConfirm.get("error_code") == null) {
+                System.out.println("confirm success: " + res);
+            } else {
+                System.out.println("confirm false: " + res);
             }
-        });
+
+            Integer paymentId = request.getMetadata().getPaymentId();
+            List<BookPaymentDTO> bookPaymentList = bookPaymentService.getBookPayments(paymentId, myUserDetails.getUser());
+            bookPaymentList.forEach(bookPaymentDTO -> {
+                Integer paymentPk = bootPayDTO.getMetadataDTO().getPaymentId();
+                String paymentType = bootPayDTO.getMetadataDTO().getPaymentType();
+
+                if (!paymentPk.equals(request.getMetadata().getPaymentId()) && !paymentType.equals(request.getMetadata().getPaymentType())) {
+                    throw new Exception400("결제 타입이 일치하지 않습니다.");
+                }
+
+                if (bookPaymentDTO.getPrice() != request.getPrice()) {
+                    throw new Exception400("결제 금액이 일치하지 않습니다.");
+                }
+            });
+        } else if (request.getStatus() == 1) { // 결제 완료 상태
+            bootPayDTO = bootPayService.save(request);
+        } else if (request.getStatus() == 2) { // 결제 승인중인 상태(서버 검증 전)
+            bootPayDTO = bootPayService.save(request);
+        } else if (request.getStatus() == 20) { // 결제 취소 상태
+            bootPayDTO = bootPayService.save(request);
+        }
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
@@ -576,11 +571,13 @@ peek(중간처리 메서드) 반복문을 돌려 조회된 리스트들(결제�
 
         return ResponseEntity.ok(map);
     }
+}
 ```
 
 ```
 부트페이 관리자 계정에 등록해놓은 callback url로 웹훅 통지를 받습니다.
-해당 정보를 먼저 save해주고 환경변수에 설정해놓은 키값을 이용해 토큰을 발급하고 해당 토큰을 부트페이 서버에 검증 요청합니다.
+웹훅 통지 안의 status값으로 현재 결제 상태를 구분짓고 로직을 분기시킵니다.
+대기 상태에서는 해당 정보를 먼저 save해주고 환경변수에 설정해놓은 키값을 이용해 토큰을 발급하고 해당 토큰을 부트페이 서버에 검증 요청합니다.
 이후 해당 토큰이 유효하다면 응답받은 access_token을 헤더에 심어줍니다.
 웹훅통지안의 receipt_id(영수증 id)가 유효한 id인지 부트페이 서버에 검증 요청합니다.
 유효하다면 이후 앱에서 전달해준 고유 번호를 웹훅통지안에서 꺼내, 서버의 데이터베이스에 조회해 결제 금액, 결제 타입을 검증합니다.
