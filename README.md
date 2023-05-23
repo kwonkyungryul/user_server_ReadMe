@@ -8,9 +8,6 @@
 다양한 장르의 책을 제공하며 편리한 인터페이스로 책 읽기를 더욱 즐겁게 만들어줍니다.</br>
 수많은 전자책을 한 곳에서 쉽게 찾아 읽을 수 있는 편리함과 함께 즐겨찾은 페이지를 표시하고,</br> 읽은 책에 대한 리뷰를 공유하는 등 독서를 더욱 풍부하게 즐길 수 있습니다. </br>
 
-# 시연영상
-https://www.youtube.com/watch?v=MDKwmzJHqKE
-
 # 핵심기능
 > **부트페이**</br>
 * 개념</br>
@@ -71,55 +68,38 @@ https://www.youtube.com/watch?v=MDKwmzJHqKE
  </tr>
 </table>
 
-# 발표자료
-[3조_파이널.pdf](https://github.com/ReadMeCorporation/user_server_ReadMe/files/11477830/3._.pdf)
-
-
-# 프로젝트 기간
-- 2023-04-10 ~ 2023.05.10
-
-# 팀원 소개
-### Back-End
-- 권경렬([@kwonkyungryul](https://github.com/kwonkyungryul))
-- 임지상([@tero1115](https://github.com/tero1115))
-### Front-End
-- 장희선([@heesun-b](https://github.com/heesun-b))
-- 김유현([@yuhyunkimm](https://github.com/yuhyunkimm))
-- 안정훈([@aj124578](https://github.com/aj124578))
-
 # 기술 스택
 ## IDE
 [![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ%20IDEA-blue?logo=intellij-idea&logoColor=white)](https://www.jetbrains.com/idea/)
-[![Android Studio](https://img.shields.io/badge/-Android%20Studio-green?logo=android-studio&logoColor=white)](https://developer.android.com/studio)
 
 ## FrameWork
 [![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-brightgreen?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Flutter](https://img.shields.io/badge/-Flutter-blue?logo=flutter&logoColor=white)](https://flutter.dev)
-
 
 ## DB
 [![H2](https://img.shields.io/badge/-H2-orange?logo=h2&logoColor=white)](http://www.h2database.com)
 [![MySQL](https://img.shields.io/badge/-MySQL-blue?logo=mysql&logoColor=white)](https://www.mysql.com)
 
 ## 사용기술
-[![SQFLITE](https://img.shields.io/badge/-SQFLITE-blue?logo=flutter&logoColor=white)](https://pub.dev/packages/sqflite)
 [![EC2](https://img.shields.io/badge/-EC2-orange?logo=amazon-aws&logoColor=white)](https://aws.amazon.com/ec2/)
 [![S3](https://img.shields.io/badge/-S3-yellow?logo=amazon-s3&logoColor=white)](https://aws.amazon.com/s3/)
+![JPA](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/e03f90f7-ae4f-4dbe-9918-281f35580383)
 [![JSP](https://img.shields.io/badge/-JSP-orange?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/javaserverpages.html)
-[![RiverPod](https://img.shields.io/badge/-RiverPod-blue?logo=flutter&logoColor=white)](https://pub.dev/packages/riverpod)
 [![BootPay](https://img.shields.io/badge/-BootPay-yellow?logo=bootpay&logoColor=white)](https://www.bootpay.co.kr/)
-[![Freezed](https://img.shields.io/badge/-Freezed-brightgreen?logo=dart&logoColor=white)](https://pub.dev/packages/freezed)
 [![Firebase](https://img.shields.io/badge/-Firebase-yellow?logo=firebase&logoColor=white)](https://firebase.google.com/)
 [![OAuth](https://img.shields.io/badge/-OAuth-blue?logo=oauth&logoColor=white)](https://oauth.net/)
+![Junit](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/39202382-e8c9-4247-8c92-c2068b6b5fac)
+![Mockito](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/8bf7d8a1-3e10-472a-8965-50ad410c7408)
 
 ## 협업 툴
 [![Figma](https://img.shields.io/badge/-Figma-purple?logo=figma&logoColor=white)](https://www.figma.com)
 [![Notion](https://img.shields.io/badge/-Notion-black?logo=notion&logoColor=white)](https://www.notion.so)
-[![Postman](https://img.shields.io/badge/-Postman-orange?logo=postman&logoColor=white)](https://www.postman.com)
 [![Git](https://img.shields.io/badge/-Git-red?logo=git&logoColor=white)](https://git-scm.com)
 [![GitHub](https://img.shields.io/badge/-GitHub-black?logo=github&logoColor=white)](https://github.com)
 [![JIRA](https://img.shields.io/badge/-JIRA-blue?logo=jira&logoColor=white)](https://www.atlassian.com/software/jira)
 [![Slack](https://img.shields.io/badge/-Slack-purple?logo=slack&logoColor=white)](https://slack.com)
+
+## 기타 툴
+[![Postman](https://img.shields.io/badge/-Postman-orange?logo=postman&logoColor=white)](https://www.postman.com)
 
 ## ERD
 **전체**
@@ -146,13 +126,506 @@ https://www.youtube.com/watch?v=MDKwmzJHqKE
 
 ## 유저 시나리오
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/6ef610ff-c958-415a-ac21-cb409863666f)
+> CommonService
+```java
+    @Transactional
+    public String getUser(FirebaseRequest request) {
+        FirebaseToken firebaseToken = null;
+        try {
+            firebaseToken = FirebaseAuth.getInstance().verifyIdToken(request.getIdToken());
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            throw new Exception400("잘못된 FirebaseToken 입니다.");
+        }
+
+        System.out.println(firebaseToken.getEmail());
+
+        User user = null;
+        Optional<User> optionalUser = userRepository.findByUsername(firebaseToken.getEmail());
+        if (optionalUser.isEmpty()) {
+            user = userRepository.save(new User(null, firebaseToken.getEmail(), UUID.randomUUID().toString(), RoleType.USER.name(), false, false));
+        } else {
+            user = optionalUser.get();
+        }
+        return MyJwtProvider.create(user);
+    }
+```
+
+```java
+@Component
+public class MyJwtProvider {
+
+    private static final String SUBJECT = "ReadMeCorpJWT";
+    private static final int EXP = 1000 * 60 * 60* 24;
+    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String HEADER = "Authorization";
+    private static final String SECRET = System.getenv("JWT_SECRET");
+
+    public static String create(User user) {
+        String jwt = JWT.create()
+                .withSubject(SUBJECT)
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXP))
+                .withClaim("id", user.getId())
+                .withClaim("role", user.getRole().name())
+                .sign(Algorithm.HMAC512(SECRET));
+        return TOKEN_PREFIX + jwt;
+    }
+
+    public static DecodedJWT verify(String jwt) throws SignatureVerificationException, TokenExpiredException {
+        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(SECRET))
+                .build().verify(jwt);
+        return decodedJWT;
+    }
+}
+```
+
+```
+프론트로부터 받아온 FirebaseToken을 Firebase 서버에 검증요청 후 유효한 토큰이라면
+토큰안의 로그인하는 유저의 email로 유저 테이블에 조회를 합니다.
+조회 결과가 존재한다면 해당 정보로 JWT 토큰을 생성 후 리턴합니다.
+조회 결과가 존재하지 않는다면 Firebase의 토큰안의 email을 토대로 회원가입을 진행시킨 후 결과로 JWT 토큰을 생성 후 리턴합니다
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/9c2ada18-3b49-4ea2-adc7-4bb09f526ec3)
+> CommonService
+```java
+    public MetaDTO getMetaData(MyUserDetails myUserDetails) {
+        List<BigCategoryDTO> categories = categoryService.getCategories();
+        UserDTO userDTO = null;
+        String jwt = "";
+        if (myUserDetails != null) {
+            userDTO = userService.getUser(myUserDetails.getUser());
+            jwt = MyJwtProvider.create(myUserDetails.getUser());
+        }
+
+        List<CommonDTO> storageBoxTabList = Arrays.stream(StorageBoxType.values())
+                .map(storageBoxType -> new CommonDTO(storageBoxType.getName(), storageBoxType.getRequestName()))
+                .collect(Collectors.toList());
+
+        List<CommonDTO> mainTabList = Arrays.stream(MainTabType.values())
+                .map(mainTabType -> new CommonDTO(mainTabType.getName(), mainTabType.getRequestName()))
+                .collect(Collectors.toList());
+
+        List<CommonDTO> paymentTabList = Arrays.stream(PaymentTabType.values())
+                .map(paymentTabType -> new CommonDTO(paymentTabType.getName(), paymentTabType.getRequestName()))
+                .collect(Collectors.toList());
+
+        List<String> notificationTypes = Arrays.stream(NotificationType.values()).map(Enum::name).collect(Collectors.toList());
+
+        return MetaDTO.builder()
+                .bigCategory(categories)
+                .user(userDTO)
+                .jwt(jwt)
+                .storageBoxTabs(storageBoxTabList)
+                .mainTabs(mainTabList)
+                .paymentTabs(paymentTabList)
+                .notificationTypes(notificationTypes)
+                .build();
+    }
+```
+
+```
+앱 최초 로드시에 불변하는 데이터(인증된 유저 정보, 탭 이름, 등)들을 해당 페이지 로드시마다 조회하지 않게
+한 번에 프론트에 전송해준다.(앱은 SQLFlite 에 저장 후 사용)
+```
+> BookService
+```java
+ public Page<BookDTO> getPage (
+        Integer bigCategoryId,
+        Integer smallCategoryId,
+        Pageable pageable,
+        String status,
+        MyUserDetails myUserDetails
+    ) {
+        Page<Book> page = new PageImpl<>(List.of(), pageable, 0);
+
+        // 전체 (bigCategoryId, smallCategoryID)
+        if (status.equals(MainTabType.ALL.getRequestName())) {
+            if (bigCategoryId != 0) {
+                if (smallCategoryId != 0) {
+                    page = bookRepository.findByStatusAndSmallCategoryId(BookStatus.ACTIVE, smallCategoryId, pageable);
+                } else {
+                    List<Integer> smallCategoryIds = smallCategoryRepository.findByBigCategoryId(bigCategoryId).stream().map(SmallCategory::getId).collect(Collectors.toList());
+                    page = bookRepository.findByStatusAndSmallCategoryIdIn(BookStatus.ACTIVE, smallCategoryIds, pageable);
+                }
+            } else {
+                page = bookRepository.findByStatus(pageable, BookStatus.ACTIVE);
+            }
+
+        // heart 가 많은 순
+        } else if (status.equals(MainTabType.RECOMMEND.getRequestName())) {
+            page = bookRepository.findByBookHeartCount(pageable, BookStatus.ACTIVE);
+
+        // bestSeller -> payment 판매순
+        } else if (status.equals(MainTabType.BESTSELLER.getRequestName())) {
+            page = bookRepository.findByBookPaymentDESC(pageable, BookStatus.ACTIVE);
+
+        // 신간 OrderBy id Desc
+        } else if (status.equals(MainTabType.NEW.getRequestName())) {
+            page = bookRepository.findByStatusOrderByIdDesc(pageable, BookStatus.ACTIVE);
+
+        }
+
+        return page.map(book -> getBookDTO(book, myUserDetails));
+    }
+
+    public Optional<Book> getBook(Integer id) {
+        return bookRepository.findById(id);
+    }
+```
+
+```
+하나의 엔드포인트로 쿼리파라미터의 유무에 따라 조회하는 쿼리문이 달라진다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/89f81900-cacd-4761-b565-b4afdad7bb24)
+> BookService
+```java
+    private BookDTO getBookDTO(Book book, MyUserDetails myUserDetails) {
+        BigCategory bigCategory = book.getSmallCategory().getBigCategory();
+        BookDTO bookDTO = book.toDTO();
+        List<File> epubFiles = fileRepository.findByFileInfo_Id(book.getEpub().getId());
+        if (epubFiles.size() == 0) {
+            bookDTO.setEpubFile(BookConst.defaultBookFileDTO);
+        } else {
+            bookDTO.setEpubFile(epubFiles.get(0).toDTO());
+        }
+
+        List<File> coverFiles = fileRepository.findByFileInfo_Id(book.getCover().getId());
+        if (epubFiles.size() == 0) {
+            bookDTO.setCoverFile(BookConst.defaultBookFileDTO);
+        } else {
+            bookDTO.setCoverFile(coverFiles.get(0).toDTO());
+        }
+
+        Double stars = reviewRepository.findAvgStars(bookDTO.getId());
+        if (stars != null) {
+            bookDTO.setStars(Math.ceil((stars * 10) / 10));
+        } else {
+            bookDTO.setStars(0.0);
+        }
+
+        bookDTO.setIsHeart(false);
+        if (myUserDetails != null) {
+            User user = myUserDetails.getUser();
+            Optional<Heart> optionalHeart = heartRepository.heartCount(book.getId(), user.getId());
+            if (optionalHeart.isPresent()) {
+                bookDTO.setIsHeart(true);
+            }
+        }
+        bookDTO.setBigCategory(bigCategory.toSingleDTO());
+        return bookDTO;
+    }
+```
+
+```
+받아온 책의 정보로 전자책파일(epub)과 표지사진을 조회하고 해당 책의 평점을 조회합니다.
+유저가 로그인을 한 상태이면 해당 책에 좋아요를 했는지에 대한 정보를 받아줍니다.(로그인을 하지 않았다면 false)
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/7cb39d8d-c7aa-4301-8b32-b8fb518c29f5)
+```
+도서 상세페이지에 전달한 전자책 파일(epub)을 앱에서 압축해제 후 HTML파일을 출력합니다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/ea54798f-048a-4d2a-9fa0-563596447c5d)
+> BookService
+```java
+    public Page<BookDTO> getPage (
+        Integer bigCategoryId,
+        Integer smallCategoryId,
+        Pageable pageable,
+        String status,
+        MyUserDetails myUserDetails
+    ) {
+        Page<Book> page = new PageImpl<>(List.of(), pageable, 0);
+
+        // 전체 (bigCategoryId, smallCategoryID)
+        if (status.equals(MainTabType.ALL.getRequestName())) {
+            if (bigCategoryId != 0) {
+                if (smallCategoryId != 0) {
+                    page = bookRepository.findByStatusAndSmallCategoryId(BookStatus.ACTIVE, smallCategoryId, pageable);
+                } else {
+                    List<Integer> smallCategoryIds = smallCategoryRepository.findByBigCategoryId(bigCategoryId).stream().map(SmallCategory::getId).collect(Collectors.toList());
+                    page = bookRepository.findByStatusAndSmallCategoryIdIn(BookStatus.ACTIVE, smallCategoryIds, pageable);
+                }
+            } else {
+                page = bookRepository.findByStatus(pageable, BookStatus.ACTIVE);
+            }
+
+        // heart 가 많은 순
+        } else if (status.equals(MainTabType.RECOMMEND.getRequestName())) {
+            page = bookRepository.findByBookHeartCount(pageable, BookStatus.ACTIVE);
+
+        // bestSeller -> payment 판매순
+        } else if (status.equals(MainTabType.BESTSELLER.getRequestName())) {
+            page = bookRepository.findByBookPaymentDESC(pageable, BookStatus.ACTIVE);
+
+        // 신간 OrderBy id Desc
+        } else if (status.equals(MainTabType.NEW.getRequestName())) {
+            page = bookRepository.findByStatusOrderByIdDesc(pageable, BookStatus.ACTIVE);
+
+        }
+
+        return page.map(book -> getBookDTO(book, myUserDetails));
+    }
+
+    public Optional<Book> getBook(Integer id) {
+        return bookRepository.findById(id);
+    }
+```
+
+```
+메인 도서 목록의 코드와 동일합니다.(하나의 엔드포인트)
+해당 코드에서 BigCategory와 SmallCategory의 id 값에 따라 해당하는 카테고리의 책 정보를 조회합니다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/0ec6d7c3-ed76-4d22-b560-42c96bdb2101)
+> CommonController
+```java
+    @GetMapping("/push")
+    public ResponseEntity<?> push (
+            @RequestParam String token,
+            String type,
+            String data,
+            String title,
+            String message
+    ) {
+        firebaseConfig.sendPushNotification(token, title, message, type, data);
+        return ResponseEntity.ok(new ResponseDTO<>(1, "성공", "OK"));
+    }
+```
+
+```java
+    public boolean sendPushNotification(String token, String title, String body, String notificationType, String notificationData) {
+
+        // FCM 메시지 생성
+        Message message = Message.builder()
+                .setToken(token)
+                .putData("title", title)
+                .putData("body", body)
+                .putData("notificationType", notificationType)
+                .putData("notificationData", notificationData)
+                .build();
+
+        // FCM 서버로 메시지 전송
+        try {
+            ApiFuture<String> send = FirebaseMessaging.getInstance().sendAsync(message);
+            String response = send.get();
+            System.out.println("Successfully sent message: " + response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+```
+
+```
+요청 시 사용자의 Firbase Token, 알림의 타입(공지, 결제, 관리자, 광고), 데이터(index번호), 제목, 내용을 쿼리파라미터로 받고
+Message 객체를 생성해 FCM서버로 전송합니다.
+앱에서는 알림 타입과 데이터로, 알림 터치 시에 이동될 경로를 설정해줍니다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/70d909b9-0024-4a06-b12a-f21d4e646179)
+> BookService
+```java
+public List<BookDTO> getSearch(
+            String keyword,
+            MyUserDetails myUserDetails
+    ) {
+        return bookRepository.findByStatusNotAndTitleLike(BookStatus.DELETE, "%" + keyword + "%").stream()
+                .map(book -> {
+                    return getBookDTO(book, myUserDetails);
+                })
+                .collect(Collectors.toList());
+    }
+```
+
+```
+키워드를 쿼리파라미터로 받아주고 Like쿼리로 해당하는 정보를 조회합니다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/78f107ea-1309-4022-ba9e-d6573eb56a80)
+> BookController
+```java
+    @GetMapping("/books/my")
+    public ResponseEntity<ResponseDTO<List<BookPaymentDTO>>> getMyPaymentBook(
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        List<BookPaymentDTO> bookPayments = bookPaymentService.getMyPaymentList(
+                myUserDetails.getUser(),
+                bookService,
+                fileService
+        );
+        return ResponseEntity.ok(new ResponseDTO<>(1, "보관함 - 구매내역 조회가 완료되었습니다.", bookPayments));
+    }
+```
+> BookService
+```java
+    public List<BookPaymentDTO> getMyPaymentList(User user, BookService bookService, FileService fileService) {
+        return bookPaymentRepository.findByStatusNotAndUser(PaymentStatus.DELETE, user)
+                .stream()
+                .map(BookPayment::toDTO)
+                .peek(bookPaymentDTO -> {
+                        Optional<Book> optionalBook = bookService.getBook(bookPaymentDTO.getBook().getId());
+                        if (optionalBook.isEmpty()) {
+                            throw new Exception400(BookConst.notFound);
+                        }
+                        Book book = optionalBook.get();
+                        Optional<FileDTO> optionalFile = fileService.getFile(book.getCover().getId());
+                        if (optionalFile.isEmpty()) {
+                            bookPaymentDTO.getBook().setCoverFile(PaymentConst.defaultBookFileDTO);
+                        } else {
+                            bookPaymentDTO.getBook().setCoverFile(optionalFile.get());
+                        }
+                    }).collect(Collectors.toList());
+    }
+```
+
+```
+서비스에서 서비스를 호출했을 시 순환참조 문제가 생길 수 있어 서비스를 매개변수로 받아주었습니다.
+인증된 유저 정보로 Book 테이블을 조회하고 stream framework를 이용해 map 메서드로 응답해줄 타입으로 변환해주었습니다.
+peek(중간처리 메서드) 반복문을 돌려 조회된 리스트들(결제내역)의 도서정보가 현재 존재하는지와, 존재한다면 화면에 필요한 사진정보를 set해줍니다.
+이후 최종처리 메서드로 해당 데이터를 List로 변경후 리턴합니다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/150d0448-230d-4e4c-9fe1-0dde14a07689)
+> UserService
+```java
+    public MembershipPaymentNoneUserDTO getMyPage(MyUserDetails myUserDetails) {
+        Optional<User> optionalUser = userRepository.findById(myUserDetails.getUser().getId());
+        if (optionalUser.isEmpty()) {
+            throw new Exception400(UserConst.notFound);
+        }
+        User user = optionalUser.get();
+        Optional<MembershipPayment> optionalMembershipPayment = membershipPaymentRepository.findByUserIdAndStatusNot(user.getId(), PaymentStatus.DELETE);
+
+        MembershipPaymentNoneUserDTO noneUserDTO = null;
+
+        if (optionalMembershipPayment.isPresent()) {
+            noneUserDTO = optionalMembershipPayment.get().toNoneUserDTO();
+        }
+
+        return noneUserDTO;
+    }
+```
+
+```
+인증된 유저 정보를 받아주고 해당 유저의 정보로 멤버십 여부를 조회합니다.
+만약 멤버십에 가입이 되어있다면 멤버십의 정보를 리턴해주고, 멤버십 가입이 되어있지 않다면 null을 리턴해줍니다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/a949919d-1444-4b9e-a96e-0aafcb18a36d)
+> BootPayController
+```java
+    @PostMapping("/callback")
+    public ResponseEntity<HashMap<String, Boolean>> bootPayCallBack(
+            @RequestBody BootPaySaveRequest request,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+            ) throws Exception {
+
+
+        BootPayDTO bootPayDTO = bootPayService.save(request);
+
+        // 토큰 검증
+        Bootpay bootpay = new Bootpay(restApiKey, privateKey);
+        HashMap<String, Object> res = bootpay.getAccessToken();
+
+        if(res.get("error_code") == null) { //success
+            System.out.println("goGetToken success: " + res);
+        } else {
+            System.out.println("goGetToken false: " + res);
+            throw new Exception500("토큰 발급에 실패하였습니다.");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", res.get("access_token").toString());
+
+
+        // 영수증 ID 검증
+        String receiptId = request.getReceiptId();
+        HashMap<String, Object> receiptConfirm = bootpay.confirm(receiptId);
+        if (receiptConfirm.get("error_code") == null) {
+            System.out.println("confirm success: " + res);
+        } else {
+            System.out.println("confirm false: " + res);
+        }
+
+        Integer paymentId = request.getMetadata().getPaymentId();
+        List<BookPaymentDTO> bookPaymentList = bookPaymentService.getBookPayments(paymentId, myUserDetails.getUser());
+        bookPaymentList.forEach(bookPaymentDTO -> {
+            Integer paymentPk = bootPayDTO.getMetadataDTO().getPaymentId();
+            String paymentType = bootPayDTO.getMetadataDTO().getPaymentType();
+
+            if (!paymentPk.equals(request.getMetadata().getPaymentId()) && !paymentType.equals(request.getMetadata().getPaymentType())) {
+                throw new Exception400("결제 타입이 일치하지 않습니다.");
+            }
+
+            if (bookPaymentDTO.getPrice() != request.getPrice()) {
+                throw new Exception400("결제 금액이 일치하지 않습니다.");
+            }
+        });
+
+        ObjectMapper om = new ObjectMapper();
+        om.registerModule(new JavaTimeModule());
+        System.out.println(om.writeValueAsString(request));
+
+
+        var map = new HashMap<String, Boolean>();
+        map.put("success", true);
+
+        return ResponseEntity.ok(map);
+    }
+```
+
+```
+부트페이 관리자 계정에 등록해놓은 callback url로 웹훅 통지를 받습니다.
+해당 정보를 먼저 save해주고 환경변수에 설정해놓은 키값을 이용해 토큰을 발급하고 해당 토큰을 부트페이 서버에 검증 요청합니다.
+이후 해당 토큰이 유효하다면 응답받은 access_token을 헤더에 심어줍니다.
+웹훅통지안의 receipt_id(영수증 id)가 유효한 id인지 부트페이 서버에 검증 요청합니다.
+유효하다면 이후 앱에서 전달해준 고유 번호를 웹훅통지안에서 꺼내, 서버의 데이터베이스에 조회해 결제 금액, 결제 타입을 검증합니다.
+모두 정상적으로 검증이 완료되었다면 부트페이 서버에 성공을 응답해줍니다.
+```
+
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/d943b57d-1b26-44ad-9c13-0ab84027e8ac)
+> CartController
+```java
+@PostMapping
+    public ResponseEntity<ResponseDTO<CartResponse>> saveCart (
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @Valid @RequestBody CartSaveRequest request,
+            Errors error
+    ) {
+        if (error.hasErrors()) {
+            throw new Exception400(error.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        Optional<Book> optionalBook = bookService.getBook(request.getBookId());
+        if (optionalBook.isEmpty()) {
+            throw new Exception400("책 정보를 찾을 수 없습니다.");
+        }
+
+        if (cartService.isCart(optionalBook.get(), myUserDetails.getUser())) {
+            throw new Exception400("이미 장바구니에 있는 책입니다.");
+        }
+
+        List<Integer> myBookIds = bookPaymentService.getMyList(myUserDetails.getUser())
+                                                    .stream()
+                                                    .map(BookPaymentDTO::getId)
+                                                    .collect(Collectors.toList());
+
+        if (myBookIds.contains(request.getBookId())) {
+            throw new Exception400("이미 구매한 도서가 존재합니다.");
+        }
+
+        UserDTO userDTO = userService.getUser(myUserDetails.getUser());
+        return ResponseEntity.ok(new ResponseDTO<>(1, "장바구니 등록 성공", cartService.save(userDTO.toEntity(), optionalBook.get())));
+    }
+```
+
+```
+장바구니에 등록할 때, 등록하는 책의 정보가 유효한 책인지 검증해줍니다.
+이후 이미 담겨있는 책인지 검증합니다.
+마지막으로 이미 구매한 도서인지 검증합니다.
+모든 검증이 끝나면 장바구니에 등록합니다.
+```
