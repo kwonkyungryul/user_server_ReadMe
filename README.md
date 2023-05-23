@@ -295,6 +295,62 @@ public class MyJwtProvider {
 한 번에 프론트에 전송해준다.(앱은 SQFlite 에 저장 후 사용)
 만약 로그인을 한 상태이면(myUserDetails != null) 해당 유저의 정보로 jwt 토큰을 생성해준다.
 ```
+
+> MyUserDetails
+```java
+@Setter
+@Getter
+public class MyUserDetails implements UserDetails {
+    private User user;
+
+    public MyUserDetails(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> collector = new ArrayList<>();
+        collector.add(() -> user.getRole().name());
+        return collector;
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}
+```
+
+```
+MyUserDeatils는 직접 구현한 UserDetails 입니다.
+UserDeatils를 상속받아 타입을 일치시켜주고 SecurityContextHolder에 등록할 수 있게 합니다.
+```
+
 > BookService
 ```java
  public Page<BookDTO> getPage (
@@ -344,9 +400,8 @@ Query Parameter로 받아온 status가 ALL이라면 Query Parameter의 bigCatego
 status가 RECOMMEND라면 책에 대한 Heart(좋아요)가 많은 순으로 조회합니다.(추천)
 status가 BESTSELLER라면 책에 대한 판매가 가장 많은 순으로 조회합니다.(베스트셀러)
 status가 NEW라면 최근 등록된 순서로 조회합니다.(신간)
-
-동적으로 파라미터를 쉽게 받아서 사용하는 방법으로 변경할 예정[QueryDSL]
 ```
+**<i>동적으로 파라미터를 쉽게 받아서 사용하는 방법으로 변경할 예정[QueryDSL]</i>**
 > bookService
 ```java
 ...
@@ -532,7 +587,7 @@ peek(중간처리 메서드) 반복문을 돌려 조회된 리스트들(결제�
 
 **peek와 forEach** </br>
 
- `peek`는 중간처리 메서드 이하 중간연산 입니다.</br>
+`peek`는 중간처리 메서드 이하 중간연산 입니다.</br>
 `forEach`는 최종처리 메서드 이하 최종연산 입니다.</br></br>
 두 메서드 전부 반복문을 돌리는 것은 동일합니다.</br>
 `peek`는 중간연산이기 때문에 최종연산이 존재하지 않으면 동작하지 않습니다.</br>
@@ -547,79 +602,74 @@ peek(중간처리 메서드) 반복문을 돌려 조회된 리스트들(결제�
 ![image](https://github.com/ReadMeCorporation/app_ReadMe/assets/68271830/a949919d-1444-4b9e-a96e-0aafcb18a36d)
 > BootPayController
 ```java
+
+    @Value("${bootpay.restapikey}")
+    private String restApiKey;
+
+    @Value("${bootpay.privatekey}")
+    private String privateKey;
+    
     @PostMapping("/callback")
     public ResponseEntity<HashMap<String, Boolean>> bootPayCallBack(
             @RequestBody BootPaySaveRequest request,
             @AuthenticationPrincipal MyUserDetails myUserDetails
-            ) throws Exception {
+            ) {
 
-        BootPayDTO bootPayDTO = new BootPayDTO();
+        Bootpay bootpay = new Bootpay(restApiKey, privateKey);
+
+        BootPayDTO bootPayDTO;
         if (request.getStatus() == 0) { // 결제 대기 상태
             bootPayDTO = bootPayService.save(request);
 
             // 토큰 검증
-            Bootpay bootpay = new Bootpay(restApiKey, privateKey);
-            HashMap<String, Object> res = bootpay.getAccessToken();
-
-            if(res.get("error_code") == null) { //success
-                System.out.println("goGetToken success: " + res);
-            } else {
-                System.out.println("goGetToken false: " + res);
+            String accessToken = null;
+            try {
+                accessToken = bootPayService.getAccessToken(bootpay, restApiKey, privateKey);
+            } catch (Exception e) {
+                e.printStackTrace();
                 throw new Exception500("토큰 발급에 실패하였습니다.");
             }
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", res.get("access_token").toString());
-
+            headers.add("Authorization", accessToken);
 
             // 영수증 ID 검증
-            String receiptId = request.getReceiptId();
-            HashMap<String, Object> receiptConfirm = bootpay.confirm(receiptId);
-            if (receiptConfirm.get("error_code") == null) {
-                System.out.println("confirm success: " + res);
-            } else {
-                System.out.println("confirm false: " + res);
+            try {
+                bootPayService.confirmReceiptId(bootpay, request.getReceiptId());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new Exception500("ReceiptId 검증에 실패하였습니다.");
             }
 
             Integer paymentId = request.getMetadata().getPaymentId();
             List<BookPaymentDTO> bookPaymentList = bookPaymentService.getBookPayments(paymentId, myUserDetails.getUser());
-            bookPaymentList.forEach(bookPaymentDTO -> {
-                Integer paymentPk = bootPayDTO.getMetadataDTO().getPaymentId();
-                String paymentType = bootPayDTO.getMetadataDTO().getPaymentType();
 
-                if (!paymentPk.equals(request.getMetadata().getPaymentId()) && !paymentType.equals(request.getMetadata().getPaymentType())) {
-                    throw new Exception400("결제 타입이 일치하지 않습니다.");
-                }
-
-                if (bookPaymentDTO.getPrice() != request.getPrice()) {
-                    throw new Exception400("결제 금액이 일치하지 않습니다.");
-                }
-            });
+            String confirmResult = bootPayService.confirmPriceAndType(bootPayDTO, bookPaymentList, request);
+            if (!confirmResult.equals("success")) {
+                throw new Exception400(confirmResult);
+            }
         } else if (request.getStatus() == 1) { // 결제 완료 상태
-            bootPayDTO = bootPayService.save(request);
+            bootPayService.save(request);
         } else if (request.getStatus() == 2) { // 결제 승인중인 상태(서버 검증 전)
-            bootPayDTO = bootPayService.save(request);
+            bootPayService.save(request);
         } else if (request.getStatus() == 20) { // 결제 취소 상태
-            bootPayDTO = bootPayService.save(request);
+            bootPayService.save(request);
         }
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
-        System.out.println(om.writeValueAsString(request));
-
 
         var map = new HashMap<String, Boolean>();
         map.put("success", true);
 
         return ResponseEntity.ok(map);
     }
-}
 ```
 
 ```
 부트페이 관리자 계정에 등록해놓은 callback url로 웹훅 통지를 받습니다.
 웹훅 통지 안의 status값으로 현재 결제 상태를 구분짓고 로직을 분기시킵니다.
-대기 상태에서는 해당 정보를 먼저 save해주고 환경변수에 설정해놓은 키값을 이용해 토큰을 발급하고 해당 토큰을 부트페이 서버에 검증 요청합니다.
+대기 상태에서는 해당 정보를 먼저 save해주고 EC2 환경변수에 설정해놓은 키값들을 이용해 토큰을 발급하고 해당 토큰을 부트페이 서버에 검증 요청합니다.
 이후 해당 토큰이 유효하다면 응답받은 access_token을 헤더에 심어줍니다.
 웹훅통지안의 receipt_id(영수증 id)가 유효한 id인지 부트페이 서버에 검증 요청합니다.
 유효하다면 이후 앱에서 전달해준 고유 번호를 웹훅통지안에서 꺼내, 서버의 데이터베이스에 조회해 결제 금액, 결제 타입을 검증합니다.
