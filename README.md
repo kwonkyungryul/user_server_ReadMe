@@ -169,6 +169,9 @@ implementation 'org.springframework.boot:spring-boot-starter-security'
 
 ![image](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/2e580d9d-c772-4792-a759-0b6c8c6baa67)
 ![image](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/64df3710-1385-4fc1-90db-965204b5bb88)
+![image](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/a1fe2cc0-c4b3-483d-a3a3-b32fcb48a71a)
+![image](https://github.com/kwonkyungryul/user_server_ReadMe/assets/68271830/69e89e76-7a03-438f-86c7-806c4adfb495)
+
 
 ---
 ## 유저 시나리오
