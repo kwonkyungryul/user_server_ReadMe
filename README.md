@@ -10,6 +10,10 @@
 
 # 핵심기능
 > **부트페이**</br>
+* gradle 의존성
+```gradle
+implementation 'io.github.bootpay:backend:+'
+```
 * 개념</br>
   * 부트페이는 개발사들이 쉽게 결제를 연동할 수 있도록 다양한 플랫폼별 SDK를 제공합니다.</br>
   * 개발환경, PG에 상관없이 쉬운 문법, 적은 개발 공수를 제공하고,</br>
@@ -18,12 +22,13 @@
 ![image](https://github.com/ReadMeCorporation/user_server_ReadMe/assets/68271830/81834691-9b5a-4d09-b9ed-6773bc3abb19)
 
 * 적용</br>
-  * [1] 클라이언트가 결제 요청을 클릭시 먼저 서버에 결제 데이터를 저장하고 결제번호를 응답받습니다..</br>
+  * [1] 클라이언트가 결제 요청을 클릭시 먼저 서버에 결제 데이터를 저장하고 결제번호를 응답받습니다.</br>
   * [2] 해당 id 값을 부트페이 서버에 전송합니다.</br>
   * [3] 클라이언트에서 결제 완료를 하고 부트페이 서버에서 스프링 서버로 결제 대기 상태의 웹훅 통지를 날립니다.</br>
   * [4] 웹훅 통지 안의 가격과 클라이언트를 통해 넘겨받은 결제번호로 검증합니다.</br>
   * [5] 서버 검증을 마치고 정상적이면 부트페이에 `결제승인처리` 데이터를 전송하고 실패하면 `결제승인취소`를 보냅니다. </br>
   * [6] 결제 승인 처리, 실패처리가 되면 부트 페이 서버에서 클라이언트와 서버쪽으로 데이터를 보내고 클라이언트는 결제 창이 닫히고 정상적으로 결제처리를 완료시킵니다.</br></br>
+
 ![image](https://github.com/ReadMeCorporation/user_server_ReadMe/assets/68271830/9a0c3dd6-ea6c-4200-a0f6-90e12a8b249d)
 
 <!-- > **FCM**
@@ -31,7 +36,12 @@
 
 * 적용</br> -->
 
+---
 > **S3**</br>
+* gradle 의존성
+```gradle
+implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+```
 * 개념</br>
   * AWS S3(Amazon Simple Storage Service)는 아마존 웹 서비스(Amazon Web Services)에서 제공하는 클라우드 기반의 객체 스토리지 서비스입니다.</br>
   * S3는 인터넷을 통해 데이터를 저장하고 검색할 수 있는 스토리지 솔루션으로, 안정적이고 확장 가능한 저장소를 제공하여 다양한 용도로 활용됩니다.</br>
@@ -41,7 +51,39 @@
   * 생성된 인스턴스로 S3 putObject 메서드를 호출해 버킷과 파일이름, 파일의 용량을 S3에 업로드. 이후 getUrl메서드를 리턴해 해당 파일의 경로를 받아옵니다.</br>
   * S3 버킷의 폴더경로로 파일의 출처를 구분짓고 받아온 파일의 경로를 리턴합니다.</br>
 
+```java
+@Component
+public class S3Upload {
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    private final AmazonS3 amazonS3;
+
+    public S3Upload(AmazonS3 amazonS3) {
+        this.amazonS3 = amazonS3;
+    }
+
+    public String upload(MultipartFile multipartFile, String dir) throws IOException {
+        String s3FileName = dir;
+        s3FileName += UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+
+        ObjectMetadata objMeta = new ObjectMetadata();
+        objMeta.setContentLength(multipartFile.getInputStream().available());
+        amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
+
+        return amazonS3.getUrl(bucket, s3FileName).toString();
+    }
+}
+```
+
+---
 > **Security & OAuth 2.0**</br>
+* gradle 의존성
+```gradle
+implementation 'com.google.firebase:firebase-admin:9.1.1'
+implementation 'org.springframework.boot:spring-boot-starter-security'
+```
 * OAuth 2.0 개념</br>
   * OAuth 2.0은 인증과 권한 부여를 위한 개방형 표준 프로토콜로, 웹 및 모바일 애플리케이션에서 안전하게 제3자 서비스에 접근할 수 있도록 도와줍니다.</br>
   * OAuth 2.0은 사용자의 비밀 정보를 공유하지 않으면서 인증 및 권한을 관리하는 메커니즘을 제공합니다.
