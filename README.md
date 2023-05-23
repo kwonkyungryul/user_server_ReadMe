@@ -406,20 +406,20 @@ status가 NEW라면 최근 등록된 순서로 조회합니다.(신간)
 ```java
 ...
 Double stars = reviewRepository.findAvgStars(bookDTO.getId());
-        if (stars != null) {
-            bookDTO.setStars(Math.ceil((stars * 10) / 10));
-        } else {
-            bookDTO.setStars(0.0);
-        }
+if (stars != null) {
+    bookDTO.setStars(Math.ceil((stars * 10) / 10));
+} else {
+    bookDTO.setStars(0.0);
+}
 
-        bookDTO.setIsHeart(false);
-        if (myUserDetails != null) {
-            User user = myUserDetails.getUser();
-            Optional<Heart> optionalHeart = heartRepository.heartCount(book.getId(), user.getId());
-            if (optionalHeart.isPresent()) {
-                bookDTO.setIsHeart(true);
-            }
-        }
+bookDTO.setIsHeart(false);
+if (myUserDetails != null) {
+    User user = myUserDetails.getUser();
+    Optional<Heart> optionalHeart = heartRepository.heartCount(book.getId(), user.getId());
+    if (optionalHeart.isPresent()) {
+        bookDTO.setIsHeart(true);
+    }
+}
 ...
 ```
 
